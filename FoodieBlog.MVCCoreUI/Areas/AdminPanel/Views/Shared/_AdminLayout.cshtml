@@ -1,0 +1,108 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>SparkMarket Yönetim Paneli</title>
+    <meta name="robots" content="noindex" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="/adminassets/plugins/fontawesome-free/css/all.min.css">
+    <!-- Theme style -->
+    <link rel="stylesheet" href="/adminassets/css/adminlte.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha512-Evv84Mr4kqVGRNSgIGL/F/aIDqQb7xQ2vcrdIwxfjThSH8CSR7PBEakCr51Ck+w+/U6swU2Im1vVX0SVk9ABhg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="/adminassets/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="/adminassets/plugins/datatables-responsive/css/responsive.bootstrap4.min.css">
+    <link rel="stylesheet" href="/adminassets/plugins/datatables-buttons/css/buttons.bootstrap4.min.css">
+
+    <link rel="stylesheet" href="/adminassets/plugins/summernote/summernote-bs4.min.css">
+    <link rel="stylesheet" href="/adminassets/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="/adminassets/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+
+    <link href="~/lib/sweetalert2/sweetalert2.min.css" rel="stylesheet" />
+
+    @RenderSection("Styles", false)
+
+</head>
+<body class="hold-transition sidebar-mini">
+    <div class="wrapper">
+
+        <!-- Navbar -->
+        @await Component.InvokeAsync("mainHeader")
+        <!-- 1. Controllers klasörü seviyesinde ViewComponents klasörü oluştur -->
+        <!-- 2. BU klasöre eklediğinde class :ViewComponent den kalıtım almalı ve IViewComponentResult tipten dönmeli ve ismi Invoke olmalı o zaman return view dediğimizde Shared içersinde Components klasörü içerisindeki class ismiyle (Viewcomponent hariç) aynı isimdeki cshtml çağırıldığı yerden döndürürüyor
+
+
+
+        <!-- 2. Shared içersinde Components klasörü oluştur -->
+        <!-- 2.  class ismiyle (Viewcomponent hariç) aynı isimde klasör oluşturulur. Onun içide Default cshtml oluşturulur -->
+        @await Component.InvokeAsync("sidebar")
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <div class="content-header">
+
+                @RenderSection("ContentHeader")
+
+            </div>
+            <!-- /.content-header -->
+            <!-- Main content -->
+            <div class="content">
+                <div class="container-fluid">
+                    <div class="row">
+
+                        @RenderBody()
+
+                    </div>
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </div>
+            <!-- /.content -->
+        </div>
+        <!-- /.content-wrapper -->
+        <!-- Control Sidebar -->
+        @await Component.InvokeAsync("aside")
+
+        @*    @Html.Partial("_footer") *@
+        @{
+
+            await Html.RenderPartialAsync("_footer");
+        }
+
+
+    </div>
+
+    <script src="/adminassets/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="/adminassets/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+    <!-- AdminLTE App -->
+    <script src="/adminassets/js/adminlte.min.js"></script>
+
+    <!-- DataTables  & Plugins -->
+    <script src="/adminassets/plugins/datatables/jquery.dataTables.min.js"></script>
+    <script src="/adminassets/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+    <script src="/adminassets/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+    <script src="/adminassets/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+    <script src="/adminassets/plugins/datatables-buttons/js/dataTables.buttons.min.js"></script>
+    <script src="/adminassets/plugins/datatables-buttons/js/buttons.bootstrap4.min.js"></script>
+    <script src="/adminassets/plugins/jszip/jszip.min.js"></script>
+    <script src="/adminassets/plugins/pdfmake/pdfmake.min.js"></script>
+    <script src="/adminassets/plugins/pdfmake/vfs_fonts.js"></script>
+    <script src="/adminassets/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
+    <script src="/adminassets/plugins/datatables-buttons/js/buttons.print.min.js"></script>
+    <script src="/adminassets/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+    <script src="/adminassets/plugins/bootstrap-switch/js/bootstrap-switch.min.js"></script>
+    <script src="/adminassets/plugins/summernote/summernote-bs4.min.js"></script>
+    <script src="/adminassets/plugins/select2/js/select2.full.min.js"></script>
+    <script src="~/lib/sweetalert2/sweetalert2.min.js"></script>
+
+    @RenderSection("Scripts", false)
+
+
+</body>
+</html>
