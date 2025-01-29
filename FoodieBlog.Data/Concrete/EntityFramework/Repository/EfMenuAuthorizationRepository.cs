@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FoodieBlog.Data.Concrete.EntityFramework.Repository
 {
-    public class EfInteractionRepository : EfRepositoryBase<Interaction, FoodBlogDbContext>, IInteractionRepository
+    public class EfMenuAuthorizationRepository : EfRepositoryBase<MenuAuthorization, FoodBlogDbContext>, IMenuAuthorizationRepository
     {
     }
 }

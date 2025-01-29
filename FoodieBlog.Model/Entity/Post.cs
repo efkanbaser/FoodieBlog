@@ -7,15 +7,11 @@ namespace FoodieBlog.Model.Entity;
 public partial class Post : BaseEntity
 {
 
-    public string? Title { get; set; }
+    public string Title { get; set; }
 
-    public string? Contents { get; set; }
+    public string Contents { get; set; }
 
-    public string? Category { get; set; }
-
-    public DateOnly? PublicationDate { get; set; }
-
-    public DateOnly? ModifiedDate { get; set; }
+    public string Category { get; set; }
 
     public int? UserId { get; set; }
 
@@ -25,5 +21,5 @@ public partial class Post : BaseEntity
 
     public virtual ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();
 
-    public virtual User? User { get; set; }
+    public virtual User User { get; set; }
 }

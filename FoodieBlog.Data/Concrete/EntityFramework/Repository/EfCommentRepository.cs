@@ -1,4 +1,5 @@
 ﻿using FoodieBlog.Data.Abstract;
+using FoodieBlog.Model.Data.Concrete.EntityFramework.Context;
 using FoodieBlog.Model.Entity;
 using Infrastructure.Data.Concrete.EntityFramework;
 using System;
