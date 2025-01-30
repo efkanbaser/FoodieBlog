@@ -10,12 +10,13 @@ namespace FoodieBlog.MVCCoreUI.Filters
     {
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserBs _userBs;
-        //private readonly IMenuBs _menuBs;
+        private readonly IAdminMenuBs _menuBs;
 
-        public SessionManager(IHttpContextAccessor httpContextAccessor, IUserBs userBs)
+        public SessionManager(IHttpContextAccessor httpContextAccessor, IUserBs userBs, IAdminMenuBs menuBs)
         {
             _httpContextAccessor = httpContextAccessor;
             _userBs = userBs;
+            _menuBs = menuBs;
         }
 
         
@@ -53,32 +54,29 @@ namespace FoodieBlog.MVCCoreUI.Filters
             }
         }
 
-        //public bool YetkisiVarmi(int MenuId, int KullaniciId)
-        //{
-        //    Menu menu = _menuBS.Get(x => x.Id == MenuId, false, "MenuYetkis", "MenuYetkis.Rol", "MenuYetkis.Rol.KullaniciRols", "MenuYetkis.Rol.KullaniciRols.Kullanici");
+        public bool IsAllowed(int MenuId, int UserId)
+        {
+            AdminMenu menu = _menuBs.Get(x => x.Id == MenuId, false, "MenuAuthorizations", "MenuAuthorizations.Role", "MenuAuthorizations.Role.UserRoles", "MenuAuthorizations.Role.UserRoles.User");
 
-        //    Kullanici k = _kullaniciBS.Get(x => x.Id == KullaniciId, false, "KullaniciRols");
+            User user = _userBs.Get(x => x.Id == UserId, false, "UserRoles");
 
-        //    bool yetki = false;
+            bool auth = false;
 
-        //    foreach (MenuYetki myetki in menu.MenuYetkis)
-        //    {
+            foreach (MenuAuthorization mauth in menu.MenuAuthorizations)
+            {
+                foreach (UserRole urole in user.UserRoles)
+                {
+                    if (mauth.SelectAuthorization == true && mauth.RoleId == urole.RoleId)
+                    {
+                        auth = true;
 
-        //        foreach (KullaniciRol krol in k.KullaniciRols)
-        //        {
+                        break;
+                    }
+                }
+            }
 
-        //            if (myetki.SelectYetki == true && myetki.RolId == krol.RolId)
-        //            {
-        //                yetki = true;
+            return auth;
+        }
 
-        //                break;
-        //            }
-        //        }
-
-        //    }
-
-
-        //    return yetki;
-        //}
     }
 }

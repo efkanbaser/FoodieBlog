@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using FoodieBlog.Model.Entity;
 using Microsoft.EntityFrameworkCore;
 
-namespace FoodieBlog.Model.Data.Concrete.EntityFramework.Context;
+namespace FoodieBlog.Data.Concrete.EntityFramework.Context;
 
 public partial class FoodBlogDbContext : DbContext
 {
@@ -45,6 +45,8 @@ public partial class FoodBlogDbContext : DbContext
         modelBuilder.Entity<AdminMenu>(entity =>
         {
             entity.ToTable("AdminMenu");
+
+            entity.HasIndex(e => e.ParentMenuId, "IX_AdminMenu_ParentMenuId");
 
             entity.Property(e => e.Header).HasMaxLength(50);
             entity.Property(e => e.MenuIcon).HasMaxLength(200);
@@ -96,9 +98,15 @@ public partial class FoodBlogDbContext : DbContext
 
         modelBuilder.Entity<MenuAuthorization>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("MenuAuthorization");
+            entity.ToTable("MenuAuthorization");
+
+            entity.HasOne(d => d.Menu).WithMany(p => p.MenuAuthorizations)
+                .HasForeignKey(d => d.MenuId)
+                .HasConstraintName("FK_MenuAuthorization_AdminMenu");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.MenuAuthorizations)
+                .HasForeignKey(d => d.RoleId)
+                .HasConstraintName("FK_MenuAuthorization_Role");
         });
 
         modelBuilder.Entity<Post>(entity =>
@@ -155,6 +163,14 @@ public partial class FoodBlogDbContext : DbContext
         modelBuilder.Entity<UserRole>(entity =>
         {
             entity.ToTable("UserRole");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.UserRoles)
+                .HasForeignKey(d => d.RoleId)
+                .HasConstraintName("FK_UserRole_Role");
+
+            entity.HasOne(d => d.User).WithMany(p => p.UserRoles)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_UserRole_Users");
         });
 
         OnModelCreatingPartial(modelBuilder);

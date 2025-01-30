@@ -2,11 +2,14 @@
 using FoodieBlog.Model.ViewModel.Areas.AdminPanel;
 using FoodieBlog.MVCCoreUI.Filters;
 using Infrastructure.CrossCuttingConcern.Converters;
+using Infrastructure.CrossCuttingConcern.Crypto;
 using Infrastructure.Utility;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Caching.Memory;
 using System.Drawing;
 using System.Drawing.Text;
+using FoodieBlog.Model.Entity;
+using Azure.Identity;
 
 namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
 {
@@ -15,12 +18,14 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
     {
         private readonly IUserBs _userBs;
         private readonly ISessionManager _session;
+        private readonly IAdminMenuBs _menuBs;
 
-        public AdminController(IUserBs userBs, ISessionManager session)
+        public AdminController(IUserBs userBs, ISessionManager session, IAdminMenuBs menuBs)
         {
             _userBs = userBs;
             _session = session;
-        }   
+            _menuBs = menuBs;
+        }
 
 
         public IActionResult Index()
@@ -39,7 +44,26 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
         [ValidateAntiForgeryToken]
         public IActionResult Login(LoginVm user)
         {
+            // TODO: Password Crypto
+            // TODO: Remember Me button function with cookies
+            // TODO: are DTO's useful anywhere here? 
 
+            user.Email = "eb@gmail.com";
+            user.Password = "1234@efkan";
+
+            //string CryptoPassword = CryptoManager.SHA256Encrypt(user.Password);
+
+            User user1 = _userBs.Get(x => x.Email == user.Email && x.Password == user.Password, false, "UserRoles", "UserRoles.Role");
+
+            if(user1 != null)
+            {
+                _session.ActiveAdmin = user1;
+                return RedirectToAction("Index", "Panel");
+            }
+            else
+            {
+                TempData["Mesaj"] = "Login failed";
+            }
 
             return View();
         }

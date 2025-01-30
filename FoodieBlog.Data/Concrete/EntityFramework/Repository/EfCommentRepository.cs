@@ -1,5 +1,5 @@
 ﻿using FoodieBlog.Data.Abstract;
-using FoodieBlog.Model.Data.Concrete.EntityFramework.Context;
+using FoodieBlog.Data.Concrete.EntityFramework.Context;
 using FoodieBlog.Model.Entity;
 using Infrastructure.Data.Concrete.EntityFramework;
 using System;
@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace FoodieBlog.Data.Concrete.EntityFramework.Repository
 {
-    public class EfCommentRepository:EfRepositoryBase<Comment,FoodBlogDbContext>,ICommentRepository
+    public class EfCommentRepository : EfRepositoryBase<Comment, FoodBlogDbContext>, ICommentRepository
     {
     }
 }

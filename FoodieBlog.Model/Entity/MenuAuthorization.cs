@@ -18,4 +18,9 @@ public partial class MenuAuthorization : BaseEntity
 
     public bool? SelectAuthorization { get; set; }
 
+
+
+    public virtual AdminMenu Menu { get; set; }
+
+    public virtual Role Role { get; set; }
 }

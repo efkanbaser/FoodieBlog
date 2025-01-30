@@ -1,0 +1,651 @@
+﻿@section ContentHeader
+{
+
+}
+
+@model UserIndexVm
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">User List</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table id="tblUsers" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>User Name</th>
+                        <th>Email</th>
+                        <th>Bio</th>
+                        <th>Profile Pic</th>
+                        <th>Date Created</th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+</div>
+
+@section Styles {
+
+    <link href="~/adminassets/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.css" rel="stylesheet" />
+
+}
+<form id="frmUserEkle">
+    <div class="modal fade" id="modalUrunEkle">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">User Ekleme Paneli</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>User Name</label>
+                            <input type="text" class="form-control" asp-for="UserName" placeholder="User Name">
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="text" class="form-control" asp-for="Email" placeholder="Email">
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Bio</label>
+                            <input type="text" class="form-control" asp-for="Bio" placeholder="Bio">
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <label>Profile Pic</label>
+                            <input type="text" class="form-control" asp-for="ProfilePic" placeholder="Profile Pic">
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+
+
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">VAZGEÇ</button>
+                    <button type="button" id="btnUserEkle" class="btn btn-primary">KAYDET</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+</form>
+
+<form id="frmUserGuncelle">
+    <div class="modal fade" id="modalUrunGuncelle">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">User Güncelleme Paneli</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="card-body">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="GId">
+
+                            <label>User Name</label>
+                            <input type="text" class="form-control" id="GUserAdi" placeholder="User Name">
+
+                            <label>Email</label>
+                            <input type="text" class="form-control" id="GUserOrani" placeholder="Email">
+
+                            <label>Bio</label>
+                            <input type="text" class="form-control" id="GUserAdi" placeholder="Bio">
+
+                            @* put an actual way to change profile pic *@
+                            <label>Profile Pic</label>
+                            <input type="text" class="form-control" id="GUserAdi" placeholder="Profile Pic">
+                        </div>
+                    </div>
+
+
+                    <!-- /.card-body -->
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                    <button type="button" id="btnUserGuncelle" class="btn btn-primary">UPDATE</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+</form>
+
+
+@section Scripts {
+    <script>
+            var table;
+            $(function () {
+                table = $("#tblUserler").DataTable({
+                    "dom": "Bfrtip",
+                    "responsive": true,
+                    "lengthChange": true,
+                    "pageLength": 10,
+                    "autoWidth": false,
+                    "buttons": ["csv", "excel", "pdf", "print", "colvis"],
+                    ajax: { url: '/AdminPanel/User/List', type: 'post' },
+                    columns: [
+                        { data: 'id', visible: false },
+                        { data: 'UserAdi' },
+                        { data: 'UserOrani' },
+                        { data: 'aktif' },
+                        { data: 'id' },
+                        { data: 'id' },
+
+                    ],
+                    columnDefs: [
+                        {
+                            targets: 3,
+                            render: function (data, type, row, meta) {
+
+                                var katid = row["id"];
+
+
+                                if (data)
+
+                                    return '<input katid=' + katid + '  type= "checkbox" data-on-text="AKTİF" data-off-text="PASİF" name = "my-checkbox" checked data-bootstrap-switch data-off-color="danger" class="chkAktif" data-on-color="success" > ';
+
+
+                                else
+
+                                    return '<input katid=' + katid + '  type= "checkbox" data-on-text="AKTİF" data-off-text="PASİF" name = "my-checkbox"  data-bootstrap-switch data-off-color="danger" class="chkAktif" data-on-color="success" > ';
+
+                            }
+                        },
+
+                        {
+                            targets: 4,
+                            render: function (data, type, row, meta) {
+
+                                return "<a class='btn btn-info btnDuzenle' katid=" + data + ">   <i class='fas fa-pencil-alt'></i> DÜZENLE</a > ";
+
+                            }
+                        },
+
+                        {
+                            targets: 5,
+                            render: function (data, type, row, meta) {
+
+                                return "<a class='btn btn-danger btnSil' katid=" + data + "><i class='fas fa-trash'></i> SİL</a > ";
+                            }
+                        },
+
+
+
+
+                    ],
+
+                    initComplete: function (settings, json) {
+
+                        // Datatable initilize olduğunda
+                        $("input[data-bootstrap-switch]").each(function () {
+                            $(this).bootstrapSwitch();
+                        })
+
+
+
+                    },
+
+                    drawCallback: function () {
+
+                        // Arama Yapıldığında, Sayfalama Yapıldığında, Sıralama Yapıldığında Draw yapılıyor
+                        $("input[data-bootstrap-switch]").each(function () {
+                            $(this).bootstrapSwitch();
+                        })
+
+
+
+                    }
+
+
+
+                }).buttons().container().appendTo('#tblUserler_wrapper .col-md-6:eq(0)');
+
+            })
+
+            $("#btnUserEkle").click(function () {
+
+                var swal = Swal.fire({
+                    title: "LÜTFEN BEKLEYİNİZ...",
+                    html: "İşleminiz Yapılıyor",
+                    timerProgressBar: true,
+                    didOpen: () => {
+
+                        Swal.showLoading();
+
+                    },
+                });
+                // var form = $("#frmUserEkle");
+                var formData = new FormData();
+
+                var UserAdi = $("#UserAdi").val();
+                var UserOrani = $("#UserOrani").val();
+
+            formData.append("UserAdi", UserAdi)
+        formData.append("UserOrani", UserOrani)
+
+
+                $.ajax({
+                    url: "/AdminPanel/User/Add",
+                    type: "post",
+                    dataType: "json",
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function (r) {
+
+                        // ---------------Datatable Yok Edildi---------------
+
+                        $("#tblUserler").DataTable().destroy();
+                        //-------------------------------------------------
+
+                        // ---------------Datatable Yeniden Oluşturuluyor.---------------
+
+
+                        table = $("#tblUserler").DataTable({
+                            "dom": "Bfrtip",
+                            "responsive": true,
+                            "lengthChange": true,
+                            "pageLength": 10,
+                            "autoWidth": false,
+                            "buttons": ["csv", "excel", "pdf", "print", "colvis"],
+                            ajax: { url: '/AdminPanel/User/List', type: 'post' },
+                            columns: [
+                                { data: 'id', visible: false },
+                                { data: 'UserAdi' },
+                                { data: 'UserOrani' },
+                                { data: 'aktif' },
+                                { data: 'id' },
+                                { data: 'id' },
+
+                            ],
+                            columnDefs: [
+
+
+                                {
+                                    targets: 3,
+                                    render: function (data, type, row, meta) {
+
+                                        var katid = row["id"];
+
+
+                                        if (data)
+
+                                            return '<input katid=' + katid + '  type= "checkbox" data-on-text="AKTİF" data-off-text="PASİF" name = "my-checkbox" checked data-bootstrap-switch data-off-color="danger" class="chkAktif" data-on-color="success" > ';
+
+
+                                        else
+
+                                            return '<input katid=' + katid + '  type= "checkbox" data-on-text="AKTİF" data-off-text="PASİF" name = "my-checkbox"  data-bootstrap-switch data-off-color="danger" class="chkAktif" data-on-color="success" > ';
+
+                                    }
+                                },
+
+                                {
+                                    targets: 4,
+                                    render: function (data, type, row, meta) {
+
+                                        return "<a class='btn btn-info btnDuzenle' katid=" + data + ">   <i class='fas fa-pencil-alt'></i> DÜZENLE</a > ";
+
+                                    }
+                                },
+
+                                {
+                                    targets: 5,
+                                    render: function (data, type, row, meta) {
+
+                                        return "<a class='btn btn-danger btnSil' katid=" + data + "><i class='fas fa-trash'></i> SİL</a > ";
+                                    }
+                                },
+
+
+
+
+                            ],
+
+                            initComplete: function (settings, json) {
+
+                                // Datatable initilize olduğunda
+                                $("input[data-bootstrap-switch]").each(function () {
+                                    $(this).bootstrapSwitch();
+                                })
+
+
+
+                            },
+
+                            drawCallback: function () {
+
+                                // Arama Yapıldığında, Sayfalama Yapıldığında, Sıralama Yapıldığında Draw yapılıyor
+                                $("input[data-bootstrap-switch]").each(function () {
+                                    $(this).bootstrapSwitch();
+                                })
+
+                            }
+
+                        }).buttons().container().appendTo('#tblUserler_wrapper .col-md-6:eq(0)');
+
+
+
+
+                        //   $("#UstUserId").trigger("change"); // change eventı buradan tetiklendi
+                        // $("#modalUrunEkle").modal("hide");
+
+
+                        swal.close();
+                        if (r.result) {
+                            $("#UserAdi").val(''); // modaldaki User adı kısımını temizler
+                            $("#UserOrani").val('');
+                            Swal.fire({
+                                title: "İŞLEM BAŞARILI",
+                                text: r.mesaj,
+                                icon: "success"
+                            });
+                        }
+
+
+
+
+                    },
+                    error: function () {
+
+                    }
+                }
+                );
+
+
+
+            });
+
+
+
+
+
+    </script>
+    <script>
+
+        $(function () {
+            // Summernote
+            $("input[data-bootstrap-switch]").each(function () {
+                $(this).bootstrapSwitch();
+            })
+            $(document).on('switchChange.bootstrapSwitch', '.chkAktif', function (event, state) {
+
+                var swal = Swal.fire({
+                    title: "LÜTFEN BEKLEYİNİZ...",
+                    html: "İşleminiz Yapılıyor",
+                    timerProgressBar: true,
+                    didOpen: () => {
+
+                        Swal.showLoading();
+
+                    },
+                });
+
+                var id = $(this).attr('katid');
+                var aktifpasif = state;
+                $.ajax({
+                    url: "/AdminPanel/User/AktifPasif",
+                    type: "post",
+                    dataType: "json",
+                    data: { id: id, aktif: aktifpasif },
+                    success: function (r) {
+
+
+                        swal.close();
+                        if (r.result) {
+                            Swal.fire({
+                                title: "İŞLEM BAŞARILI",
+                                text: r.mesaj,
+                                icon: "success"
+                            });
+                        }
+                    },
+                    error: function () {
+
+                    }
+                }
+                );
+
+
+
+            });
+
+            $(document).on('click', '.btnDuzenle', function () {
+                var swal = Swal.fire({
+                    title: "LÜTFEN BEKLEYİNİZ...",
+                    html: "İşleminiz Yapılıyor",
+                    timerProgressBar: true,
+                    didOpen: () => {
+
+                        Swal.showLoading();
+
+                    },
+                });
+
+                var id = $(this).attr('katid');
+                $("#GId").val(id);
+
+                $.ajax({
+                    url: "/AdminPanel/User/GetUser",
+                    type: "post",
+                    dataType: "json",
+                    data: { id: id },
+                    success: function (r) {
+
+                        if (r.result) {
+                            $("#GUserAdi").val(r.model.UserAdi);
+                            $("#GUserOrani").val(r.model.UserOrani);
+                            $("#modalUrunGuncelle").modal('show');
+                        }
+                        swal.close();
+                    },
+                    error: function () {
+
+                    }
+                }
+                );
+            });
+
+
+            // DÜZENLE TUŞU
+            $(document).on('click', '#btnUserGuncelle', function () {
+                var swal = Swal.fire({
+                    title: "LÜTFEN BEKLEYİNİZ...",
+                    html: "İşleminiz Yapılıyor",
+                    timerProgressBar: true,
+                    didOpen: () => {
+
+                        Swal.showLoading();
+
+                    },
+                });
+
+                var formData = new FormData();
+
+
+                var UserAdi = $("#GUserAdi").val();
+                var UserOrani = $("#GUserOrani").val();
+                var Id = $("#GId").val();
+
+                formData.append("UserAdi", UserAdi)
+                formData.append("UserOrani", UserOrani)
+                formData.append("Id", Id)
+
+                $.ajax({
+                    url: "/AdminPanel/User/Update",
+                    type: "post",
+                    dataType: "json",
+                    processData: false,
+                    contentType: false,
+                    data: formData,
+                    success: function (r) {
+
+                        // ---------------Datatable Yok Edildi---------------
+
+                        $("#tblUserler").DataTable().destroy();
+                        //-------------------------------------------------
+
+                        // ---------------Datatable Yeniden Oluşturuluyor.---------------
+
+
+                        table = $("#tblUserler").DataTable({
+                            "dom": "Bfrtip",
+                            "responsive": true,
+                            "lengthChange": true,
+                            "pageLength": 10,
+                            "autoWidth": false,
+                            "buttons": ["csv", "excel", "pdf", "print", "colvis"],
+                            ajax: { url: '/AdminPanel/User/List', type: 'post' },
+                            columns: [
+                                { data: 'id', visible: false },
+                                { data: 'UserAdi' },
+                                { data: 'UserOrani' },
+                                { data: 'aktif' },
+                                { data: 'id' },
+                                { data: 'id' },
+                            ],
+                            columnDefs: [
+                                {
+                                    targets: 3,
+                                    render: function (data, type, row, meta) {
+
+                                        var katid = row["id"];
+
+                                        if (data)
+                                            return '<input katid=' + katid + '  type= "checkbox" data-on-text="AKTİF" data-off-text="PASİF" name = "my-checkbox" checked data-bootstrap-switch data-off-color="danger" class="chkAktif" data-on-color="success" > ';
+
+                                        else
+                                            return '<input katid=' + katid + '  type= "checkbox" data-on-text="AKTİF" data-off-text="PASİF" name = "my-checkbox"  data-bootstrap-switch data-off-color="danger" class="chkAktif" data-on-color="success" > ';
+
+                                    }
+                                },
+
+                                {
+                                    targets: 4,
+                                    render: function (data, type, row, meta) {
+
+                                        return "<a class='btn btn-info btnDuzenle' katid=" + data + ">   <i class='fas fa-pencil-alt'></i> DÜZENLE</a > ";
+
+                                    }
+                                },
+
+                                {
+                                    targets: 5,
+                                    render: function (data, type, row, meta) {
+
+                                        return "<a class='btn btn-danger btnSil' katid=" + data + "><i class='fas fa-trash'></i> SİL</a > ";
+                                    }
+                                },
+                            ],
+
+                            initComplete: function (settings, json) {
+
+                                // Datatable initilize olduğunda
+                                $("input[data-bootstrap-switch]").each(function () {
+                                    $(this).bootstrapSwitch();
+                                })
+                            },
+
+                            drawCallback: function () {
+
+                                // Arama Yapıldığında, Sayfalama Yapıldığında, Sıralama Yapıldığında Draw yapılıyor
+                                $("input[data-bootstrap-switch]").each(function () {
+                                    $(this).bootstrapSwitch();
+                                })
+                            }
+
+                        }).buttons().container().appendTo('#tblUserler_wrapper .col-md-6:eq(0)');
+
+
+                        // $("#modalUrunEkle").modal("hide");
+
+                        swal.close();
+                        if (r.result) {
+                            Swal.fire({
+                                title: "İŞLEM BAŞARILI",
+                                text: r.mesaj,
+                                icon: "success"
+                            });
+                        }
+                    },
+                    error: function () {
+
+                    }
+                }
+                );
+            });
+
+
+
+            // SİL TUŞU
+            $(document).on('click', '.btnSil', function () {
+                var id = $(this).attr('katid');
+                $.ajax({
+                    url: "/AdminPanel/User/GetUser",
+                    type: "post",
+                    dataType: "json",
+                    data: { id: id },
+                    success: function (r) {
+
+                        if (r.result) {
+                        $("#GUserAdi").val(r.model.UserAdi);
+                        $("#GUserOrani").val(r.model.UserOrani);
+                            $("#modalUrunGuncelle").modal('show');
+                        }
+                        swal.close();
+                    },
+                    error: function () {
+
+
+                    }
+                }
+                );
+            });
+        })
+
+
+
+    </script>
+    <script>
+
+
+    </script>
+}
+
+
+
+
+
+
+
+
+

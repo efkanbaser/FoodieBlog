@@ -1,8 +1,9 @@
 using FoodieBlog.Business;
 using FoodieBlog.Data;
-using FoodieBlog.Model.Data.Concrete.EntityFramework.Context;
+using FoodieBlog.Data.Concrete.EntityFramework.Context;
 using FoodieBlog.Model.Entity;
 using FoodieBlog.MVCCoreUI.Filters;
+using Microsoft.EntityFrameworkCore;
 
 namespace FoodieBlog.MVCCoreUI
 {
@@ -17,6 +18,8 @@ namespace FoodieBlog.MVCCoreUI
 
             // Context
             builder.Services.AddDbContext<FoodBlogDbContext>();
+    //        builder.Services.AddDbContext<FoodBlogDbContext>(options =>
+    //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
             // Repository pattern methods
             builder.Services.AddBusinessService();
@@ -28,7 +31,6 @@ namespace FoodieBlog.MVCCoreUI
 
             // HttpContextAccessor
             builder.Services.AddHttpContextAccessor();
-
 
 
 

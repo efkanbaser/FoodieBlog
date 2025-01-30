@@ -7,6 +7,6 @@ namespace FoodieBlog.MVCCoreUI.Filters
         public User ActiveUser { get; set; }
         public User ActiveAdmin { get; set; }
         public string Captcha { get; set; }
-        //public bool IsAllowed()
+        public bool IsAllowed(int MenuId, int UserId);
     }
 }
