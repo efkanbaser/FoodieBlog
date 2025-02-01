@@ -39,6 +39,7 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
                     PublicationDate = item.PublicationDate,
                     Active = item.Active
                 };
+                vm.Add(uservm);
             }
 
             return Json(new { data = vm });
@@ -93,15 +94,18 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
             User user = _userBs.Get(x => x.Id == Id);
 
             // Convert active to bool
-            var temp = data["Active"].ToString();
-            bool dataActive = bool.Parse(temp); 
+            if (!String.IsNullOrEmpty(data["Active"])){
+                var temp = data["Active"].ToString();
+                bool dataActive = bool.Parse(temp);
+                user.Active = dataActive;
+            }
             // ---------------
                 
             user.UserName = data["UserName"];
             user.Email = data["Email"];
             user.Bio = data["Bio"];
             user.ProfilePic = data["ProfilePic"];
-            user.Active = dataActive;
+
 
             _userBs.Update(user);
 

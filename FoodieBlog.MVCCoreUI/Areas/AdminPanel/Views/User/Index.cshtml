@@ -3,6 +3,12 @@
 
 }
 
+@section Styles {
+
+    <link href="~/adminassets/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.css" rel="stylesheet" />
+
+}
+
 @model UserIndexVm
 <div class="col-12">
     <div class="card">
@@ -20,9 +26,9 @@
                         <th>Bio</th>
                         <th>Profile Pic</th>
                         <th>Date Created</th>
-                        <th></th>
-                        <th></th>
-                        <th></th>
+                        <th>Active</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                 </thead>
             </table>
@@ -31,50 +37,50 @@
     </div>
 </div>
 
-@section Styles {
 
-    <link href="~/adminassets/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.css" rel="stylesheet" />
-
-}
-<form id="frmUserEkle">
-    <div class="modal fade" id="modalUrunEkle">
+<form id="frmAddUser">
+    <div class="modal fade" id="modalAddUser">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">User Ekleme Paneli</h4>
+                    <h4 class="modal-title">Add User Panel</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
 
-                    <div class="card-body">
+                    <div class="card-body p-0">
                         <div class="form-group">
                             <label>User Name</label>
                             <input type="text" class="form-control" asp-for="UserName" placeholder="User Name">
                         </div>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body p-0">
                         <div class="form-group">
                             <label>Email</label>
                             <input type="text" class="form-control" asp-for="Email" placeholder="Email">
                         </div>
                     </div>
 
-                    <div class="card-body">
+                    <div class="card-body p-0">
                         <div class="form-group">
                             <label>Bio</label>
                             <input type="text" class="form-control" asp-for="Bio" placeholder="Bio">
                         </div>
                     </div>
 
-                    <div class="card-body">
+
+                    @* SOMETHING TO ADD PROFILE PIC *@
+                    <div class="card-body p-0">
                         <div class="form-group">
                             <label>Profile Pic</label>
                             <input type="text" class="form-control" asp-for="ProfilePic" placeholder="Profile Pic">
                         </div>
                     </div>
+
+
                     <!-- /.card-body -->
 
 
@@ -82,8 +88,8 @@
 
                 </div>
                 <div class="modal-footer justify-content-between">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">VAZGEÇ</button>
-                    <button type="button" id="btnUserEkle" class="btn btn-primary">KAYDET</button>
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                    <button type="button" id="btnAddUser" class="btn btn-primary">ADD</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -93,43 +99,54 @@
 
 </form>
 
-<form id="frmUserGuncelle">
-    <div class="modal fade" id="modalUrunGuncelle">
+<form id="frmUpdateUser">
+    <div class="modal fade" id="modalUpdateUser">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">User Güncelleme Paneli</h4>
+                    <h4 class="modal-title">Update User Panel</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
                 <div class="modal-body">
-
-                    <div class="card-body">
+                    <div class="card-body p-0">
                         <div class="form-group">
-                            <input type="hidden" class="form-control" id="GId">
-
+                            <input type="hidden" class="form-control" id="HId">
                             <label>User Name</label>
-                            <input type="text" class="form-control" id="GUserAdi" placeholder="User Name">
-
-                            <label>Email</label>
-                            <input type="text" class="form-control" id="GUserOrani" placeholder="Email">
-
-                            <label>Bio</label>
-                            <input type="text" class="form-control" id="GUserAdi" placeholder="Bio">
-
-                            @* put an actual way to change profile pic *@
-                            <label>Profile Pic</label>
-                            <input type="text" class="form-control" id="GUserAdi" placeholder="Profile Pic">
+                            <input type="text" class="form-control" id="HUserName" placeholder="User Name">
                         </div>
                     </div>
+
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="text" class="form-control" id="HEmail" placeholder="Email">
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Bio</label>
+                            <input type="text" class="form-control" id="HBio" placeholder="Bio">
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Profile Pic</label>
+                            <input type="text" class="form-control" id="HProfilePic" placeholder="Profile Pic">
+                        </div>
+                    </div>
+
+
 
 
                     <!-- /.card-body -->
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
-                    <button type="button" id="btnUserGuncelle" class="btn btn-primary">UPDATE</button>
+                    <button type="button" id="btnUpdateUser" class="btn btn-primary">UPDATE</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -142,59 +159,71 @@
 
 @section Scripts {
     <script>
+        function createTable()
+        {
             var table;
-            $(function () {
-                table = $("#tblUserler").DataTable({
-                    "dom": "Bfrtip",
+            table = $("#tblUsers").DataTable({
+                    "dom": "<'d-flex justify-content-between'lfB>rtip",
+                    "buttons": [
+                        "csv", "excel", "pdf", "print", "colvis",
+                        {
+                          text: 'Add User',
+                          className: 'btn btn-default',
+                          action: function () {
+                            $('#modalAddUser').modal('show');
+                          },
+                        }                                                           
+                    ],
                     "responsive": true,
                     "lengthChange": true,
                     "pageLength": 10,
                     "autoWidth": false,
-                    "buttons": ["csv", "excel", "pdf", "print", "colvis"],
                     ajax: { url: '/AdminPanel/User/List', type: 'post' },
                     columns: [
                         { data: 'id', visible: false },
-                        { data: 'UserAdi' },
-                        { data: 'UserOrani' },
-                        { data: 'aktif' },
+                        { data: 'userName' },
+                        { data: 'email' },
+                        { data: 'bio' },
+                        { data: 'profilePic' },
+                        { data: 'publicationDate' },
+                        { data: 'active' },
                         { data: 'id' },
-                        { data: 'id' },
-
+                        { data: 'id' }
                     ],
                     columnDefs: [
                         {
-                            targets: 3,
+                            targets: 6,
                             render: function (data, type, row, meta) {
 
-                                var katid = row["id"];
+                                var userId = row["id"];
 
 
                                 if (data)
 
-                                    return '<input katid=' + katid + '  type= "checkbox" data-on-text="AKTİF" data-off-text="PASİF" name = "my-checkbox" checked data-bootstrap-switch data-off-color="danger" class="chkAktif" data-on-color="success" > ';
+                                    return '<input userId=' + userId + '  type= "checkbox" data-on-text="ACTIVE" data-off-text="PASSIVE" name = "my-checkbox" checked data-bootstrap-switch data-off-color="danger" class="chkActive" data-on-color="success" > ';
 
 
                                 else
 
-                                    return '<input katid=' + katid + '  type= "checkbox" data-on-text="AKTİF" data-off-text="PASİF" name = "my-checkbox"  data-bootstrap-switch data-off-color="danger" class="chkAktif" data-on-color="success" > ';
+                                    return '<input userId=' + userId + '  type= "checkbox" data-on-text="ACTIVE" data-off-text="PASSIVE" name = "my-checkbox"  data-bootstrap-switch data-off-color="danger" class="chkActive" data-on-color="success" > ';
 
                             }
                         },
 
                         {
-                            targets: 4,
+                            targets: 7,
                             render: function (data, type, row, meta) {
 
-                                return "<a class='btn btn-info btnDuzenle' katid=" + data + ">   <i class='fas fa-pencil-alt'></i> DÜZENLE</a > ";
+                                return "<a class='btn btn-info btnEdit' userId=" + data + ">   <i class='fas fa-pencil-alt'></i> EDIT</a > ";
 
                             }
                         },
 
                         {
-                            targets: 5,
+                            targets: 8,
                             render: function (data, type, row, meta) {
 
-                                return "<a class='btn btn-danger btnSil' katid=" + data + "><i class='fas fa-trash'></i> SİL</a > ";
+                                return "<a class='btn btn-danger btnDelete' userId=" + data + "><i class='fas fa-trash'></i> DELETE</a > ";
                             }
                         },
 
@@ -227,11 +256,17 @@
 
 
 
-                }).buttons().container().appendTo('#tblUserler_wrapper .col-md-6:eq(0)');
+                }).buttons().container().appendTo('#tblUsers_wrapper .col-md-6:eq(0)');
+            return table;
+        }
 
+
+            var table;
+            $(function () {
+                table = createTable();
             })
 
-            $("#btnUserEkle").click(function () {
+            $("#btnAddUser").click(function () {
 
                 var swal = Swal.fire({
                     title: "LÜTFEN BEKLEYİNİZ...",
@@ -243,14 +278,18 @@
 
                     },
                 });
-                // var form = $("#frmUserEkle");
                 var formData = new FormData();
 
-                var UserAdi = $("#UserAdi").val();
-                var UserOrani = $("#UserOrani").val();
+                var UserName = $("#UserName").val();
+                var Email = $("#Email").val();
+                var Bio = $("#Bio").val();
+                var ProfilePic = $("#ProfilePic").val();
 
-            formData.append("UserAdi", UserAdi)
-        formData.append("UserOrani", UserOrani)
+                formData.append("UserName", UserName)
+                formData.append("Email", Email)
+                formData.append("Bio", Bio)
+                formData.append("ProfilePic", ProfilePic)
+
 
 
                 $.ajax({
@@ -263,126 +302,31 @@
                     success: function (r) {
 
                         // ---------------Datatable Yok Edildi---------------
-
-                        $("#tblUserler").DataTable().destroy();
+                        $("#tblUsers").DataTable().destroy();
                         //-------------------------------------------------
-
                         // ---------------Datatable Yeniden Oluşturuluyor.---------------
-
-
-                        table = $("#tblUserler").DataTable({
-                            "dom": "Bfrtip",
-                            "responsive": true,
-                            "lengthChange": true,
-                            "pageLength": 10,
-                            "autoWidth": false,
-                            "buttons": ["csv", "excel", "pdf", "print", "colvis"],
-                            ajax: { url: '/AdminPanel/User/List', type: 'post' },
-                            columns: [
-                                { data: 'id', visible: false },
-                                { data: 'UserAdi' },
-                                { data: 'UserOrani' },
-                                { data: 'aktif' },
-                                { data: 'id' },
-                                { data: 'id' },
-
-                            ],
-                            columnDefs: [
-
-
-                                {
-                                    targets: 3,
-                                    render: function (data, type, row, meta) {
-
-                                        var katid = row["id"];
-
-
-                                        if (data)
-
-                                            return '<input katid=' + katid + '  type= "checkbox" data-on-text="AKTİF" data-off-text="PASİF" name = "my-checkbox" checked data-bootstrap-switch data-off-color="danger" class="chkAktif" data-on-color="success" > ';
-
-
-                                        else
-
-                                            return '<input katid=' + katid + '  type= "checkbox" data-on-text="AKTİF" data-off-text="PASİF" name = "my-checkbox"  data-bootstrap-switch data-off-color="danger" class="chkAktif" data-on-color="success" > ';
-
-                                    }
-                                },
-
-                                {
-                                    targets: 4,
-                                    render: function (data, type, row, meta) {
-
-                                        return "<a class='btn btn-info btnDuzenle' katid=" + data + ">   <i class='fas fa-pencil-alt'></i> DÜZENLE</a > ";
-
-                                    }
-                                },
-
-                                {
-                                    targets: 5,
-                                    render: function (data, type, row, meta) {
-
-                                        return "<a class='btn btn-danger btnSil' katid=" + data + "><i class='fas fa-trash'></i> SİL</a > ";
-                                    }
-                                },
-
-
-
-
-                            ],
-
-                            initComplete: function (settings, json) {
-
-                                // Datatable initilize olduğunda
-                                $("input[data-bootstrap-switch]").each(function () {
-                                    $(this).bootstrapSwitch();
-                                })
-
-
-
-                            },
-
-                            drawCallback: function () {
-
-                                // Arama Yapıldığında, Sayfalama Yapıldığında, Sıralama Yapıldığında Draw yapılıyor
-                                $("input[data-bootstrap-switch]").each(function () {
-                                    $(this).bootstrapSwitch();
-                                })
-
-                            }
-
-                        }).buttons().container().appendTo('#tblUserler_wrapper .col-md-6:eq(0)');
-
-
-
+                        table = createTable();
 
                         //   $("#UstUserId").trigger("change"); // change eventı buradan tetiklendi
                         // $("#modalUrunEkle").modal("hide");
-
-
                         swal.close();
                         if (r.result) {
-                            $("#UserAdi").val(''); // modaldaki User adı kısımını temizler
-                            $("#UserOrani").val('');
+                            $("#UserName").val('');
+                            $("#Email").val('');
+                            $("Bio").val('');
                             Swal.fire({
                                 title: "İŞLEM BAŞARILI",
                                 text: r.mesaj,
                                 icon: "success"
                             });
+                            $('#modalAddUser').modal('hide');
                         }
+                        },
+                        error: function () {
 
-
-
-
-                    },
-                    error: function () {
-
-                    }
+                        }
                 }
                 );
-
-
-
             });
 
 
@@ -397,7 +341,7 @@
             $("input[data-bootstrap-switch]").each(function () {
                 $(this).bootstrapSwitch();
             })
-            $(document).on('switchChange.bootstrapSwitch', '.chkAktif', function (event, state) {
+            $(document).on('switchChange.bootstrapSwitch', '.chkActive', function (event, state) {
 
                 var swal = Swal.fire({
                     title: "LÜTFEN BEKLEYİNİZ...",
@@ -410,13 +354,13 @@
                     },
                 });
 
-                var id = $(this).attr('katid');
+                var id = $(this).attr('userId');
                 var aktifpasif = state;
                 $.ajax({
-                    url: "/AdminPanel/User/AktifPasif",
+                    url: "/AdminPanel/User/ActiveInactive",
                     type: "post",
                     dataType: "json",
-                    data: { id: id, aktif: aktifpasif },
+                    data: { id: id, active: aktifpasif },
                     success: function (r) {
 
 
@@ -439,7 +383,7 @@
 
             });
 
-            $(document).on('click', '.btnDuzenle', function () {
+            $(document).on('click', '.btnEdit', function () {
                 var swal = Swal.fire({
                     title: "LÜTFEN BEKLEYİNİZ...",
                     html: "İşleminiz Yapılıyor",
@@ -451,8 +395,8 @@
                     },
                 });
 
-                var id = $(this).attr('katid');
-                $("#GId").val(id);
+                var id = $(this).attr('userId');
+                $("#HId").val(id);
 
                 $.ajax({
                     url: "/AdminPanel/User/GetUser",
@@ -462,9 +406,11 @@
                     success: function (r) {
 
                         if (r.result) {
-                            $("#GUserAdi").val(r.model.UserAdi);
-                            $("#GUserOrani").val(r.model.UserOrani);
-                            $("#modalUrunGuncelle").modal('show');
+                            $("#HUserName").val(r.model.userName);
+                            $("#HEmail").val(r.model.email);
+                            $("#HBio").val(r.model.bio);
+                            $("#HProfilePic").val(r.model.profilePic);
+                            $("#modalUpdateUser").modal('show');
                         }
                         swal.close();
                     },
@@ -477,7 +423,7 @@
 
 
             // DÜZENLE TUŞU
-            $(document).on('click', '#btnUserGuncelle', function () {
+            $(document).on('click', '#btnUpdateUser', function () {
                 var swal = Swal.fire({
                     title: "LÜTFEN BEKLEYİNİZ...",
                     html: "İşleminiz Yapılıyor",
@@ -491,14 +437,18 @@
 
                 var formData = new FormData();
 
+                var UserName = $("#HUserName").val();
+                var Email = $("#HEmail").val();
+                var Bio = $("HBio").val();
+                var Id = $("#HId").val();
 
-                var UserAdi = $("#GUserAdi").val();
-                var UserOrani = $("#GUserOrani").val();
-                var Id = $("#GId").val();
-
-                formData.append("UserAdi", UserAdi)
-                formData.append("UserOrani", UserOrani)
+                formData.append("UserName", UserName)
+                formData.append("Email", Email)
+                formData.append("Bio", Bio)
                 formData.append("Id", Id)
+
+
+
 
                 $.ajax({
                     url: "/AdminPanel/User/Update",
@@ -511,82 +461,15 @@
 
                         // ---------------Datatable Yok Edildi---------------
 
-                        $("#tblUserler").DataTable().destroy();
+                        $("#tblUsers").DataTable().destroy();
                         //-------------------------------------------------
 
                         // ---------------Datatable Yeniden Oluşturuluyor.---------------
 
 
-                        table = $("#tblUserler").DataTable({
-                            "dom": "Bfrtip",
-                            "responsive": true,
-                            "lengthChange": true,
-                            "pageLength": 10,
-                            "autoWidth": false,
-                            "buttons": ["csv", "excel", "pdf", "print", "colvis"],
-                            ajax: { url: '/AdminPanel/User/List', type: 'post' },
-                            columns: [
-                                { data: 'id', visible: false },
-                                { data: 'UserAdi' },
-                                { data: 'UserOrani' },
-                                { data: 'aktif' },
-                                { data: 'id' },
-                                { data: 'id' },
-                            ],
-                            columnDefs: [
-                                {
-                                    targets: 3,
-                                    render: function (data, type, row, meta) {
-
-                                        var katid = row["id"];
-
-                                        if (data)
-                                            return '<input katid=' + katid + '  type= "checkbox" data-on-text="AKTİF" data-off-text="PASİF" name = "my-checkbox" checked data-bootstrap-switch data-off-color="danger" class="chkAktif" data-on-color="success" > ';
-
-                                        else
-                                            return '<input katid=' + katid + '  type= "checkbox" data-on-text="AKTİF" data-off-text="PASİF" name = "my-checkbox"  data-bootstrap-switch data-off-color="danger" class="chkAktif" data-on-color="success" > ';
-
-                                    }
-                                },
-
-                                {
-                                    targets: 4,
-                                    render: function (data, type, row, meta) {
-
-                                        return "<a class='btn btn-info btnDuzenle' katid=" + data + ">   <i class='fas fa-pencil-alt'></i> DÜZENLE</a > ";
-
-                                    }
-                                },
-
-                                {
-                                    targets: 5,
-                                    render: function (data, type, row, meta) {
-
-                                        return "<a class='btn btn-danger btnSil' katid=" + data + "><i class='fas fa-trash'></i> SİL</a > ";
-                                    }
-                                },
-                            ],
-
-                            initComplete: function (settings, json) {
-
-                                // Datatable initilize olduğunda
-                                $("input[data-bootstrap-switch]").each(function () {
-                                    $(this).bootstrapSwitch();
-                                })
-                            },
-
-                            drawCallback: function () {
-
-                                // Arama Yapıldığında, Sayfalama Yapıldığında, Sıralama Yapıldığında Draw yapılıyor
-                                $("input[data-bootstrap-switch]").each(function () {
-                                    $(this).bootstrapSwitch();
-                                })
-                            }
-
-                        }).buttons().container().appendTo('#tblUserler_wrapper .col-md-6:eq(0)');
+                        table = createTable();
 
 
-                        // $("#modalUrunEkle").modal("hide");
 
                         swal.close();
                         if (r.result) {
@@ -596,6 +479,7 @@
                                 icon: "success"
                             });
                         }
+                        $("#modalUpdateUser").modal('hide');
                     },
                     error: function () {
 
@@ -607,28 +491,68 @@
 
 
             // SİL TUŞU
-            $(document).on('click', '.btnSil', function () {
-                var id = $(this).attr('katid');
-                $.ajax({
-                    url: "/AdminPanel/User/GetUser",
-                    type: "post",
-                    dataType: "json",
-                    data: { id: id },
-                    success: function (r) {
+            $(document).on('click', '.btnDelete', function () {
 
-                        if (r.result) {
-                        $("#GUserAdi").val(r.model.UserAdi);
-                        $("#GUserOrani").val(r.model.UserOrani);
-                            $("#modalUrunGuncelle").modal('show');
-                        }
-                        swal.close();
-                    },
-                    error: function () {
+                Swal.fire({
+                    title: "Are you sure?",
+                    text: "You won't be able to revert this!",
+                    icon: "warning",
+                    showCancelButton: true,
+                    confirmButtonColor: "#3085d6",
+                    cancelButtonColor: "#d33",
+                    confirmButtonText: "Yes, delete it!"
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
+                        var id = $(this).attr('userId');
+                        $("#HId").val(id);
+                        $.ajax({
+                            url: "/AdminPanel/User/Delete",
+                            type: "post",
+                            dataType: "json",
+                            data: { id: id },
+                            success: function (r) {
+                                // ---------------Datatable Yok Edildi---------------
+
+                                $("#tblUsers").DataTable().destroy();
+                                //-------------------------------------------------
+
+                                // ---------------Datatable Yeniden Oluşturuluyor.---------------
+                                table = createTable();
+
+                                if (r.result) {
+                                Swal.fire({
+                                        title: "İŞLEM BAŞARILI",
+                                        text: r.mesaj,
+                                        icon: "success"
+                                    });
+                            }
+                            },
+                            error: function () {
 
 
+                            }
+                        });
+
+
+
+
+
+                      Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                      });
                     }
-                }
-                );
+                });
+
+
+
+
+
+
+
+
             });
         })
 
@@ -640,6 +564,7 @@
 
     </script>
 }
+
 
 
 
