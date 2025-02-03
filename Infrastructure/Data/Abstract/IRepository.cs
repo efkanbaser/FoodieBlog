@@ -13,17 +13,17 @@ namespace Infrastructure.Data.Abstract
     public interface IRepository<T>
         where T : BaseEntity, new()
     {
-        List<T> GetAll(Expression<Func<T, bool>> filter = null, Expression<Func<T, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist);
+        Task<List<T>> GetAll(Expression<Func<T, bool>> filter = null, Expression<Func<T, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist);
 
-        PagingResult<T> GetAllPaging(int Page, int PageSize, Expression<Func<T, bool>> filter = null, Expression<Func<T, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist);
+        Task<PagingResult<T>> GetAllPaging(int Page, int PageSize, Expression<Func<T, bool>> filter = null, Expression<Func<T, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist);
 
-        int GetCount(Expression<Func<T, bool>> filter = null, params string[] includelist);
-        T Get(Expression<Func<T, bool>> filter, bool Tracking = false, params string[] includelist);
-        List<T> GetAllByActive(Expression<Func<T, bool>> filter = null, Expression<Func<T, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Aktif = true, bool Tracking = false, params string[] includelist);
-        T GetById(int Id, bool Tracking = false, params string[] includelist);
-        T Insert(T entity);
+        Task<int> GetCount(Expression<Func<T, bool>> filter = null, params string[] includelist);
+        Task<T> Get(Expression<Func<T, bool>> filter, bool Tracking = false, params string[] includelist);
+        Task<List<T>> GetAllByActive(Expression<Func<T, bool>> filter = null, Expression<Func<T, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Aktif = true, bool Tracking = false, params string[] includelist);
+        Task<T> GetById(int Id, bool Tracking = false, params string[] includelist);
+        Task<T> Insert(T entity);
         T Delete(T entity);
         T DeleteById(int Id);
-        T Update(T entity);
+        Task<T> Update(T entity);
     }
 }

@@ -22,10 +22,10 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
         }
 
         [HttpPost]
-        public IActionResult List()
+        public async Task<IActionResult> List()
         {
             List<UserIndexVm> vm = new List<UserIndexVm>();
-            List<User> users = _userBs.GetAll();
+            List<User> users = await _userBs.GetAll();
 
             foreach (var item in users)
             {
@@ -88,10 +88,10 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
         }
 
         [HttpPost]
-        public IActionResult Update(IFormCollection data)
+        public async Task<IActionResult> Update(IFormCollection data)
         {
             int Id = Convert.ToInt32(data["Id"]);
-            User user = _userBs.Get(x => x.Id == Id);
+            User user = await _userBs.Get(x => x.Id == Id);
 
             // Convert active to bool
             if (!String.IsNullOrEmpty(data["Active"])){
@@ -109,7 +109,7 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
 
             _userBs.Update(user);
 
-            List<User> users = _userBs.GetAll();
+            List<User> users = await _userBs.GetAll();
 
             UserIndexVm model = new UserIndexVm();
 
@@ -122,18 +122,18 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
             return Json(new { result = true, message = "User is updated successfully", model = model });
         }
 
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            User k = _userBs.Get(x => x.Id == id);
+            User k = await _userBs.Get(x => x.Id == id);
 
             _userBs.Delete(k);
 
             return Json(new { result = true, mesaj = "User is deleted successfully" });
         }
 
-        public IActionResult ActiveInactive(int id, bool active)
+        public async Task<IActionResult> ActiveInactive(int id, bool active)
         {
-            User k = _userBs.Get(x => x.Id == id);
+            User k = await _userBs.Get(x => x.Id == id);
             k.Active = active;
             _userBs.Update(k);
 
@@ -141,10 +141,10 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
             return Json(new { result = true, mesaj = "Activity is updated successfully" });
         }
 
-        public IActionResult GetUser(int id)
+        public async Task<IActionResult> GetUser(int id)
         {
 
-            User k = _userBs.Get(x => x.Id == id);
+            User k = await _userBs.Get(x => x.Id == id);
 
 
             return Json(new { result = true, model = k });

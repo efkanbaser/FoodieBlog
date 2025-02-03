@@ -16,7 +16,7 @@ namespace FoodieBlog.Business.Concrete.Base
     {
         private readonly IAdminMenuRepository _repo;
 
-        public AdminMenuBs(IAdminMenuRepository repo)
+        public AdminMenuBs (IAdminMenuRepository repo)
         {
             _repo = repo;
         }
@@ -31,45 +31,45 @@ namespace FoodieBlog.Business.Concrete.Base
             return _repo.DeleteById(Id);
         }
 
-        public AdminMenu Get(Expression<Func<AdminMenu, bool>> filter, bool Tracking = false, params string[] includelist)
+        public async Task<AdminMenu>Get(Expression<Func<AdminMenu, bool>> filter, bool Tracking = false, params string[] includelist)
         {
-            return _repo.Get(filter, Tracking, includelist);
+            return await _repo.Get(filter, Tracking, includelist);
         }
 
-        public List<AdminMenu> GetAll(Expression<Func<AdminMenu, bool>> filter = null, Expression<Func<AdminMenu, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist)
+        public async Task<List<AdminMenu>> GetAll(Expression<Func<AdminMenu, bool>> filter = null, Expression<Func<AdminMenu, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetAll(filter, orderby, sorted, Tracking, includelist);
+            return await _repo.GetAll(filter, orderby, sorted, Tracking, includelist);
         }
 
-        public List<AdminMenu> GetAllByActive(Expression<Func<AdminMenu, bool>> filter = null, Expression<Func<AdminMenu, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Aktif = true, bool Tracking = false, params string[] includelist)
+        public async Task<List<AdminMenu>> GetAllByActive(Expression<Func<AdminMenu, bool>> filter = null, Expression<Func<AdminMenu, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Aktif = true, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetAllByActive(filter, orderby, sorted, Aktif, Tracking, includelist);
+            return await _repo.GetAllByActive(filter, orderby, sorted, Aktif, Tracking, includelist);
 
         }
 
-        public PagingResult<AdminMenu> GetAllPaging(int Page, int PageSize, Expression<Func<AdminMenu, bool>> filter = null, Expression<Func<AdminMenu, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist)
+        public async Task<PagingResult<AdminMenu>> GetAllPaging(int Page, int PageSize, Expression<Func<AdminMenu, bool>> filter = null, Expression<Func<AdminMenu, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist)
         {
-            return _repo.GetAllPaging(Page, PageSize, filter, orderby, sorted, includelist);
+            return await _repo.GetAllPaging(Page, PageSize, filter, orderby, sorted, includelist);
         }
 
-        public AdminMenu GetById(int Id, bool Tracking = false, params string[] includelist)
+        public async Task<AdminMenu> GetById(int Id, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetById(Id, Tracking, includelist);
+            return await _repo.GetById(Id, Tracking, includelist);
         }
 
-        public int GetCount(Expression<Func<AdminMenu, bool>> filter = null, params string[] includelist)
+        public async Task<int> GetCount(Expression<Func<AdminMenu, bool>> filter = null, params string[] includelist)
         {
-            return _repo.GetCount(filter, includelist);
+            return await _repo.GetCount(filter, includelist);
         }
 
-        public AdminMenu Insert(AdminMenu entity)
+        public async Task<AdminMenu> Insert(AdminMenu entity)
         {
-            return _repo.Insert(entity);
+            return await _repo.Insert(entity);
         }
 
-        public AdminMenu Update(AdminMenu entity)
+        public async Task<AdminMenu> Update(AdminMenu entity)
         {
-            return _repo.Update(entity);
+            return await _repo.Update(entity);
         }
     }
 }

@@ -42,7 +42,7 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Login(LoginVm user)
+        public async Task<IActionResult> Login(LoginVm user)
         {
             // TODO: Password Crypto
             // TODO: Remember Me button function with cookies
@@ -53,7 +53,7 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
 
             //string CryptoPassword = CryptoManager.SHA256Encrypt(user.Password);
 
-            User user1 = _userBs.Get(x => x.Email == user.Email && x.Password == user.Password, false, "UserRoles", "UserRoles.Role");
+            User user1 = await _userBs.Get(x => x.Email == user.Email && x.Password == user.Password, false, "UserRoles", "UserRoles.Role");
 
             if(user1 != null)
             {

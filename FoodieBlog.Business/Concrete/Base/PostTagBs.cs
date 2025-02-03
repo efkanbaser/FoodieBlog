@@ -31,45 +31,45 @@ namespace FoodieBlog.Business.Concrete.Base
             return _repo.DeleteById(Id);
         }
 
-        public PostTag Get(Expression<Func<PostTag, bool>> filter, bool Tracking = false, params string[] includelist)
+        public async Task<PostTag> Get(Expression<Func<PostTag, bool>> filter, bool Tracking = false, params string[] includelist)
         {
-            return _repo.Get(filter, Tracking, includelist);
+            return await _repo.Get(filter, Tracking, includelist);
         }
 
-        public List<PostTag> GetAll(Expression<Func<PostTag, bool>> filter = null, Expression<Func<PostTag, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist)
+        public async Task<List<PostTag>> GetAll(Expression<Func<PostTag, bool>> filter = null, Expression<Func<PostTag, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetAll(filter, orderby, sorted, Tracking, includelist);
+            return await _repo.GetAll(filter, orderby, sorted, Tracking, includelist);
         }
 
-        public List<PostTag> GetAllByActive(Expression<Func<PostTag, bool>> filter = null, Expression<Func<PostTag, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Aktif = true, bool Tracking = false, params string[] includelist)
+        public async Task<List<PostTag>> GetAllByActive(Expression<Func<PostTag, bool>> filter = null, Expression<Func<PostTag, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Aktif = true, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetAllByActive(filter, orderby, sorted, Aktif, Tracking, includelist);
+            return await _repo.GetAllByActive(filter, orderby, sorted, Aktif, Tracking, includelist);
 
         }
 
-        public PagingResult<PostTag> GetAllPaging(int Page, int PageSize, Expression<Func<PostTag, bool>> filter = null, Expression<Func<PostTag, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist)
+        public async Task<PagingResult<PostTag>> GetAllPaging(int Page, int PageSize, Expression<Func<PostTag, bool>> filter = null, Expression<Func<PostTag, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist)
         {
-            return _repo.GetAllPaging(Page, PageSize, filter, orderby, sorted, includelist);
+            return await _repo.GetAllPaging(Page, PageSize, filter, orderby, sorted, includelist);
         }
 
-        public PostTag GetById(int Id, bool Tracking = false, params string[] includelist)
+        public async Task<PostTag> GetById(int Id, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetById(Id, Tracking, includelist);
+            return await _repo.GetById(Id, Tracking, includelist);
         }
 
-        public int GetCount(Expression<Func<PostTag, bool>> filter = null, params string[] includelist)
+        public async Task<int> GetCount(Expression<Func<PostTag, bool>> filter = null, params string[] includelist)
         {
-            return _repo.GetCount(filter, includelist);
+            return await _repo.GetCount(filter, includelist);
         }
 
-        public PostTag Insert(PostTag entity)
+        public async Task<PostTag> Insert(PostTag entity)
         {
-            return _repo.Insert(entity);
+            return await _repo.Insert(entity);
         }
 
-        public PostTag Update(PostTag entity)
+        public async Task<PostTag> Update(PostTag entity)
         {
-            return _repo.Update(entity);
+            return await _repo.Update(entity);
         }
     }
 }

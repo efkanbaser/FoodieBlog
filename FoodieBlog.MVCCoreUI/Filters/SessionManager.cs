@@ -54,11 +54,11 @@ namespace FoodieBlog.MVCCoreUI.Filters
             }
         }
 
-        public bool IsAllowed(int MenuId, int UserId)
+        public async Task<bool> IsAllowed(int MenuId, int UserId)
         {
-            AdminMenu menu = _menuBs.Get(x => x.Id == MenuId, false, "MenuAuthorizations", "MenuAuthorizations.Role", "MenuAuthorizations.Role.UserRoles", "MenuAuthorizations.Role.UserRoles.User");
+            AdminMenu menu = await _menuBs.Get(x => x.Id == MenuId, false, "MenuAuthorizations", "MenuAuthorizations.Role", "MenuAuthorizations.Role.UserRoles", "MenuAuthorizations.Role.UserRoles.User");
 
-            User user = _userBs.Get(x => x.Id == UserId, false, "UserRoles");
+            User user = await _userBs.Get(x => x.Id == UserId, false, "UserRoles");
 
             bool auth = false;
 

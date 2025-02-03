@@ -18,10 +18,10 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.ViewComponents
             _session = session;
         }
 
-        public IViewComponentResult Invoke()
+        public async Task<IViewComponentResult> InvokeAsync()
         {
             // TODO: Change SidebarVm to include less stuff, atm you basically send the entity AdminMenu
-            List<AdminMenu> menu = _menuBs.GetAll(filter: x => x.Active == true, orderby: x => x.MenuOrder, sorted: Sorted.ASC, Tracking: false, "MenuAuthorizations", "MenuAuthorizations.Role", "MenuAuthorizations.Role.UserRoles", "MenuAuthorizations.Role.UserRoles.User");
+            List<AdminMenu> menu = await _menuBs.GetAll(filter: x => x.Active == true, orderby: x => x.MenuOrder, sorted: Sorted.ASC, Tracking: false, "MenuAuthorizations", "MenuAuthorizations.Role", "MenuAuthorizations.Role.UserRoles", "MenuAuthorizations.Role.UserRoles.User");
 
             SidebarVm vm = new SidebarVm();
             vm.AdminMenus = menu;

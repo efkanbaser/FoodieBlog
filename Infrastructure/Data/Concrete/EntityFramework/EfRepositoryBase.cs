@@ -57,7 +57,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
 
         }
 
-        public TEntity Get(Expression<Func<TEntity, bool>> filter, bool Tracking = false, params string[] includelist)
+        public async Task<TEntity> Get(Expression<Func<TEntity, bool>> filter, bool Tracking = false, params string[] includelist)
         {
             try
             {
@@ -71,9 +71,9 @@ namespace Infrastructure.Data.Concrete.EntityFramework
                     }
                 }
                 if (Tracking)
-                    return query.SingleOrDefault(filter);
+                    return await query.SingleOrDefaultAsync(filter);
                 else
-                    return query.AsNoTracking().SingleOrDefault(filter);
+                    return await query.AsNoTracking().SingleOrDefaultAsync(filter);
             }
             catch (Exception)
             {
@@ -82,7 +82,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
             }
         }
 
-        public List<TEntity> GetAll(Expression<Func<TEntity, bool>> filter = null, Expression<Func<TEntity, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist)
+        public async Task<List<TEntity>> GetAll(Expression<Func<TEntity, bool>> filter = null, Expression<Func<TEntity, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist)
         {
 
             using TContext ctx = new TContext();
@@ -124,11 +124,11 @@ namespace Infrastructure.Data.Concrete.EntityFramework
             }
 
 
-            return query.ToList();
+            return await query.ToListAsync();
 
         }
 
-        public List<TEntity> GetAllByActive(Expression<Func<TEntity, bool>> filter = null, Expression<Func<TEntity, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Active = true, bool Tracking = false, params string[] includelist)
+        public async Task<List<TEntity>> GetAllByActive(Expression<Func<TEntity, bool>> filter = null, Expression<Func<TEntity, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Active = true, bool Tracking = false, params string[] includelist)
         {
             try
             {
@@ -173,7 +173,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
                         query = query.OrderByDescending(orderby);
                 }
 
-                return query.ToList();
+                return await query.ToListAsync();
 
             }
             catch (Exception)
@@ -187,7 +187,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
 
         }
 
-        public PagingResult<TEntity> GetAllPaging(int Page, int PageSize, Expression<Func<TEntity, bool>> filter = null, Expression<Func<TEntity, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist)
+        public async Task<PagingResult<TEntity>> GetAllPaging(int Page, int PageSize, Expression<Func<TEntity, bool>> filter = null, Expression<Func<TEntity, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist)
         {
             try
             {
@@ -218,7 +218,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
 
                 query = query.Skip((Page - 1) * PageSize).Take(PageSize);
 
-                return new PagingResult<TEntity>(query.ToList(), TotalItemCount, totalCount);
+                return new PagingResult<TEntity>(await query.ToListAsync(), TotalItemCount, totalCount);
             }
             catch (Exception)
             {
@@ -230,7 +230,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
 
         }
 
-        public TEntity GetById(int Id, bool Tracking = false, params string[] includelist)
+        public async Task<TEntity> GetById(int Id, bool Tracking = false, params string[] includelist)
         {
             try
             {
@@ -244,9 +244,9 @@ namespace Infrastructure.Data.Concrete.EntityFramework
                     }
                 }
                 if (Tracking)
-                    return query.SingleOrDefault(x => x.Id == Id);
+                    return await query.SingleOrDefaultAsync(x => x.Id == Id);
                 else
-                    return query.AsNoTracking().SingleOrDefault(x => x.Id == Id);
+                    return await query.AsNoTracking().SingleOrDefaultAsync(x => x.Id == Id);
             }
             catch (Exception)
             {
@@ -255,7 +255,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
             }
         }
 
-        public int GetCount(Expression<Func<TEntity, bool>> filter = null, params string[] includelist)
+        public async Task<int> GetCount(Expression<Func<TEntity, bool>> filter = null, params string[] includelist)
         {
             try
             {
@@ -269,7 +269,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
                     }
                 }
 
-                return query.Where(filter).Count();
+                return await query.Where(filter).CountAsync();
             }
             catch (Exception)
             {
@@ -286,7 +286,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
 
         }
 
-        public TEntity Insert(TEntity entity)
+        public async Task<TEntity> Insert(TEntity entity)
         {
             try
             {
@@ -294,8 +294,8 @@ namespace Infrastructure.Data.Concrete.EntityFramework
 
                 // entity.OlusturulmaTarihi = DateTime.UtcNow;
 
-                ctx.Set<TEntity>().Add(entity);
-                ctx.SaveChanges();
+                await ctx.Set<TEntity>().AddAsync(entity);
+                await ctx.SaveChangesAsync();
 
                 return entity;
 
@@ -309,7 +309,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
         }
        
 
-        public TEntity Update(TEntity entity)
+        public async Task<TEntity> Update(TEntity entity)
         {
             try
             {
@@ -317,7 +317,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
                 //  entity.DegistirilmeTarihi = DateTime.UtcNow;
                 ctx.Set<TEntity>().Attach(entity);
                 ctx.Entry(entity).State = EntityState.Modified;
-                ctx.SaveChanges();
+                await ctx.SaveChangesAsync();
                 return entity;
 
             }

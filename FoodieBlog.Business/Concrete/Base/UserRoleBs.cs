@@ -31,45 +31,45 @@ namespace FoodieBlog.Business.Concrete.Base
             return _repo.DeleteById(Id);
         }
 
-        public UserRole Get(Expression<Func<UserRole, bool>> filter, bool Tracking = false, params string[] includelist)
+        public async Task<UserRole> Get(Expression<Func<UserRole, bool>> filter, bool Tracking = false, params string[] includelist)
         {
-            return _repo.Get(filter, Tracking, includelist);
+            return await _repo.Get(filter, Tracking, includelist);
         }
 
-        public List<UserRole> GetAll(Expression<Func<UserRole, bool>> filter = null, Expression<Func<UserRole, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist)
+        public async Task<List<UserRole>> GetAll(Expression<Func<UserRole, bool>> filter = null, Expression<Func<UserRole, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetAll(filter, orderby, sorted, Tracking, includelist);
+            return await _repo.GetAll(filter, orderby, sorted, Tracking, includelist);
         }
 
-        public List<UserRole> GetAllByActive(Expression<Func<UserRole, bool>> filter = null, Expression<Func<UserRole, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Aktif = true, bool Tracking = false, params string[] includelist)
+        public async Task<List<UserRole>> GetAllByActive(Expression<Func<UserRole, bool>> filter = null, Expression<Func<UserRole, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Aktif = true, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetAllByActive(filter, orderby, sorted, Aktif, Tracking, includelist);
+            return await _repo.GetAllByActive(filter, orderby, sorted, Aktif, Tracking, includelist);
 
         }
 
-        public PagingResult<UserRole> GetAllPaging(int Page, int PageSize, Expression<Func<UserRole, bool>> filter = null, Expression<Func<UserRole, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist)
+        public async Task<PagingResult<UserRole>> GetAllPaging(int Page, int PageSize, Expression<Func<UserRole, bool>> filter = null, Expression<Func<UserRole, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist)
         {
-            return _repo.GetAllPaging(Page, PageSize, filter, orderby, sorted, includelist);
+            return await _repo.GetAllPaging(Page, PageSize, filter, orderby, sorted, includelist);
         }
 
-        public UserRole GetById(int Id, bool Tracking = false, params string[] includelist)
+        public async Task<UserRole> GetById(int Id, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetById(Id, Tracking, includelist);
+            return await _repo.GetById(Id, Tracking, includelist);
         }
 
-        public int GetCount(Expression<Func<UserRole, bool>> filter = null, params string[] includelist)
+        public async Task<int> GetCount(Expression<Func<UserRole, bool>> filter = null, params string[] includelist)
         {
-            return _repo.GetCount(filter, includelist);
+            return await _repo.GetCount(filter, includelist);
         }
 
-        public UserRole Insert(UserRole entity)
+        public async Task<UserRole> Insert(UserRole entity)
         {
-            return _repo.Insert(entity);
+            return await _repo.Insert(entity);
         }
 
-        public UserRole Update(UserRole entity)
+        public async Task<UserRole> Update(UserRole entity)
         {
-            return _repo.Update(entity);
+            return await _repo.Update(entity);
         }
     }
 }

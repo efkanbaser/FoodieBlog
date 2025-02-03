@@ -31,45 +31,45 @@ namespace FoodieBlog.Business.Concrete.Base
             return _repo.DeleteById(Id);
         }
 
-        public MenuAuthorization Get(Expression<Func<MenuAuthorization, bool>> filter, bool Tracking = false, params string[] includelist)
+        public async Task<MenuAuthorization> Get(Expression<Func<MenuAuthorization, bool>> filter, bool Tracking = false, params string[] includelist)
         {
-            return _repo.Get(filter, Tracking, includelist);
+            return await _repo.Get(filter, Tracking, includelist);
         }
 
-        public List<MenuAuthorization> GetAll(Expression<Func<MenuAuthorization, bool>> filter = null, Expression<Func<MenuAuthorization, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist)
+        public async Task<List<MenuAuthorization>> GetAll(Expression<Func<MenuAuthorization, bool>> filter = null, Expression<Func<MenuAuthorization, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetAll(filter, orderby, sorted, Tracking, includelist);
+            return await _repo.GetAll(filter, orderby, sorted, Tracking, includelist);
         }
 
-        public List<MenuAuthorization> GetAllByActive(Expression<Func<MenuAuthorization, bool>> filter = null, Expression<Func<MenuAuthorization, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Aktif = true, bool Tracking = false, params string[] includelist)
+        public async Task<List<MenuAuthorization>> GetAllByActive(Expression<Func<MenuAuthorization, bool>> filter = null, Expression<Func<MenuAuthorization, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Aktif = true, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetAllByActive(filter, orderby, sorted, Aktif, Tracking, includelist);
+            return await _repo.GetAllByActive(filter, orderby, sorted, Aktif, Tracking, includelist);
 
         }
 
-        public PagingResult<MenuAuthorization> GetAllPaging(int Page, int PageSize, Expression<Func<MenuAuthorization, bool>> filter = null, Expression<Func<MenuAuthorization, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist)
+        public async Task<PagingResult<MenuAuthorization>> GetAllPaging(int Page, int PageSize, Expression<Func<MenuAuthorization, bool>> filter = null, Expression<Func<MenuAuthorization, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist)
         {
-            return _repo.GetAllPaging(Page, PageSize, filter, orderby, sorted, includelist);
+            return await _repo.GetAllPaging(Page, PageSize, filter, orderby, sorted, includelist);
         }
 
-        public MenuAuthorization GetById(int Id, bool Tracking = false, params string[] includelist)
+        public async Task<MenuAuthorization> GetById(int Id, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetById(Id, Tracking, includelist);
+            return await _repo.GetById(Id, Tracking, includelist);
         }
 
-        public int GetCount(Expression<Func<MenuAuthorization, bool>> filter = null, params string[] includelist)
+        public async Task<int> GetCount(Expression<Func<MenuAuthorization, bool>> filter = null, params string[] includelist)
         {
-            return _repo.GetCount(filter, includelist);
+            return await _repo.GetCount(filter, includelist);
         }
 
-        public MenuAuthorization Insert(MenuAuthorization entity)
+        public async Task<MenuAuthorization> Insert(MenuAuthorization entity)
         {
-            return _repo.Insert(entity);
+            return await _repo.Insert(entity);
         }
 
-        public MenuAuthorization Update(MenuAuthorization entity)
+        public async Task<MenuAuthorization> Update(MenuAuthorization entity)
         {
-            return _repo.Update(entity);
+            return await _repo.Update(entity);
         }
     }
 }

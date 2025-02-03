@@ -20,7 +20,7 @@ namespace FoodieBlog.Business.Concrete.Base
         {
             _repo = repo;
         }
-        
+
         public Comment Delete(Comment entity)
         {
             return _repo.Delete(entity);
@@ -31,45 +31,45 @@ namespace FoodieBlog.Business.Concrete.Base
             return _repo.DeleteById(Id);
         }
 
-        public Comment Get(Expression<Func<Comment, bool>> filter, bool Tracking = false, params string[] includelist)
+        public async Task<Comment> Get(Expression<Func<Comment, bool>> filter, bool Tracking = false, params string[] includelist)
         {
-            return _repo.Get(filter, Tracking, includelist);
+            return await _repo.Get(filter, Tracking, includelist);
         }
 
-        public List<Comment> GetAll(Expression<Func<Comment, bool>> filter = null, Expression<Func<Comment, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist)
+        public async Task<List<Comment>> GetAll(Expression<Func<Comment, bool>> filter = null, Expression<Func<Comment, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetAll(filter, orderby, sorted, Tracking, includelist);
+            return await _repo.GetAll(filter, orderby, sorted, Tracking, includelist);
         }
 
-        public List<Comment> GetAllByActive(Expression<Func<Comment, bool>> filter = null, Expression<Func<Comment, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Aktif = true, bool Tracking = false, params string[] includelist)
+        public async Task<List<Comment>> GetAllByActive(Expression<Func<Comment, bool>> filter = null, Expression<Func<Comment, object>> orderby = null, Sorted sorted = Sorted.ASC, bool Aktif = true, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetAllByActive(filter, orderby, sorted, Aktif, Tracking, includelist);
+            return await _repo.GetAllByActive(filter, orderby, sorted, Aktif, Tracking, includelist);
 
         }
 
-        public PagingResult<Comment> GetAllPaging(int Page, int PageSize, Expression<Func<Comment, bool>> filter = null, Expression<Func<Comment, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist)
+        public async Task<PagingResult<Comment>> GetAllPaging(int Page, int PageSize, Expression<Func<Comment, bool>> filter = null, Expression<Func<Comment, object>> orderby = null, Sorted sorted = Sorted.ASC, params string[] includelist)
         {
-            return _repo.GetAllPaging(Page, PageSize, filter, orderby, sorted, includelist);
+            return await _repo.GetAllPaging(Page, PageSize, filter, orderby, sorted, includelist);
         }
 
-        public Comment GetById(int Id, bool Tracking = false, params string[] includelist)
+        public async Task<Comment> GetById(int Id, bool Tracking = false, params string[] includelist)
         {
-            return _repo.GetById(Id, Tracking, includelist);
+            return await _repo.GetById(Id, Tracking, includelist);
         }
 
-        public int GetCount(Expression<Func<Comment, bool>> filter = null, params string[] includelist)
+        public async Task<int> GetCount(Expression<Func<Comment, bool>> filter = null, params string[] includelist)
         {
-            return _repo.GetCount(filter, includelist);
+            return await _repo.GetCount(filter, includelist);
         }
 
-        public Comment Insert(Comment entity)
+        public async Task<Comment> Insert(Comment entity)
         {
-            return _repo.Insert(entity);
+            return await _repo.Insert(entity);
         }
 
-        public Comment Update(Comment entity)
+        public async Task<Comment> Update(Comment entity)
         {
-            return _repo.Update(entity);
+            return await _repo.Update(entity);
         }
     }
 }
