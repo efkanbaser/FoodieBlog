@@ -1,0 +1,113 @@
+﻿@section ContentHeader
+{
+
+}
+
+@section Styles {
+
+    <link href="~/adminassets/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.css" rel="stylesheet" />
+
+}
+
+@model RoleIndexVm
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Role List</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table id="tblRoles" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Role Name</th>
+                        <th>Active</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+</div>
+
+
+<form id="frmAddRole">
+    <div class="modal fade" id="modalAddRole">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Role Panel</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Role Name</label>
+                            <input type="text" class="form-control" asp-for="RoleName" placeholder="Role Name">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                    <button type="button" id="btnAddRole" class="btn btn-primary">ADD</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+</form>
+
+<form id="frmUpdateRole">
+    <div class="modal fade" id="modalUpdateRole">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Role Panel</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="HId">
+                            <label>Role Name</label>
+                            <input type="text" class="form-control" id="HRoleName" placeholder="Role Name">
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                    <button type="button" id="btnUpdateRole" class="btn btn-primary">UPDATE</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+</form>
+
+
+@section Scripts {
+    <script src="~/adminassets/js/custom/role.js"></script>
+}
+
+
+
+
+
+
+
+
+
+
+

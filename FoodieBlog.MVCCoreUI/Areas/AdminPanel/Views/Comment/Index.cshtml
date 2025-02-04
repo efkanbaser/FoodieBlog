@@ -1,0 +1,52 @@
+﻿@section ContentHeader
+{
+
+}
+
+@section Styles {
+
+    <link href="~/adminassets/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.css" rel="stylesheet" />
+
+}
+
+@model CommentIndexVm
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Comment List</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table id="tblComments" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>User Name</th>
+                        <th>Post Title</th>
+                        <th>Contents</th>
+                        <th>Creation Date</th>
+                        <th>Modified Date</th>
+                        <th>Active</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>    
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="~/adminassets/js/custom/comment.js"></script>
+}
+
+
+
+
+
+
+
+
+
+
