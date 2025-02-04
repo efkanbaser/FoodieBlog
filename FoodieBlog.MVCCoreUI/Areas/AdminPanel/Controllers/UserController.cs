@@ -109,7 +109,7 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
             user.ProfilePic = data["ProfilePic"];
 
 
-            _userBs.Update(user);
+            await _userBs.Update(user);
 
             List<User> users = await _userBs.GetAll();
 

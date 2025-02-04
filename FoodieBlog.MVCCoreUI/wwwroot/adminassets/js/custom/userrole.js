@@ -23,27 +23,27 @@
                 targets: 3,
                 render: function (data, type, row, meta) {
 
-                    var UserRoleId = row["id"];
+                    var userroleId = row["id"];
 
                     if (data)
-                        return '<input UserRoleId=' + UserRoleId + ' type="checkbox" data-on-text="ACTIVE" data-off-text="PASSIVE" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" class="chkActive" data-on-color="success" > ';
+                        return '<input userroleId=' + userroleId + ' type="checkbox" data-on-text="ACTIVE" data-off-text="PASSIVE" name="my-checkbox" checked data-bootstrap-switch data-off-color="danger" class="chkActive" data-on-color="success" > ';
 
                     else
-                        return '<input UserRoleId=' + UserRoleId + ' type="checkbox" data-on-text="ACTIVE" data-off-text="PASSIVE" name="my-checkbox" data-bootstrap-switch data-off-color="danger" class="chkActive" data-on-color="success" > ';
+                        return '<input userroleId=' + userroleId + ' type="checkbox" data-on-text="ACTIVE" data-off-text="PASSIVE" name="my-checkbox" data-bootstrap-switch data-off-color="danger" class="chkActive" data-on-color="success" > ';
                 }
             },
 
             {
                 targets: 4,
                 render: function (data, type, row, meta) {
-                    return "<a class='btn btn-info btnEdit' UserRoleId=" + data + ">   <i class='fas fa-pencil-alt'></i> EDIT</a > ";
+                    return "<a class='btn btn-info btnEdit' userroleId=" + data + ">   <i class='fas fa-pencil-alt'></i> EDIT</a > ";
                 }
             },
 
             {
                 targets: 5,
                 render: function (data, type, row, meta) {
-                    return "<a class='btn btn-danger btnDelete' UserRoleId=" + data + "><i class='fas fa-trash'></i> DELETE</a > ";
+                    return "<a class='btn btn-danger btnDelete' userroleId=" + data + "><i class='fas fa-trash'></i> DELETE</a > ";
                 }
             },
         ],
@@ -93,7 +93,7 @@ $(function () {
             },
         });
 
-        var id = $(this).attr('UserRoleId');
+        var id = $(this).attr('userroleId');
         var aktifpasif = state;
         $.ajax({
             url: "/AdminPanel/UserRole/ActiveInactive",
@@ -129,7 +129,7 @@ $(function () {
             },
         });
 
-        var id = $(this).attr('UserRoleId');
+        var id = $(this).attr('userroleId');
         $("#HId").val(id);
 
         $.ajax({
@@ -140,7 +140,8 @@ $(function () {
             success: function (r) {
 
                 if (r.result) {
-                    $("#HRoleName").val(r.model.RoleName);
+                    $("#HUserName").text(r.model.userName);
+                    /*$("#HRoleName").val(r.model.roleId).trigger("change");*/
                     $("#modalUpdateUserRole").modal('show');
                 }
                 swal.close();
@@ -168,9 +169,11 @@ $(function () {
 
         var formData = new FormData();
 
-        var UserRoleName = $("#HRoleName").val();
+        var UserName = $("#HUserName").val();
+        var RoleName = $("#HRoleName").val();
         var Id = $("#HId").val();
 
+        formData.append("UserName", UserName)
         formData.append("RoleName", RoleName)
         formData.append("Id", Id)
 
@@ -223,7 +226,7 @@ $(function () {
         }).then((result) => {
             if (result.isConfirmed) {
 
-                var id = $(this).attr('UserRoleId');
+                var id = $(this).attr('userroleId');
                 $("#HId").val(id);
                 $.ajax({
                     url: "/AdminPanel/UserRole/Delete",

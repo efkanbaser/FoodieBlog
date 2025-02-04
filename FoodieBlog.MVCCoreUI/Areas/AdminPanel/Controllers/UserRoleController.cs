@@ -3,6 +3,7 @@ using FoodieBlog.Model.Entity;
 using FoodieBlog.Model.ViewModel.Areas.AdminPanel;
 using FoodieBlog.MVCCoreUI.Filters;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
 {
@@ -12,16 +13,25 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
     {
         private readonly IUserRoleBs _userRoleBs;
         private readonly IRoleBs _roleBs;
+        private readonly IUserBs _userBs;
 
-        public UserRoleController(IUserRoleBs userRoleBs, IRoleBs roleBs)
+        public UserRoleController(IUserRoleBs userRoleBs, IRoleBs roleBs, IUserBs userBs)
         {
             _userRoleBs = userRoleBs;
             _roleBs = roleBs;
+            _userBs = userBs;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            UserRoleIndexVm vm = new UserRoleIndexVm();
+            List<Role> roles = await _roleBs.GetAll();
+
+            vm.RoleList = roles.Select(x => new SelectListItem() { Text = x.RoleName, Value = x.Id.ToString()}).ToList();
+
+            vm.RoleList.Insert(0, new SelectListItem() { Text = "Please Select A Role", Value = "0", Selected = true });
+
+            return View(vm);
         }
 
         [HttpPost]
@@ -44,7 +54,7 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
                     Active = item.Active
                 };
                 vm.Add(UserRolevm);
-            }
+            }           
 
             return Json(new { data = vm });
         }
@@ -68,40 +78,11 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
             int Id = Convert.ToInt32(data["Id"]);
             UserRole UserRole = await _userRoleBs.Get(x => x.Id == Id);
 
-            // Convert active to bool
-            if (!String.IsNullOrEmpty(data["Active"]))
-            {
-                var temp = data["Active"].ToString();
-                bool dataActive = bool.Parse(temp);
-                UserRole.Active = dataActive;
-            }
-            // ---------------
-
-            int? newRoleId = null;
-            // Temp fix
-            List<Role> roles = await _roleBs.GetAll();
-            foreach (var role in roles)
-            {
-                if(role.RoleName == data["RoleName"])
-                {
-                    newRoleId = role.Id;
-                }
-            }
-
-            UserRole.RoleId = newRoleId;
-
+            UserRole.RoleId = Convert.ToInt32(data["RoleName"]);
 
             await _userRoleBs.Update(UserRole);
 
-            List<UserRole> UserRoles = await _userRoleBs.GetAll();
-
-            UserRoleIndexVm model = new UserRoleIndexVm();
-
-            model.UserName = UserRole.User.UserName;
-            model.RoleName = UserRole.Role.RoleName;
-            model.Active = UserRole.Active;
-
-            return Json(new { result = true, message = "User Role is updated successfully", model = model });
+            return Json(new { result = true, message = "User Role is updated successfully"});
         }
 
         public async Task<IActionResult> Delete(int id)
@@ -128,8 +109,15 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
 
             UserRole k = await _userRoleBs.Get(x => x.Id == id);
 
+            UserRoleIndexVm vm = new UserRoleIndexVm();
 
-            return Json(new { result = true, model = k });
+            User user = await _userBs.Get(x => x.Id == k.UserId);
+            Role role = await _roleBs.Get(x => x.Id == k.RoleId);
+
+            vm.UserName = user.UserName;
+            vm.RoleName = role.RoleName;
+
+            return Json(new { result = true, model = vm });
 
         }
     }

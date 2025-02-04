@@ -88,22 +88,20 @@
                     </button>
                 </div>
                 <div class="modal-body">
+                    @* nedense ajaxtan bu roller gelmiyor *@
                     <div class="card-body p-0">
                         <div class="form-group">
                             <input type="hidden" class="form-control" id="HId">
                             <label>User Name</label>
-                            <input type="text" class="form-control" id="HUserName" placeholder="User Name">
-                            @* buraya user name çekilip basılacak sadece, kesinlikle bir input alınmayacak *@
+                            <p id="HUserName" class="alert alert-secondary"></p>
                         </div>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="form-group">
-                            <input type="hidden" class="form-control" id="HId">
-                            <label>Role Name</label>
-                            <input type="text" class="form-control" id="HRoleName" placeholder="Role Name">
-                        </div>
-                    </div>
 
+                        <div class="form-group">
+                            <label>Role Name</label>
+                            <select id="HRoleName" asp-items="@Model.RoleList" class="form-control custom-select">
+                            </select>
+                        </div>
+                    </div>
                     <!-- /.card-body -->
                 </div>
                 <div class="modal-footer justify-content-between">

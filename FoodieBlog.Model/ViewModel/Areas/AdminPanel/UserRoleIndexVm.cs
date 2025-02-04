@@ -1,4 +1,5 @@
 ﻿using FoodieBlog.Model.Entity;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,6 +19,7 @@ namespace FoodieBlog.Model.ViewModel.Areas.AdminPanel
 
         public string? RoleName { get; set; }
 
+        public List<SelectListItem> RoleList { get; set; }
 
         public virtual Role Role { get; set; }
 
