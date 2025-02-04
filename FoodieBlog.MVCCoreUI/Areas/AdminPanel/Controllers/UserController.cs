@@ -1,12 +1,14 @@
 ﻿using FoodieBlog.Business.Abstract;
 using FoodieBlog.Model.Entity;
 using FoodieBlog.Model.ViewModel.Areas.AdminPanel;
+using FoodieBlog.MVCCoreUI.Filters;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
 {
     [Area("AdminPanel")]
+    [AdminFilter]
     public class UserController : Controller
     {
         private readonly IUserBs _userBs;
@@ -84,7 +86,7 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
             _userBs.Insert(user);
 
 
-            return Json(new { result = true, mesaj = "Kategori Başasıyla Eklendi" });
+            return Json(new { result = true, mesaj = "User is added successfully" });
         }
 
         [HttpPost]

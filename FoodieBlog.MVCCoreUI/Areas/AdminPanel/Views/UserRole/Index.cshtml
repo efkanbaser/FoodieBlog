@@ -9,23 +9,20 @@
 
 }
 
-@model UserIndexVm
+@model UserRoleIndexVm
 <div class="col-12">
     <div class="card">
         <div class="card-header">
-            <h3 class="card-title">User List</h3>
+            <h3 class="card-title">User Role List</h3>
         </div>
         <!-- /.card-header -->
         <div class="card-body">
-            <table id="tblUsers" class="table table-bordered table-striped">
+            <table id="tblUserRoles" class="table table-bordered table-striped">
                 <thead>
                     <tr>
                         <th></th>
                         <th>User Name</th>
-                        <th>Email</th>
-                        <th>Bio</th>
-                        <th>Profile Pic</th>
-                        <th>Date Created</th>
+                        <th>Role Name</th>
                         <th>Active</th>
                         <th>Edit</th>
                         <th>Delete</th>
@@ -38,12 +35,12 @@
 </div>
 
 
-<form id="frmAddUser">
-    <div class="modal fade" id="modalAddUser">
+@* <form id="frmAddUserRole">
+    <div class="modal fade" id="modalAddUserRole">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Add User Panel</h4>
+                    <h4 class="modal-title">Add User Role Panel</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -52,35 +49,16 @@
 
                     <div class="card-body p-0">
                         <div class="form-group">
-                            <label>User Name</label>
-                            <input type="text" class="form-control" asp-for="UserName" placeholder="User Name">
+                            <label>UserRole Name</label>
+                            <input type="text" class="form-control" asp-for="UserRoleName" placeholder="UserRole Name">
                         </div>
                     </div>
-
                     <div class="card-body p-0">
                         <div class="form-group">
-                            <label>Email</label>
-                            <input type="text" class="form-control" asp-for="Email" placeholder="Email">
+                            <label>Role Name</label>
+                            <input type="text" class="form-control" asp-for="RoleName" placeholder="UserRole Name">
                         </div>
                     </div>
-
-                    <div class="card-body p-0">
-                        <div class="form-group">
-                            <label>Bio</label>
-                            <input type="text" class="form-control" asp-for="Bio" placeholder="Bio">
-                        </div>
-                    </div>
-
-
-                    @* SOMETHING TO ADD PROFILE PIC *@
-                    <div class="card-body p-0">
-                        <div class="form-group">
-                            <label>Profile Pic</label>
-                            <input type="text" class="form-control" asp-for="ProfilePic" placeholder="Profile Pic">
-                        </div>
-                    </div>
-
-
                     <!-- /.card-body -->
 
 
@@ -89,7 +67,7 @@
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
-                    <button type="button" id="btnAddUser" class="btn btn-primary">ADD</button>
+                    <button type="button" id="btnAddUserRole" class="btn btn-primary">ADD</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -97,14 +75,14 @@
         <!-- /.modal-dialog -->
     </div>
 
-</form>
+</form> *@
 
-<form id="frmUpdateUser">
-    <div class="modal fade" id="modalUpdateUser">
+<form id="frmUpdateUserRole">
+    <div class="modal fade" id="modalUpdateUserRole">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title">Update User Panel</h4>
+                    <h4 class="modal-title">Update UserRole Panel</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -115,38 +93,22 @@
                             <input type="hidden" class="form-control" id="HId">
                             <label>User Name</label>
                             <input type="text" class="form-control" id="HUserName" placeholder="User Name">
+                            @* buraya user name çekilip basılacak sadece, kesinlikle bir input alınmayacak *@
                         </div>
                     </div>
-
                     <div class="card-body p-0">
                         <div class="form-group">
-                            <label>Email</label>
-                            <input type="text" class="form-control" id="HEmail" placeholder="Email">
+                            <input type="hidden" class="form-control" id="HId">
+                            <label>Role Name</label>
+                            <input type="text" class="form-control" id="HRoleName" placeholder="Role Name">
                         </div>
                     </div>
-
-                    <div class="card-body p-0">
-                        <div class="form-group">
-                            <label>Bio</label>
-                            <input type="text" class="form-control" id="HBio" placeholder="Bio">
-                        </div>
-                    </div>
-
-                    <div class="card-body p-0">
-                        <div class="form-group">
-                            <label>Profile Pic</label>
-                            <input type="text" class="form-control" id="HProfilePic" placeholder="Profile Pic">
-                        </div>
-                    </div>
-
-
-
 
                     <!-- /.card-body -->
                 </div>
                 <div class="modal-footer justify-content-between">
                     <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
-                    <button type="button" id="btnUpdateUser" class="btn btn-primary">UPDATE</button>
+                    <button type="button" id="btnUpdateUserRole" class="btn btn-primary">UPDATE</button>
                 </div>
             </div>
             <!-- /.modal-content -->
@@ -158,7 +120,7 @@
 
 
 @section Scripts {
-    <script src="~/adminassets/js/custom/user.js"></script>
+    <script src="~/adminassets/js/custom/userrole.js"></script>
 }
 
 
