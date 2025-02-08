@@ -1,0 +1,191 @@
+﻿@section ContentHeader
+{
+
+}
+
+@section Styles {
+
+    <link href="~/adminassets/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.css" rel="stylesheet" />
+
+}
+
+@model MenuAuthIndexVm
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Menu Authorization List</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table id="tblMenuAuths" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Role Name</th>
+                        <th>Menu Name</th>
+                        <th>Insert Authorization</th>
+                        <th>Update Authorization</th>
+                        <th>Delete Authorization</th>
+                        <th>Select Authorization</th>
+                        <th>Active</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+</div>
+
+
+<form id="frmAddMenuAuth">
+    <div class="modal fade" id="modalAddMenuAuth">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Add Menu Authorization Panel</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Role Name</label>
+                            <input type="text" class="form-control" asp-for="RoleName" placeholder="Role Name">
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Menu Name</label>
+                            <input type="text" class="form-control" asp-for="MenuName" placeholder="Menu Name">
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Insert Authorization</label>
+                            <input type="text" class="form-control" asp-for="InsertAuthorization" placeholder="Insert Authorization">
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Update Authorization</label>
+                            <input type="text" class="form-control" asp-for="UpdateAuthorization" placeholder="Update Authorization">
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Delete Authorization</label>
+                            <input type="text" class="form-control" asp-for="DeleteAuthorization" placeholder="Delete Authorization">
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Select Authorization</label>
+                            <input type="text" class="form-control" asp-for="SelectAuthorization" placeholder="Select Authorization">
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                    <button type="button" id="btnAddMenuAuth" class="btn btn-primary">ADD</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+</form>
+
+<form id="frmUpdateMenuAuth">
+    <div class="modal fade" id="modalUpdateMenuAuth">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Menu Authorizaton Panel</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="HId">
+                            <label>Role Name</label>
+                            <input type="text" class="form-control" id="HRoleName" placeholder="Role Name">
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="HId">
+                            <label>Menu Name</label>
+                            <input type="text" class="form-control" id="HMenuName" placeholder="Menu Name">
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="HId">
+                            <label>Insert Authorization</label>
+                            <input type="text" class="form-control" id="HInsertAuthorization" placeholder="Insert Authorization">
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="HId">
+                            <label>Update Authorization</label>
+                            <input type="text" class="form-control" id="HUpdateAuthorization" placeholder="Update Authorization">
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Delete Authorization</label>
+                            <input type="text" class="form-control" id="HDeleteAuthorization" placeholder="Delete Authorization">
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Select Authorization</label>
+                            <input type="text" class="form-control" id="HSelectAuthorization" placeholder="Select Authorization">
+                        </div>
+                    </div>
+
+
+
+
+                    <!-- /.card-body -->
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                    <button type="button" id="btnUpdateMenuAuth" class="btn btn-primary">UPDATE</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+</form>
+
+
+@section Scripts {
+    <script src="~/adminassets/js/custom/menuauth.js"></script>
+}
+
+
+
+
+
+
+
+
+
+

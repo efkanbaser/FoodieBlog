@@ -6,6 +6,7 @@ namespace FoodieBlog.Model.Entity;
 
 public partial class MenuAuthorization : BaseEntity
 {
+
     public int? MenuId { get; set; }
 
     public int? RoleId { get; set; }
