@@ -12,8 +12,6 @@ public partial class Post : BaseEntity
 
     public string Contents { get; set; }
 
-    public string Category { get; set; }
-
 
 
     public int? UserId { get; set; }
@@ -23,6 +21,8 @@ public partial class Post : BaseEntity
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual ICollection<Interaction> Interactions { get; set; } = new List<Interaction>();
+
+    public virtual ICollection<PostCategory> PostCategories { get; set; } = new List<PostCategory>();
 
     public virtual ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();
 

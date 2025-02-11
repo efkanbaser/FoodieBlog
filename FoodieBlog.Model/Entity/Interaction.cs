@@ -7,7 +7,6 @@ namespace FoodieBlog.Model.Entity;
 public partial class Interaction : BaseEntity
 {
 
-
     public int? UserId { get; set; }
 
     public int? PostId { get; set; }

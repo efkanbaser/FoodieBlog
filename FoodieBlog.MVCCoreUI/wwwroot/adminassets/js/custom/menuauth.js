@@ -98,12 +98,12 @@ $("#btnAddMenuAuth").click(function () {
     });
     var formData = new FormData();
 
-    var RoleName = $("#RoleName").val();
-    var MenuName = $("#MenuName").val();
-    var InsertAuthorization = $("#InsertAuthorization").val();
-    var UpdateAuthorization = $("#UpdateAuthorization").val();
-    var DeleteAuthorization = $("#DeleteAuthorization").val();
-    var SelectAuthorization = $("#SelectAuthorization").val();
+    var RoleName = $("#RoleName option:selected").val();
+    var MenuName = $("#MenuName option:selected").val();
+    var InsertAuthorization = $("#InsertAuthorization option:selected").val();
+    var UpdateAuthorization = $("#UpdateAuthorization option:selected").val();
+    var DeleteAuthorization = $("#DeleteAuthorization option:selected").val();
+    var SelectAuthorization = $("#SelectAuthorization option:selected").val();
 
     formData.append("RoleName", RoleName)
     formData.append("MenuName", MenuName)
@@ -113,7 +113,7 @@ $("#btnAddMenuAuth").click(function () {
     formData.append("SelectAuthorization", SelectAuthorization)
 
     $.ajax({
-        url: "/AdminPanel/User/Add",
+        url: "/AdminPanel/MenuAuth/Add",
         type: "post",
         dataType: "json",
         processData: false,
@@ -217,13 +217,13 @@ $(function () {
             success: function (r) {
 
                 if (r.result) {
-                    $("#HRoleName").val(r.model.roleName);
-                    $("#HMenuName").val(r.model.menuName);
-                    $("#HInsertAuthorization").val(r.model.insertAuthorization);
-                    $("#HUpdateAuthorization").val(r.model.updateAuthorization);
-                    $("#HDeleteAuthorization").val(r.model.deleteAuthorization);
-                    $("#HSelectAuthorization").val(r.model.selectAuthorization);
-                    $("#modalUpdateUser").modal('show');
+                    $("#HRoleName").val(r.model.roleId);
+                    $("#HMenuName").val(r.model.menuId);
+                    $("#HInsertAuthorization").val(r.model.insertAuthorization.toString());
+                    $("#HUpdateAuthorization").val(r.model.updateAuthorization.toString());
+                    $("#HDeleteAuthorization").val(r.model.deleteAuthorization.toString());
+                    $("#HSelectAuthorization").val(r.model.selectAuthorization.toString());
+                    $("#modalUpdateMenuAuth").modal('show');
                 }
                 swal.close();
             },
@@ -236,7 +236,7 @@ $(function () {
 
 
     // DÜZENLE TUŞU
-    $(document).on('click', '#btnUpdateUser', function () {
+    $(document).on('click', '#btnUpdateMenuAuth', function () {
         var swal = Swal.fire({
             title: "Please Wait...",
             html: "Your Operation Is Under Progress",
@@ -250,14 +250,15 @@ $(function () {
 
         var formData = new FormData();
 
+        var Id = $("#HId").val();
+        var RoleName = $("#HRoleName option:selected").val();
+        var MenuName = $("#HMenuName option:selected").val();
+        var InsertAuthorization = $("#HInsertAuthorization option:selected").val();
+        var UpdateAuthorization = $("#HUpdateAuthorization option:selected").val();
+        var DeleteAuthorization = $("#HDeleteAuthorization option:selected").val();
+        var SelectAuthorization = $("#HSelectAuthorization option:selected").val();
 
-        var RoleName = $("#HRoleName").val();
-        var MenuName = $("#HMenuName").val();
-        var InsertAuthorization = $("#HInsertAuthorization").val();
-        var UpdateAuthorization = $("#HUpdateAuthorization").val();
-        var DeleteAuthorization = $("#HDeleteAuthorization").val();
-        var SelectAuthorization = $("#HSelectAuthorization").val();
-
+        formData.append("Id",Id)
         formData.append("RoleName", RoleName)
         formData.append("MenuName", MenuName)
         formData.append("InsertAuthorization", InsertAuthorization)

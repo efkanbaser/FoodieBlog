@@ -25,6 +25,8 @@ namespace FoodieBlog.Data
             services.AddScoped<IMenuAuthorizationRepository, EfMenuAuthorizationRepository>();
             services.AddScoped<IRoleRepository, EfRoleRepository>();
             services.AddScoped<IUserRoleRepository, EfUserRoleRepository>();
+            services.AddScoped<IPostCategoryRepository, EfPostCategoryRepository>();
+            services.AddScoped<ICategoryRepository, EfCategoryRepository>();
 
             return services;
         }

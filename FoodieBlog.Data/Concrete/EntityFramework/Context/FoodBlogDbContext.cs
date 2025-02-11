@@ -18,6 +18,8 @@ public partial class FoodBlogDbContext : DbContext
 
     public virtual DbSet<AdminMenu> AdminMenus { get; set; }
 
+    public virtual DbSet<Category> Categories { get; set; }
+
     public virtual DbSet<Comment> Comments { get; set; }
 
     public virtual DbSet<Interaction> Interactions { get; set; }
@@ -25,6 +27,8 @@ public partial class FoodBlogDbContext : DbContext
     public virtual DbSet<MenuAuthorization> MenuAuthorizations { get; set; }
 
     public virtual DbSet<Post> Posts { get; set; }
+
+    public virtual DbSet<PostCategory> PostCategories { get; set; }
 
     public virtual DbSet<PostTag> PostTags { get; set; }
 
@@ -55,6 +59,13 @@ public partial class FoodBlogDbContext : DbContext
             entity.HasOne(d => d.ParentMenu).WithMany(p => p.InverseParentMenu)
                 .HasForeignKey(d => d.ParentMenuId)
                 .HasConstraintName("FK_AdminMenu_AdminMenu");
+        });
+
+        modelBuilder.Entity<Category>(entity =>
+        {
+            entity.ToTable("Category");
+
+            entity.Property(e => e.CategoryName).HasMaxLength(50);
         });
 
         modelBuilder.Entity<Comment>(entity =>
@@ -113,13 +124,25 @@ public partial class FoodBlogDbContext : DbContext
         {
             entity.HasIndex(e => e.UserId, "IX_Posts_UserId");
 
-            entity.Property(e => e.Category).HasMaxLength(50);
             entity.Property(e => e.Contents).HasColumnType("text");
             entity.Property(e => e.Title).HasMaxLength(255);
 
             entity.HasOne(d => d.User).WithMany(p => p.Posts)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_Posts_Users");
+        });
+
+        modelBuilder.Entity<PostCategory>(entity =>
+        {
+            entity.ToTable("PostCategory");
+
+            entity.HasOne(d => d.Category).WithMany(p => p.PostCategories)
+                .HasForeignKey(d => d.CategoryId)
+                .HasConstraintName("FK_PostCategory_Category");
+
+            entity.HasOne(d => d.Post).WithMany(p => p.PostCategories)
+                .HasForeignKey(d => d.PostId)
+                .HasConstraintName("FK_PostCategory_Posts");
         });
 
         modelBuilder.Entity<PostTag>(entity =>

@@ -1,4 +1,6 @@
 ﻿using FoodieBlog.Model.Entity;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -27,5 +29,8 @@ namespace FoodieBlog.Model.ViewModel.Areas.AdminPanel
         public virtual AdminMenu Menu { get; set; }
 
         public virtual Role Role { get; set; }
+
+        public List<SelectListItem> MenuNameList { get; set; }
+        public List<SelectListItem> RoleNameList { get; set; }
     }
 }

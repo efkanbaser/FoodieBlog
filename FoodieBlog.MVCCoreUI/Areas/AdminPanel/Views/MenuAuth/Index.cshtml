@@ -54,37 +54,53 @@
                     <div class="card-body p-0">
                         <div class="form-group">
                             <label>Role Name</label>
-                            <input type="text" class="form-control" asp-for="RoleName" placeholder="Role Name">
+                            @* <input type="text" class="form-control" asp-for="RoleName" placeholder="Role Name"> *@
+                            <select asp-for=RoleName asp-items="@Model.RoleNameList" class="form-control select2">
+                            </select>
                         </div>
                     </div>
                     <div class="card-body p-0">
                         <div class="form-group">
                             <label>Menu Name</label>
-                            <input type="text" class="form-control" asp-for="MenuName" placeholder="Menu Name">
+                            @* <input type="text" class="form-control" asp-for="MenuName" placeholder="Menu Name"> *@
+                            <select asp-for=MenuName asp-items="@Model.MenuNameList" class="form-control select2">
+                            </select>
                         </div>
                     </div>
                     <div class="card-body p-0">
                         <div class="form-group">
                             <label>Insert Authorization</label>
-                            <input type="text" class="form-control" asp-for="InsertAuthorization" placeholder="Insert Authorization">
+                            <select class="form-control" asp-for="InsertAuthorization" name="InsertAuthorization">
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
                         </div>
                     </div>
                     <div class="card-body p-0">
                         <div class="form-group">
                             <label>Update Authorization</label>
-                            <input type="text" class="form-control" asp-for="UpdateAuthorization" placeholder="Update Authorization">
+                            <select class="form-control" asp-for="UpdateAuthorization" name="UpdateAuthorization">
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
                         </div>
                     </div>
                     <div class="card-body p-0">
                         <div class="form-group">
                             <label>Delete Authorization</label>
-                            <input type="text" class="form-control" asp-for="DeleteAuthorization" placeholder="Delete Authorization">
+                            <select class="form-control" asp-for="DeleteAuthorization" name="DeleteAuthorization">
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
                         </div>
                     </div>
                     <div class="card-body p-0">
                         <div class="form-group">
                             <label>Select Authorization</label>
-                            <input type="text" class="form-control" asp-for="SelectAuthorization" placeholder="Select Authorization">
+                            <select class="form-control" asp-for="SelectAuthorization" name="SelectAuthorization">
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
                         </div>
                     </div>
                     <!-- /.card-body -->
@@ -117,44 +133,56 @@
                         <div class="form-group">
                             <input type="hidden" class="form-control" id="HId">
                             <label>Role Name</label>
-                            <input type="text" class="form-control" id="HRoleName" placeholder="Role Name">
+                            <select id="HRoleName" asp-items="@Model.RoleNameList" class="form-control select2">
+                            </select>
                         </div>
                     </div>
 
                     <div class="card-body p-0">
                         <div class="form-group">
-                            <input type="hidden" class="form-control" id="HId">
                             <label>Menu Name</label>
-                            <input type="text" class="form-control" id="HMenuName" placeholder="Menu Name">
-                        </div>
-                    </div>
-                    <div class="card-body p-0">
-                        <div class="form-group">
-                            <input type="hidden" class="form-control" id="HId">
-                            <label>Insert Authorization</label>
-                            <input type="text" class="form-control" id="HInsertAuthorization" placeholder="Insert Authorization">
+                            <select id="HMenuName" asp-items="@Model.MenuNameList" class="form-control select2">
+                            </select>
                         </div>
                     </div>
 
                     <div class="card-body p-0">
                         <div class="form-group">
-                            <input type="hidden" class="form-control" id="HId">
+                            <label>Insert Authorization</label>
+                            <select class="form-control" id="HInsertAuthorization" name="HInsertAuthorization">
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="card-body p-0">
+                        <div class="form-group">
                             <label>Update Authorization</label>
-                            <input type="text" class="form-control" id="HUpdateAuthorization" placeholder="Update Authorization">
+                            <select class="form-control" id="HUpdateAuthorization" name="HUpdateAuthorization">
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="card-body p-0">
                         <div class="form-group">
                             <label>Delete Authorization</label>
-                            <input type="text" class="form-control" id="HDeleteAuthorization" placeholder="Delete Authorization">
+                            <select class="form-control" id="HDeleteAuthorization" name="HDeleteAuthorization">
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
                         </div>
                     </div>
 
                     <div class="card-body p-0">
                         <div class="form-group">
                             <label>Select Authorization</label>
-                            <input type="text" class="form-control" id="HSelectAuthorization" placeholder="Select Authorization">
+                            <select class="form-control" id="HSelectAuthorization" name="HSelectAuthorization">
+                                <option value="true">True</option>
+                                <option value="false">False</option>
+                            </select>
                         </div>
                     </div>
 

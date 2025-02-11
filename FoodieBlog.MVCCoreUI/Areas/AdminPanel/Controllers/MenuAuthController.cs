@@ -3,6 +3,7 @@ using FoodieBlog.Model.Entity;
 using FoodieBlog.Model.ViewModel.Areas.AdminPanel;
 using FoodieBlog.MVCCoreUI.Filters;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
 {
@@ -21,9 +22,20 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
             _roleBs = roleBs;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            MenuAuthIndexVm vm = new MenuAuthIndexVm();
+
+            List<AdminMenu> menu = await _menuBs.GetAll();
+            List<Role> role = await _roleBs.GetAll();
+
+            vm.MenuNameList = menu.Select(x => new SelectListItem() { Text = x.Header, Value = x.Id.ToString() }).ToList();
+            vm.MenuNameList.Insert(0, new SelectListItem() { Text = "Please choose a menu name", Value = "0" });
+
+            vm.RoleNameList = role.Select(x => new SelectListItem() { Text = x.RoleName, Value = x.Id.ToString() }).ToList();
+            vm.RoleNameList.Insert(0, new SelectListItem() { Text = "Please choose a role name", Value = "0" });
+
+            return View(vm);
         }
 
         [HttpPost]
@@ -58,33 +70,10 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
         [HttpPost]
         public async Task<IActionResult> Add(IFormCollection data)
         {
-            // This is terrible
-            List<AdminMenu> menu = await _menuBs.GetAll();
-            List<Role> role = await _roleBs.GetAll();
-
             MenuAuthorization menuAuth = new MenuAuthorization();
 
-            int menuId = 0;
-            int roleId = 0;
-
-            foreach (var item in menu)
-            {
-                if (data["MenuName"] == item.Header)
-                {
-                    menuId = item.Id;
-                }
-            }
-
-            foreach (var item in role)
-            {
-                if (data["MenuName"] == item.RoleName)
-                {
-                    roleId = item.Id;
-                }
-            }
-
-            menuAuth.RoleId = roleId;
-            menuAuth.MenuId = menuId;
+            menuAuth.RoleId = Int32.Parse(data["RoleName"]);
+            menuAuth.MenuId = Int32.Parse(data["MenuName"]);
             menuAuth.SelectAuthorization = bool.Parse(data["SelectAuthorization"]);
             menuAuth.InsertAuthorization = bool.Parse(data["InsertAuthorization"]);
             menuAuth.UpdateAuthorization = bool.Parse(data["UpdateAuthorization"]);
@@ -103,37 +92,38 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
             int Id = Convert.ToInt32(data["Id"]);
             MenuAuthorization menuAuth = await _menuAuthBs.Get(x => x.Id == Id);
 
-            // Convert active to bool
-            if (!String.IsNullOrEmpty(data["Active"]))
-            {
-                var temp = data["Active"].ToString();
-                bool dataActive = bool.Parse(temp);
-                menuAuth.Active = dataActive;
-            }
-            // ---------------
+            //// Convert active to bool
+            //if (!String.IsNullOrEmpty(data["Active"]))
+            //{
+            //    var temp = data["Active"].ToString();
+            //    bool dataActive = bool.Parse(temp);
+            //    menuAuth.Active = dataActive;
+            //}
+            //// ---------------
 
-            List<AdminMenu> menu = await _menuBs.GetAll();
-            List<Role> role = await _roleBs.GetAll();
+            //List<AdminMenu> menu = await _menuBs.GetAll();
+            //List<Role> role = await _roleBs.GetAll();
 
-            int menuId = 0;
-            int roleId = 0;
+            //int menuId = 0;
+            //int roleId = 0;
 
-            foreach (var item in menu)
-            {
-                if (data["MenuName"] == item.Header)
-                {
-                    menuId = item.Id;
-                }
-            }
+            //foreach (var item in menu)
+            //{
+            //    if (data["MenuName"] == item.Header)
+            //    {
+            //        menuId = item.Id;
+            //    }
+            //}
 
-            foreach (var item in role)
-            {
-                if (data["MenuName"] == item.RoleName)
-                {
-                    roleId = item.Id;
-                }
-            }
-
+            //foreach (var item in role)
+            //{
+            //    if (data["MenuName"] == item.RoleName)
+            //    {
+            //        roleId = item.Id;
+            //    }
+            //}
+            menuAuth.RoleId = Int32.Parse(data["RoleName"]);
+            menuAuth.MenuId = Int32.Parse(data["MenuName"]);
             menuAuth.SelectAuthorization = bool.Parse(data["SelectAuthorization"]);
             menuAuth.InsertAuthorization = bool.Parse(data["InsertAuthorization"]);
             menuAuth.UpdateAuthorization = bool.Parse(data["UpdateAuthorization"]);
@@ -176,11 +166,44 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
 
         public async Task<IActionResult> GetUser(int id)
         {
-
             MenuAuthorization k = await _menuAuthBs.Get(x => x.Id == id);
 
+            //List<AdminMenu> menu = await _menuBs.GetAll();
+            //List<Role> role = await _roleBs.GetAll();
 
-            return Json(new { result = true, model = k });
+            //string menuName = "";
+            //string roleName = "";
+
+            //foreach (var item in menu)
+            //{
+            //    if (k.MenuId == item.Id)
+            //    {
+            //        menuName = item.Header;
+            //    }
+            //}
+
+            //foreach (var item in role)
+            //{
+            //    if (k.RoleId == item.Id)
+            //    {
+            //        roleName = item.RoleName;
+            //    }
+            //}
+
+            MenuAuthIndexVm vm = new MenuAuthIndexVm
+            {
+                MenuId = k.MenuId,
+                RoleId = k.RoleId,
+                InsertAuthorization = k.InsertAuthorization,
+                UpdateAuthorization = k.UpdateAuthorization,
+                DeleteAuthorization = k.DeleteAuthorization,
+                SelectAuthorization = k.SelectAuthorization,
+            };
+
+
+
+
+            return Json(new { result = true, model = vm });
 
         }
     }

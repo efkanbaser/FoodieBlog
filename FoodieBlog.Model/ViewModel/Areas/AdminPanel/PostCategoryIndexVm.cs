@@ -6,13 +6,8 @@ using System.Threading.Tasks;
 
 namespace FoodieBlog.Model.ViewModel.Areas.AdminPanel
 {
-    public class CategoryIndexVm
+    public class PostCategoryIndexVm
     {
-        public int Id { get; set; }
-
-        public bool? Active { get; set; }
-
-        public string CategoryName { get; set; }
 
     }
 }

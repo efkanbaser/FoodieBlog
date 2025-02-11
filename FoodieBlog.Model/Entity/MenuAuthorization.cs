@@ -6,7 +6,6 @@ namespace FoodieBlog.Model.Entity;
 
 public partial class MenuAuthorization : BaseEntity
 {
-
     public int? MenuId { get; set; }
 
     public int? RoleId { get; set; }
@@ -18,7 +17,6 @@ public partial class MenuAuthorization : BaseEntity
     public bool? DeleteAuthorization { get; set; }
 
     public bool? SelectAuthorization { get; set; }
-
 
 
     public virtual AdminMenu Menu { get; set; }

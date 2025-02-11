@@ -7,7 +7,6 @@ namespace FoodieBlog.Model.Entity;
 public partial class AdminMenu : BaseEntity
 {
 
-
     public string Header { get; set; }
 
     public string MenuIcon { get; set; }
@@ -17,7 +16,6 @@ public partial class AdminMenu : BaseEntity
     public string Url { get; set; }
 
     public int? MenuOrder { get; set; }
-
 
     public virtual ICollection<AdminMenu> InverseParentMenu { get; set; } = new List<AdminMenu>();
 
