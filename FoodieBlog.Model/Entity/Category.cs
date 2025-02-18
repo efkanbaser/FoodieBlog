@@ -10,5 +10,4 @@ public partial class Category : BaseEntity
     public string CategoryName { get; set; }
 
     public virtual ICollection<PostCategory> PostCategories { get; set; } = new List<PostCategory>();
-
 }

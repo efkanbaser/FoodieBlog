@@ -4,14 +4,13 @@ using System.Collections.Generic;
 
 namespace FoodieBlog.Model.Entity;
 
-public partial class PostTag : BaseEntity
+public partial class PostIngredient : BaseEntity
 {
 
-    public int? TagId { get; set; }
 
     public int? PostId { get; set; }
 
-    public virtual Post Post { get; set; }
+    public string Ingredient { get; set; }
 
-    public virtual Tag Tag { get; set; }
+    public virtual Post Post { get; set; }
 }

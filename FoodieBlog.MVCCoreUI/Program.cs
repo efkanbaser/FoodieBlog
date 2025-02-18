@@ -17,9 +17,7 @@ namespace FoodieBlog.MVCCoreUI
             builder.Services.AddControllersWithViews();
 
             // Context
-            builder.Services.AddDbContext<FoodBlogDbContext>();
-    //        builder.Services.AddDbContext<FoodBlogDbContext>(options =>
-    //options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+            builder.Services.AddDbContext<FoodBlogDbContext>(); 
 
             // Repository pattern methods
             builder.Services.AddBusinessService();

@@ -15,7 +15,6 @@ public partial class Comment : BaseEntity
 
     public byte[] Timestamp { get; set; }
 
-
     public virtual Post Post { get; set; }
 
     public virtual User User { get; set; }

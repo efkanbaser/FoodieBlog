@@ -16,7 +16,6 @@
   <ItemGroup>
     <Folder Include="DTO\" />
     <Folder Include="Entity\" />
-    <Folder Include="ViewModel\Front\" />
   </ItemGroup>
 
   <ItemGroup>

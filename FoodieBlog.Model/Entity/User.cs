@@ -7,7 +7,6 @@ namespace FoodieBlog.Model.Entity;
 public partial class User : BaseEntity
 {
 
-
     public string UserName { get; set; }
 
     public string Email { get; set; }
@@ -17,7 +16,6 @@ public partial class User : BaseEntity
     public string Bio { get; set; }
 
     public string ProfilePic { get; set; }
-
 
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();

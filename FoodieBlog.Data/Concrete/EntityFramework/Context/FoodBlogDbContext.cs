@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using FoodieBlog.Model.Entity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace FoodieBlog.Data.Concrete.EntityFramework.Context;
 
@@ -29,6 +30,10 @@ public partial class FoodBlogDbContext : DbContext
     public virtual DbSet<Post> Posts { get; set; }
 
     public virtual DbSet<PostCategory> PostCategories { get; set; }
+
+    public virtual DbSet<PostDirection> PostDirections { get; set; }
+
+    public virtual DbSet<PostIngredient> PostIngredients { get; set; }
 
     public virtual DbSet<PostTag> PostTags { get; set; }
 
@@ -125,6 +130,15 @@ public partial class FoodBlogDbContext : DbContext
             entity.HasIndex(e => e.UserId, "IX_Posts_UserId");
 
             entity.Property(e => e.Contents).HasColumnType("text");
+            entity.Property(e => e.DescriptionFirst).HasColumnType("text");
+            entity.Property(e => e.DescriptionHeader).HasColumnType("text");
+            entity.Property(e => e.DescriptionLast).HasColumnType("text");
+            entity.Property(e => e.LastText).HasColumnType("text");
+            entity.Property(e => e.MainImage).HasMaxLength(255);
+            entity.Property(e => e.MiddleText).HasColumnType("text");
+            entity.Property(e => e.MoreDetails).HasColumnType("text");
+            entity.Property(e => e.SecondaryImage).HasMaxLength(255);
+            entity.Property(e => e.ServingSize).HasColumnType("text");
             entity.Property(e => e.Title).HasMaxLength(255);
 
             entity.HasOne(d => d.User).WithMany(p => p.Posts)
@@ -143,6 +157,24 @@ public partial class FoodBlogDbContext : DbContext
             entity.HasOne(d => d.Post).WithMany(p => p.PostCategories)
                 .HasForeignKey(d => d.PostId)
                 .HasConstraintName("FK_PostCategory_Posts");
+        });
+
+        modelBuilder.Entity<PostDirection>(entity =>
+        {
+            entity.Property(e => e.Directions).HasMaxLength(255);
+
+            entity.HasOne(d => d.Post).WithMany(p => p.PostDirections)
+                .HasForeignKey(d => d.PostId)
+                .HasConstraintName("FK_PostDirections_Posts");
+        });
+
+        modelBuilder.Entity<PostIngredient>(entity =>
+        {
+            entity.Property(e => e.Ingredient).HasMaxLength(100);
+
+            entity.HasOne(d => d.Post).WithMany(p => p.PostIngredients)
+                .HasForeignKey(d => d.PostId)
+                .HasConstraintName("FK_PostIngredients_Posts");
         });
 
         modelBuilder.Entity<PostTag>(entity =>
@@ -201,3 +233,4 @@ public partial class FoodBlogDbContext : DbContext
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
+

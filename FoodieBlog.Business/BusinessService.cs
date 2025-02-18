@@ -28,6 +28,8 @@ namespace FoodieBlog.Business
             services.AddScoped<IUserRoleBs, UserRoleBs>();
             services.AddScoped<ICategoryBs, CategoryBs>();
             services.AddScoped<IPostCategoryBs, PostCategoryBs>();
+            services.AddScoped<IPostIngredientBs, PostIngredientBs>();
+            services.AddScoped<IPostDirectionBs, PostDirectionBs>();
 
             return services;
         }

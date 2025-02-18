@@ -12,6 +12,7 @@ public partial class PostCategory : BaseEntity
 
     public int? PostId { get; set; }
 
+
     public virtual Category Category { get; set; }
 
     public virtual Post Post { get; set; }

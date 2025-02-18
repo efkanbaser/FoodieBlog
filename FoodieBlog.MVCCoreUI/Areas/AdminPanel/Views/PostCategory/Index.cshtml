@@ -1,0 +1,139 @@
+﻿@section ContentHeader
+{
+
+}
+
+@section Styles {
+
+    <link href="~/adminassets/plugins/bootstrap-switch/css/bootstrap3/bootstrap-switch.css" rel="stylesheet" />
+
+}
+
+@model PostCategoryIndexVm
+<div class="col-12">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">Post-Category List</h3>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <table id="tblPostCategorys" class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>Post Name</th>
+                        <th>Categories</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                </thead>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+</div>
+
+<form id="frmUpdatePostCategory">
+    <div class="modal fade" id="modalUpdatePostCategory">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Update Post Category Panel</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="HId">
+                            <label>Post Name</label>
+                            <p class="form-control" id="HPostName"></p>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Categories of This Post</label>
+                            <p class ="form-control" id="HCategoryName"></p>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Other Categories</label>
+                            <select class="form-control" id="HCategorySelect" asp-items="@Model.CategoriesList"></select>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                    <button type="button" id="btnUpdatePostCategory" class="btn btn-primary">ADD</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+</form>
+
+<form id="frmDeletePostCategory">
+    <div class="modal fade" id="modalDeletePostCategory">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h4 class="modal-title">Delete Post Category Panel</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <input type="hidden" class="form-control" id="HIdDelete">
+                            <label>Post Name</label>
+                            <p class="form-control" id="HPostNameDelete"></p>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Categories of This Post</label>
+                            <p class="form-control" id="HCategoryNameDelete"></p>
+                        </div>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="form-group">
+                            <label>Other Categories</label>
+                            <select class="form-control" id="HCategorySelectDelete"></select>
+                        </div>
+                    </div>
+                    <!-- /.card-body -->
+                </div>
+                <div class="modal-footer justify-content-between">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">CLOSE</button>
+                    <button type="button" id="btnDeletePostCategory" class="btn btn-danger">DELETE</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+
+</form>
+
+
+@section Scripts {
+    <script src="~/adminassets/js/custom/postcategory.js"></script>
+}
+
+
+
+
+
+
+
+
+
+
+
+
