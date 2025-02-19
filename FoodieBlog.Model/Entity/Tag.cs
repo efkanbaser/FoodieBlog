@@ -9,6 +9,7 @@ public partial class Tag : BaseEntity
 
     public string TagName { get; set; }
 
+    public string Href { get; set; }
 
     public virtual ICollection<PostTag> PostTags { get; set; } = new List<PostTag>();
 }

@@ -1,0 +1,20 @@
+﻿@using FoodieBlog.Model.ViewModel.Front
+@model SignUpVm
+
+<form id="frmSignup" asp-action="SignUp" asp-controller="Account" asp-area="" asp-antiforgery="true">
+    <div asp-validation-summary="All"></div>
+    <input asp-for=UserName type="text" placeholder="User Name">
+    <input asp-for=Password type="password" placeholder="Password">
+    <input asp-for=ConfirmPassword type="password" placeholder="Confirm Password">
+    <input asp-for=Email type="email" placeholder="Email Address">
+
+    <label for="sign-agree-check">
+        I agree to the terms & conditions
+        <input type="checkbox" id="sign-agree-check">
+        <span class="checkmark"></span>
+    </label>
+
+    <button id="btnSignup" type="submit" class="site-btn">Register Now</button>
+</form>
+
+

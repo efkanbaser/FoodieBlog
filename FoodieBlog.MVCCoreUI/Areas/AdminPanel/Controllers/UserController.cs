@@ -50,6 +50,7 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
         [HttpPost]
         public IActionResult Add(IFormCollection data)
         {
+            // REMINDER THAT THIS PART IS SOOOOO BROKEN
             User user = new User();
             user.UserName = data["UserName"];
             user.Email = data["Email"];
@@ -137,7 +138,7 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
         {
             User k = await _userBs.Get(x => x.Id == id);
             k.Active = active;
-            _userBs.Update(k);
+            await _userBs.Update(k);
 
             //  Thread.Sleep(2000);
             return Json(new { result = true, mesaj = "Activity is updated successfully" });

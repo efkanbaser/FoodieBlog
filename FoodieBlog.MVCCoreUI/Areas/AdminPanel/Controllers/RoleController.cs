@@ -76,7 +76,7 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
             Role.RoleName = data["RoleName"];
 
 
-            _roleBs.Update(Role);
+            await _roleBs.Update(Role);
 
             List<Role> Roles = await _roleBs.GetAll();
 

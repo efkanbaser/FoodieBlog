@@ -46,7 +46,7 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
         {
             // TODO: Password Crypto
             // TODO: Remember Me button function with cookies
-            // TODO: are DTO's useful anywhere here? 
+            // TODO: are DTO's useful anywhere here? turns out they are not 20.02.2025
 
             user.Email = "eb@gmail.com";
             user.Password = "1234@efkan";

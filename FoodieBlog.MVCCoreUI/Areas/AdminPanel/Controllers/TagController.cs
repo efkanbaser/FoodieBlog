@@ -73,7 +73,7 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
             Tag.TagName = data["TagName"];
 
 
-            _tagBs.Update(Tag);
+            await _tagBs.Update(Tag);
 
             List<Tag> Tags = await _tagBs.GetAll();
 

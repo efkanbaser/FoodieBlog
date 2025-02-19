@@ -17,6 +17,7 @@ public partial class User : BaseEntity
 
     public string ProfilePic { get; set; }
 
+    public Guid UniqueId { get; set; }
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
