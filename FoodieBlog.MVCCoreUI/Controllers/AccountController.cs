@@ -7,6 +7,7 @@ using Infrastructure.CrossCuttingConcern.Comunication;
 using Infrastructure.CrossCuttingConcern.Crypto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using System.Drawing;
 
 namespace FoodieBlog.MVCCoreUI.Controllers
@@ -37,21 +38,33 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> SignIn(SignInVm vm)
         {
-            string decryptedPassword = CryptoManager.AESDecrypt(vm.Password, "efkey");
-
-            User userCheck = await _userBs.Get(x => x.UserName == vm.UserName && x.Password == decryptedPassword, false);
-
-            if (userCheck != null)
+    
+            if (!String.IsNullOrEmpty(vm.Password) && !String.IsNullOrEmpty(vm.UserName))
             {
-                _session.ActiveUser = userCheck;
-                return RedirectToAction("Index", "Home");
+                string encryptedPassword = CryptoManager.SHA256Encrypt(vm.Password);
+
+                User userCheck = await _userBs.Get(x => x.UserName == vm.UserName && x.Password == encryptedPassword, false);
+
+                if (userCheck != null)
+                {
+                    _session.ActiveUser = userCheck;
+                    return RedirectToAction("Index", "Home");
+                }
+                else
+                {
+                    return Json(new { result = true, message = "Sign in failed" });
+                }
+
             }
             else
             {
-                TempData["Mesaj"] = "Login failed";
+                return Json(new { result = true, message = "Please fill all your sign in information" });
             }
 
-            return View();
+
+            // TODO: Yanlış loginlerdeki mesajları göster
+
+
 
         }
 
@@ -67,10 +80,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
 
             User user = _mapper.Map<User>(vm);
 
-            //User user = new User();
-            //user.UserName = UserName;
-            user.Password = CryptoManager.AESEncrypt(user.Password, "efkey");
-            //user.Email = Email;
+            user.Password = CryptoManager.SHA256Encrypt(vm.Password);
             user.UniqueId = Guid.NewGuid();
             user.Active = false;
 
@@ -78,11 +88,8 @@ namespace FoodieBlog.MVCCoreUI.Controllers
 
             // TODO: Mail onay al
             // TODO: Kullanıcıyı yaratınca ona user roles tablosundan kullanıcı rolü de yarat
-            // TODO: Ön yüzden view model yakala
-
-            ////string website = _config.GetSection("websitehost").Value;
-            ////_mail.Send(user.Email, "SparkMarket", "Merhaba " + user.UserName + " SparkMarkete  hoşgeldiniz <br><a href='" + website + "/Kullanici/EmailOnay/" + user.UniqueId + "'> Lütfen emailinizi onaylamak için tıklayınız.</a>");
-
+            // TODO: Validation işini hallet (en son öncelik çünkü yapmaktan HİÇ keyif almıyorsun)
+            // TODO: Redirects to Account/SignUp for some reason, fix it
 
             return Json(new { result = true, message = "Sign up successful" });
         }

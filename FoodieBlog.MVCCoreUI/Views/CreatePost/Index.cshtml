@@ -1,0 +1,250 @@
+﻿@using FoodieBlog.Model.ViewModel.Front
+@model AddPostVm
+
+
+<div class="container">
+    <div class="row d-flex justify-content-center">
+        <div class="col-lg-12">
+            <div class="alert alert-warning text-center" role="alert">
+                <h3>CREATE A RECIPE!</h3>
+            </div>
+            <form asp-action="AddPost" asp-controller="CreatePost">
+                <div class="form-group">
+                    <label for="Title">Title</label>
+                    <input type="text" class="form-control" asp-for="Title" placeholder="Title">
+                </div>
+                <div class="form-group">
+                    <label for="Contents">An entrance for your article</label>
+                    <textarea class="form-control" asp-for="Contents" rows="3"></textarea>
+                </div>
+
+                @* büyük dörtgendeki alan *@
+                <div class="form-group">
+                    <label for="Ingredients">Ingredients</label>
+                    <ul id="IngredientsList" class="list-group"></ul>
+                    <input type="text" class="form-control" id="IngredientsInput" placeholder="Add an ingredient and press Enter">
+                    <input type="hidden" id="IngredientsHidden" asp-for="Ingredients"> <!-- Hidden field for submission -->
+                </div>
+                <div class="form-group">
+                    <label for="Directions">Directions</label>
+                    <ul id="DirectionsList" class="list-group"></ul>
+                    <input type="text" class="form-control" id="DirectionsInput" placeholder="Add a direction and press Enter">
+                    <input type="hidden" id="DirectionsHidden" asp-for="Directions"> <!-- Hidden field for submission -->
+                </div>
+                <div class="row mb-3">
+                    <div class="col">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Reading time</div>
+                            </div>
+                            <input type="text" class="form-control" asp-for="ReadingTime">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Serving size</div>
+                            </div>
+                            <input type="text" class="form-control" asp-for="ServingSize">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Prep time (in minutes)</div>
+                            </div>
+                            <input type="text" class="form-control" asp-for="PrepTime">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="input-group">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Cook time (in minutes)</div>
+                            </div>
+                            <input type="text" class="form-control" asp-for="CookTime">
+                        </div>
+                    </div>
+                </div>
+                @* büyük dörtgendeki alanın sonu *@
+
+                <div class="form-group">
+                    <label for="MiddleText">Middle Text</label>
+                    <textarea class="form-control" asp-for="MiddleText" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="Quote">A quirky quote for the dish, preferably from someone you know@* quote *@</label>
+                    <textarea class="form-control" asp-for="Quote" rows="3"></textarea>
+                </div>
+
+                @* description start*@
+                <div class="form-group">
+                    <label for="DescriptionFirst">This is where you start describing your recipe</label>
+                    <textarea class="form-control" asp-for="DescriptionFirst" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="DescriptionHeader">Why not spice it up with some big letters, just like your perfectly seasoned meals</label>
+                    <input type="text" class="form-control" asp-for="DescriptionHeader" placeholder="DescriptionHeader">
+                </div>
+                <div class="form-group">
+                    <label for="DescriptionLast">Keep telling me what's going on don't stop now</label>
+                    <textarea class="form-control" asp-for="DescriptionLast" rows="3"></textarea>
+                </div>
+                @* description end *@
+
+                <div class="form-group">
+                    <label for="MoreDetails">This is the text right next to your smaller image, why not describe what's happening inside there?</label>
+                    <textarea class="form-control" asp-for="MoreDetails" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="LastText">This part is for your closing statements</label>
+                    <textarea class="form-control" asp-for="LastText" rows="3"></textarea>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="MainImage">Upload a big image to display on top of this article</label>
+                    <input type="file" class="form-control-file" asp-for="MainImage">
+                </div>
+                <div class="form-group">
+                    <label for="SecondaryImage">Add a small, descriptive photo</label>
+                    <input type="file" class="form-control-file" asp-for="SecondaryImage">
+                </div>
+                <div class="form-group">
+                    <label for="Categories">Categories</label>
+                    <select class="custom-select" id="Categories" asp-items="@Model.Categories" multiple>
+                    </select>
+                    <input type="hidden" id="CategoriesHidden" asp-for="CategorieChosen" />
+                </div>
+                <div class="form-group">
+                    <label for="Tags">Tags</label>
+                    <select class="custom-select" id="Tags" asp-items="@Model.Tags" multiple>
+                    </select>
+                    <input type="hidden" id="TagsHidden" asp-for="TagChosen" />
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-warning btn-block mb-5">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    <style>
+        /* Change focus outline and box shadow to Bootstrap's warning color */
+        .form-control:focus,
+        .custom-select:focus,
+        .form-control-file:focus {
+            border-color: #f89c35 !important;
+            box-shadow: 0 0 5px #f89c35 !important;
+        }
+
+        /* For input groups (like prep time, cook time, etc.) */
+        .input-group-text {
+            background-color: #f89c35;
+            border-color: #f89c35;
+            color: #212529; /* Ensure text is readable */
+        }
+
+        .btn-warning {
+            background-color: #f89c35 !important;
+            border-color: #e58a2f !important;
+            color: #fff !important;
+        }
+
+            .btn-warning:hover {
+                background-color: #e58a2f !important;
+                border-color: #d67c2b !important;
+            }
+
+        .alert-warning {
+            background-color: #f89c35 !important;
+            border-color: #e58a2f !important;
+            color: #fff !important; /* Ensure text is readable */
+        }
+    </style>
+}
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            let ingredients = [];
+            let directions = [];
+            let tags = [];
+            let categories = [];
+
+            function updateHiddenFields() {
+                $('#IngredientsHidden').val(JSON.stringify(ingredients));
+                $('#DirectionsHidden').val(JSON.stringify(directions));
+                $('#TagsHidden').val(JSON.stringify(tags));
+                $('#CategoriesHidden').val(JSON.stringify(categories));
+            }
+
+            // Handle Tags selection
+            $('#Tags').on('change', function() {
+                tags = $(this).val(); // Get selected tags
+                updateHiddenFields();
+            });
+
+            // Handle Categories selection
+            $('#Categories').on('change', function() {
+                categories = $(this).val(); // Get selected categories
+                updateHiddenFields();
+            });
+
+            $('#IngredientsInput').on('keypress', function(event) {
+                if (event.which === 13) { // Enter key
+                    event.preventDefault();
+                    let ingredient = $(this).val().trim();
+                    if (ingredient) {
+                        ingredients.push(ingredient);
+                        $('#IngredientsList').append(`
+                        <li class="list-group-item p-1 d-flex justify-content-between align-items-center" style="font-size: 0.875rem;">
+                            ${ingredient}
+                            <button class="btn btn-danger btn-sm px-2 py-0 remove-item">×</button>
+                        </li>`);
+                        $(this).val('');
+                        updateHiddenFields();
+                    }
+                }
+            });
+
+            $('#DirectionsInput').on('keypress', function(event) {
+                if (event.which === 13) {
+                    event.preventDefault();
+                    let direction = $(this).val().trim();
+                    if (direction) {
+                        directions.push(direction);
+                        $('#DirectionsList').append(`
+                        <li class="list-group-item p-1 d-flex justify-content-between align-items-center" style="font-size: 0.875rem;">
+                            ${direction}
+                            <button class="btn btn-danger btn-sm px-2 py-0 remove-item">×</button>
+                        </li>`);
+                        $(this).val('');
+                        updateHiddenFields();
+                    }
+                }
+            });
+
+            $(document).on('click', '.remove-item', function() {
+                let text = $(this).parent().text().replace('X', '').trim();
+                let parentList = $(this).parent().parent();
+
+                if (parentList.attr('id') === 'IngredientsList') {
+                    ingredients = ingredients.filter(item => item !== text);
+                } else if (parentList.attr('id') === 'DirectionsList') {
+                    directions = directions.filter(item => item !== text);
+                }
+
+                $(this).parent().remove();
+                updateHiddenFields();
+            });
+        });
+    </script>
+
+
+}
+
+
+
