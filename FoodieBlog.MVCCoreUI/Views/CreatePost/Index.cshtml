@@ -8,13 +8,13 @@
             <div class="alert alert-warning text-center" role="alert">
                 <h3>CREATE A RECIPE!</h3>
             </div>
-            <form asp-action="AddPost" asp-controller="CreatePost">
+            <form asp-action="AddPost" asp-controller="CreatePost" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="Title">Title</label>
+                    <label for="Title">Title of your recipe</label>
                     <input type="text" class="form-control" asp-for="Title" placeholder="Title">
                 </div>
                 <div class="form-group">
-                    <label for="Contents">An entrance for your article</label>
+                    <label for="Contents">Write an entrance</label>
                     <textarea class="form-control" asp-for="Contents" rows="3"></textarea>
                 </div>
 
@@ -68,7 +68,7 @@
                 @* büyük dörtgendeki alanın sonu *@
 
                 <div class="form-group">
-                    <label for="MiddleText">Middle Text</label>
+                    <label for="MiddleText">Great time to talk about the recipe; how frequently you make it, a specific memory anytime you see it, go all out </label>
                     <textarea class="form-control" asp-for="MiddleText" rows="3"></textarea>
                 </div>
                 <div class="form-group">
@@ -83,7 +83,7 @@
                 </div>
                 <div class="form-group">
                     <label for="DescriptionHeader">Why not spice it up with some big letters, just like your perfectly seasoned meals</label>
-                    <input type="text" class="form-control" asp-for="DescriptionHeader" placeholder="DescriptionHeader">
+                    <input type="text" class="form-control" asp-for="DescriptionHeader">
                 </div>
                 <div class="form-group">
                     <label for="DescriptionLast">Keep telling me what's going on don't stop now</label>
@@ -159,16 +159,44 @@
             }
 
         .alert-warning {
-            background-color: #f89c35 !important;
+            background-color: #fff !important;
             border-color: #e58a2f !important;
             color: #fff !important; /* Ensure text is readable */
         }
+
+
+
+
+         .select2-container--default .select2-selection--multiple {
+            border: 1px solid #ced4da;
+            border-radius: 4px;
+            padding: 6px;
+        }
+
+        .select2-container--default .select2-selection--multiple .select2-selection__choice {
+            background: #f89c35;
+            color: white;
+            border-radius: 3px;
+            padding: 4px 8px;
+            margin: 2px;
+        } 
     </style>
 }
 
 @section Scripts {
     <script>
         $(document).ready(function() {
+        $('#Tags').select2({
+            // placeholder: "Add tags",
+            allowClear: true,
+        });
+
+        // Initialize Select2 for Categories
+        $('#Categories').select2({
+            // placeholder: "Add categories",
+            allowClear: true,
+        });
+
             let ingredients = [];
             let directions = [];
             let tags = [];
@@ -180,6 +208,8 @@
                 $('#TagsHidden').val(JSON.stringify(tags));
                 $('#CategoriesHidden').val(JSON.stringify(categories));
             }
+
+
 
             // Handle Tags selection
             $('#Tags').on('change', function() {
@@ -245,6 +275,5 @@
 
 
 }
-
 
 

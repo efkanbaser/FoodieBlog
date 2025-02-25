@@ -39,12 +39,12 @@ namespace FoodieBlog.Model.ViewModel.Front
         public string DescriptionLast { get; set; }
 
         public string Quote { get; set; }
-        public List<string> Directions { get; set; } = new List<string>();
+        public string Directions { get; set; } 
 
-        public List<string> Ingredients { get; set; } = new List<string>();
+        public string Ingredients { get; set; }
 
-        public List<string> TagChosen { get; set; } = new List<string>(); 
-        public List<string> CategorieChosen { get; set; } = new List<string>(); 
+        public string TagChosen { get; set; } 
+        public string CategorieChosen { get; set; } 
         public List<SelectListItem> Categories { get; set; }
         public List<SelectListItem> Tags { get; set; }
 

@@ -14,6 +14,7 @@ namespace FoodieBlog.Business.MappingRules
         public MappingProfile()
         {
             CreateMap<SignUpVm, User>().ReverseMap();
+            CreateMap<AddPostVm, Post>().ReverseMap();
         }
     }
 }

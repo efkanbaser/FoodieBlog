@@ -99,7 +99,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
             {
                 if (filter != null)
                 {
-                    query.Where(filter).AsNoTracking();
+                    query = query.Where(filter).AsNoTracking();
                 }
                 else
                 {

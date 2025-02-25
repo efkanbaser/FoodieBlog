@@ -43,8 +43,8 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             #endregion
 
             // Take Ingredients and Directions list, give them to model
-            List<PostIngredient> ingredientsEntity = await _ingredientBs.GetAll(x => x.PostId == post.Id);
-            List<PostDirection> directionsEntity = await _directionBs.GetAll(x => x.PostId == post.Id);
+            List<PostIngredient> ingredientsEntity = await _ingredientBs.GetAll(x => x.PostId == postId);
+            List<PostDirection> directionsEntity = await _directionBs.GetAll(x => x.PostId == postId);
 
             List<string> ingredients = ingredientsEntity
                 .Select(x => x.Ingredient)

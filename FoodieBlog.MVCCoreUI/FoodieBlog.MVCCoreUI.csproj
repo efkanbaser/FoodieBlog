@@ -26,7 +26,8 @@
     <Folder Include="Areas\AdminPanel\Data\" />
     <Folder Include="Areas\AdminPanel\Views\Shared\Partials\" />
     <Folder Include="Views\Shared\Partials\" />
-    <Folder Include="wwwroot\frontassets\" />
+    <Folder Include="wwwroot\frontassets\img\main\" />
+    <Folder Include="wwwroot\frontassets\img\secondary\" />
   </ItemGroup>
 
   <ItemGroup>
