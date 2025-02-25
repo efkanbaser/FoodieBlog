@@ -20,11 +20,17 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.Caching.StackExchangeRedis" Version="8.0.12" />
+    <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="9.0.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="6.0.0" />
+    <PackageReference Include="Serilog.Sinks.MSSqlServer" Version="8.1.0" />
   </ItemGroup>
 
   <ItemGroup>
     <Folder Include="Areas\AdminPanel\Data\" />
     <Folder Include="Areas\AdminPanel\Views\Shared\Partials\" />
+    <Folder Include="logs\" />
     <Folder Include="Views\Shared\Partials\" />
     <Folder Include="wwwroot\frontassets\img\main\" />
     <Folder Include="wwwroot\frontassets\img\secondary\" />

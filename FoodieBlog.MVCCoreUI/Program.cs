@@ -12,6 +12,11 @@ using FoodieBlog.MVCCoreUI.Filters;
 using Infrastructure.CrossCuttingConcern.Comunication;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using Serilog.Sinks.MSSqlServer;
+using Serilog;
+using System.Collections.ObjectModel;
+using System.Data;
+using FoodieBlog.MVCCoreUI.Middlewares;
 
 namespace FoodieBlog.MVCCoreUI
 {
@@ -53,6 +58,46 @@ namespace FoodieBlog.MVCCoreUI
             builder.Services.AddScoped<IValidator<SignUpVm>, SignUpValidator>();
             builder.Services.AddScoped<IValidator<SignInVm>, SignInValidator>();
 
+            #region Logging
+            // Logging
+            Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Information()
+            // this MinimumLevel needs to overlap with the one in the middleware
+            .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+            .MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Warning)
+            .WriteTo.Console()
+            .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
+            .WriteTo.MSSqlServer(
+                connectionString: "server=EFKO\\SQLEXPRESS;database=FoodBlogLogsDB;trusted_connection=true;TrustServerCertificate=True",
+                sinkOptions: new MSSqlServerSinkOptions {
+                    TableName = "WebsiteLogs",
+                    AutoCreateSqlTable = true,
+                    BatchPostingLimit = 1000,
+                    BatchPeriod = TimeSpan.FromSeconds(5)
+                },
+                columnOptions: new ColumnOptions
+                {
+                AdditionalColumns = new Collection<SqlColumn>
+                {
+                    new SqlColumn("RequestPath", SqlDbType.NVarChar, true, 512),
+                    new SqlColumn("RequestBody", SqlDbType.NVarChar, true, -1),
+                    new SqlColumn("ResponseBody", SqlDbType.NVarChar, true, -1),
+                    new SqlColumn("StatusCode", SqlDbType.Int),
+                    new SqlColumn("RequestMethod", SqlDbType.NVarChar, true, 10)
+                },
+                Store = new Collection<StandardColumn>
+                {
+                    StandardColumn.Message,
+                    StandardColumn.Level,
+                    StandardColumn.TimeStamp
+                }
+            })
+            .CreateLogger();
+
+            // Serilog'u kullan
+            builder.Host.UseSerilog();
+            #endregion
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -64,6 +109,9 @@ namespace FoodieBlog.MVCCoreUI
             }
 
             app.UseSession();
+
+            app.UseRequestResponseLogging();
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

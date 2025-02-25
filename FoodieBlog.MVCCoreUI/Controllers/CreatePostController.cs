@@ -11,6 +11,11 @@ using Microsoft.Extensions.Hosting;
 
 namespace FoodieBlog.MVCCoreUI.Controllers
 {
+    // TODO: Add fluent validation to each section
+    // TODO: Add authentication in back end
+    // TODO: Decide which parts of a post should be necessary for a recipe
+    // TODO: If a post has been deleted, the pointers will explode, think of a fix
+    // TODO: 
     [UserFilter]
     public class CreatePostController : Controller
     {
