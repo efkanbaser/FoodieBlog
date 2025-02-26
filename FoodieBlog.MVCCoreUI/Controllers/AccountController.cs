@@ -15,22 +15,38 @@ namespace FoodieBlog.MVCCoreUI.Controllers
     public class AccountController : Controller
     {
         private readonly IUserBs _userBs;
+        private readonly IRoleBs _roleBs;
+        private readonly IUserRoleBs _userRoleBs;
         private readonly MailIslemleri _mail;
         private readonly IConfiguration _config;
         private readonly IMapper _mapper;
         private readonly ISessionManager _session;
 
-        public AccountController(IUserBs userBs, MailIslemleri mail, IConfiguration config, IMapper mapper, ISessionManager session)
+        public AccountController(IUserBs userBs, MailIslemleri mail, IConfiguration config, IMapper mapper, ISessionManager session, IRoleBs roleBs, IUserRoleBs userRoleBs)
         {
             _userBs = userBs;
             _mail = mail;
             _config = config;
             _mapper = mapper;
             _session = session;
+            _userRoleBs = userRoleBs;
+            _roleBs = roleBs;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
+            string? Id = HttpContext.Request.Cookies["ActiveUserCookie"];
+            if (!string.IsNullOrEmpty(Id))
+            {
+                int id = Convert.ToInt32(Id);
+                User u = await _userBs.Get(x => x.Id == id);
+                if (u != null)
+                {
+                    _session.ActiveUser = u;
+                    return View();
+                }
+            }
+
             return View();
         }
 
@@ -39,33 +55,37 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         public async Task<IActionResult> SignIn(SignInVm vm)
         {
     
-            if (!String.IsNullOrEmpty(vm.Password) && !String.IsNullOrEmpty(vm.UserName))
+            if (!String.IsNullOrEmpty(vm.PasswordSignIn) && !String.IsNullOrEmpty(vm.UserNameSignIn))
             {
-                string encryptedPassword = CryptoManager.SHA256Encrypt(vm.Password);
+                string encryptedPassword = CryptoManager.SHA256Encrypt(vm.PasswordSignIn);
 
-                User userCheck = await _userBs.Get(x => x.UserName == vm.UserName && x.Password == encryptedPassword, false);
+                User userCheck = await _userBs.Get(x => x.UserName == vm.UserNameSignIn && x.Password == encryptedPassword, false);
 
                 if (userCheck != null)
                 {
+                    // Sets the user in session
                     _session.ActiveUser = userCheck;
+
+                    // Sets the cookie for the user that lasts a day long
+                    CookieOptions options = new CookieOptions();
+                    options.Expires = DateTime.Now.AddDays(1);
+                    HttpContext.Response.Cookies.Append("ActiveUserCookie", userCheck.Id.ToString(), options);
+
+
                     return RedirectToAction("Index", "Home");
                 }
                 else
                 {
-                    return Json(new { result = true, message = "Sign in failed" });
+                    TempData["Message"] = "Sign in failed";
+                    return RedirectToAction("Index", "Account");
                 }
 
             }
             else
             {
-                return Json(new { result = true, message = "Please fill all your sign in information" });
+                TempData["Message"] = "Please fill all your sign in information";
+                return RedirectToAction("Index", "Account");
             }
-
-
-            // TODO: Yanlış loginlerdeki mesajları göster
-
-
-
         }
 
         [HttpPost]
@@ -75,23 +95,37 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(x => x.Errors).Select(y => y.ErrorMessage).ToList();
-                return Json(new { result = false, errors = errors, message = "Please check your information" });
+                TempData["Message"] = "Please check your sign up information";
+                return RedirectToAction("Index", "Account");
             }
 
-            User user = _mapper.Map<User>(vm);
 
-            user.Password = CryptoManager.SHA256Encrypt(vm.Password);
+            if (await _userBs.Get(x => x.Email == vm.Email) != null)
+            {
+                TempData["Message"] = "Please enter an unused email to sign up";
+                return RedirectToAction("Index", "Account");
+
+            }
+
+            User user = new User();
+            user.UserName = vm.UserNameSignUp;
+            user.Email = vm.Email;
+            user.Password = CryptoManager.SHA256Encrypt(vm.PasswordSignUp);
             user.UniqueId = Guid.NewGuid();
             user.Active = false;
 
             user = await _userBs.Insert(user);
 
-            // TODO: Mail onay al
-            // TODO: Kullanıcıyı yaratınca ona user roles tablosundan kullanıcı rolü de yarat
-            // TODO: Validation işini hallet (en son öncelik çünkü yapmaktan HİÇ keyif almıyorsun)
-            // TODO: Redirects to Account/SignUp for some reason, fix it
+            UserRole blogger = new UserRole();
 
-            return Json(new { result = true, message = "Sign up successful" });
+            blogger.UserId = user.Id;
+            blogger.RoleId = 3; // ID 3 IS BLOGGER RIGHT NOW 26.02.25
+
+            await _userRoleBs.Insert(blogger);
+
+            // TODO: Mail onay al
+
+            return RedirectToAction("Index", "Home");
         }
 
         public IActionResult EmailAuth()

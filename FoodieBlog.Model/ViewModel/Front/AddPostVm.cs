@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,8 +45,11 @@ namespace FoodieBlog.Model.ViewModel.Front
         public string Ingredients { get; set; }
 
         public string TagChosen { get; set; } 
-        public string CategorieChosen { get; set; } 
+        public string CategorieChosen { get; set; }
+
+        [BindNever]
         public List<SelectListItem> Categories { get; set; }
+        [BindNever]
         public List<SelectListItem> Tags { get; set; }
 
 

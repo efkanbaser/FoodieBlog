@@ -23,6 +23,12 @@
                     </li>
                     <li class="nav-item">
                 </ul>
+                @if (TempData["Message"] != null)
+                {
+                    <div class="alert alert-info mb-0">
+                        @TempData["Message"]
+                    </div>
+                }
                 <div class="tab-content">
                     <div class="tab-pane active" id="tabs-1" role="tabpanel">
                         <div class="signin__form__text">
@@ -60,79 +66,96 @@
 
 }
 
-@section Scripts {
+@section Styles{
+    <style>
+        .validation-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin: 0;
+            padding: 0;
+            display: block;
+        }
+
+/*         .fa-eye {
+            font-size: 1rem;
+        } */
+
+    </style>
+
+}      
+
+
+@* @section Scripts {
     <script>
-        // $(document).ready(function(){
-        //     $("#btnSignup").click(function(){
-        //         var signup = $("#frmSignup");
-        //         var token = $("[name='__RequestVerificationToken']").val();
+        $(document).ready(function(){
+            $("#btnSignup").click(function(){
+                var signup = $("#frmSignup");
+                var token = $("[name='__RequestVerificationToken']").val();
 
-        //         if(signup.valid()){
-        //             $.ajax({
-        //                 url: "/Account/SignUp",
-        //                 method: "post",
-        //                 dataType: "json",
-        //                 data: signup.serialize() + "&__RequestVerificationToken=" + token,
-        //                 success: function(r) {
-        //                         if (r.result) {
-        //                         Swal.fire({
-        //                             title: "İşlem Başarılı",
-        //                             text: "Kayıt İşlemini Tamamlandı. Lütfen Mail Onayı İçin Emailinizi Kontrol Ediniz.",
-        //                             icon: "success"
-        //                         });
-        //                         }
-        //                         else {
-        //                         //HATALARI DİV yerine ilgili validation for nesnelerinde göster...
+                if(signup.valid()){
+                    $.ajax({
+                        url: "/Account/SignUp",
+                        method: "post",
+                        dataType: "json",
+                        data: signup.serialize() + "&__RequestVerificationToken=" + token,
+                        success: function(r) {
+                                if (r.result) {
+                                Swal.fire({
+                                    title: "İşlem Başarılı",
+                                    text: "Kayıt İşlemini Tamamlandı. Lütfen Mail Onayı İçin Emailinizi Kontrol Ediniz.",
+                                    icon: "success"
+                                });
+                                }
+                                else {
+                                //HATALARI DİV yerine ilgili validation for nesnelerinde göster...
 
-        //                         var errorlist = "<ul>"
+                                var errorlist = "<ul>"
 
-        //                         for (var i = 0; i < r.errors.length; i++) {
+                                for (var i = 0; i < r.errors.length; i++) {
 
-        //                             errorlist += "<li>" + r.errors[i] + " </li>"
-        //                         }
+                                    errorlist += "<li>" + r.errors[i] + " </li>"
+                                }
 
-        //                         errorlist += "</ul>";
+                                errorlist += "</ul>";
 
-        //                         $("#errorpanel").html(errorlist);
-        //                     }
+                                $("#errorpanel").html(errorlist);
+                            }
 
-        //                 },
-        //                 error: function() {
+                        },
+                        error: function() {
 
-        //                 }
-        //             })
-        //         }
-        //     });
-        // });
+                        }
+                    })
+                }
+            });
+        });
 
-            // $(document).ready(function(){
-            //     $("#btnSignup").click(function(e){
-            //     e.preventDefault(); // Prevent default form submission
-
-            //     var signup = $("#frmSignup");
-            //     var token = $("[name='__RequestVerificationToken']").val();
-
-            //         $.ajax({
-            //             url: "/Account/SignUp",
-            //             method: "post",
-            //             dataType: "json",
-            //             headers: {
-            //                 "RequestVerificationToken": token
-            //             },
-            //             data: signup.serialize(),
-            //             success: function(r) {
-            //                 console.log(r);
-            //             },
-            //             error: function() {
-            //                 console.log("Error");
-            //             }
-            //         });
-            //     });
-            // });
+        $(document).ready(function(){
+            $("#btnSignup").click(function(e){
+            e.preventDefault(); // Prevent default form submission
+            var signup = $("#frmSignup");
+            var token = $("[name='__RequestVerificationToken']").val();
+                $.ajax({
+                    url: "/Account/SignUp",
+                    method: "post",
+                    dataType: "json",
+                    headers: {
+                        "RequestVerificationToken": token
+                    },
+                    data: signup.serialize(),
+                    success: function(r) {
+                        console.log(r);
+                    },
+                    error: function() {
+                        console.log("Error");
+                    }
+                });
+            });
+        });
 
 
 
     </script>
+ *@
 
-
-}                                
+}        

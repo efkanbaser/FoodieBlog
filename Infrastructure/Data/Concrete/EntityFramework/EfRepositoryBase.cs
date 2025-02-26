@@ -27,11 +27,11 @@ namespace Infrastructure.Data.Concrete.EntityFramework
                 ctx.SaveChanges();
                 return entity;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
 
-                return null;
+                throw;
             }
 
         }

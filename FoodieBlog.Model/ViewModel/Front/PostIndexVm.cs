@@ -1,4 +1,5 @@
 ﻿using FoodieBlog.Model.Entity;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -39,16 +40,24 @@ namespace FoodieBlog.Model.ViewModel.Front
 
 
         #region previous post
+        [BindNever]
         public int? PreviousPostId { get; set; }
+        [BindNever]
         public string PrevTitle { get; set; } // Done
+        [BindNever]
         public string PrevPublicationMonth { get; set; } // Done
+        [BindNever]
         public int PrevPublicationDay { get; set; } // Done
         #endregion
 
         #region next post
+        [BindNever]
         public int? NextPostId { get; set; }
+        [BindNever]
         public string NextTitle { get; set; } // Done
+        [BindNever]
         public string NextPublicationMonth { get; set; } // Done
+        [BindNever]
         public int NextPublicationDay { get; set; } // Done
         #endregion
 
@@ -56,15 +65,16 @@ namespace FoodieBlog.Model.ViewModel.Front
 
 
 
-
+        [BindNever]
         public string UserPic { get; set; } // Done
+        [BindNever]
         public string UserBio { get; set; } // Done
 
-
+        [BindNever]
         public virtual ICollection<Comment> Comments { get; set; }
-
+        [BindNever]
         public virtual ICollection<PostCategory> PostCategories { get; set; }
-
+        [BindNever]
         public virtual User User { get; set; } // Done
 
     }

@@ -61,6 +61,7 @@ namespace FoodieBlog.MVCCoreUI
             #region Logging
             // Logging
             Log.Logger = new LoggerConfiguration()
+            .Enrich.FromLogContext()
             .MinimumLevel.Information()
             // this MinimumLevel needs to overlap with the one in the middleware
             .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)

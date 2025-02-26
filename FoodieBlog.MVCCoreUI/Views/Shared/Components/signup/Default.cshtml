@@ -1,20 +1,22 @@
 ﻿@using FoodieBlog.Model.ViewModel.Front
 @model SignUpVm
 
-<form id="frmSignup" asp-action="SignUp" asp-controller="Account" asp-area="" asp-antiforgery="true">
-    <div asp-validation-summary="All"></div>
-    <input asp-for=UserName type="text" placeholder="User Name">
-    <input asp-for=Password type="password" placeholder="Password">
-    <input asp-for=ConfirmPassword type="password" placeholder="Confirm Password">
-    <input asp-for=Email type="email" placeholder="Email Address">
+<form id="frmSignup" asp-action="SignUp" asp-controller="Account" asp-area="" asp-antiforgery="true" method="post">
+    <input asp-for=UserNameSignUp type="text" placeholder="User Name" class="mb-0">
+    <span asp-validation-for="UserNameSignUp" class="validation-message"></span>
+    <input asp-for=PasswordSignUp type="password" placeholder="Password" class="mb-0 mt-3">
+    <span asp-validation-for="PasswordSignUp" class="validation-message"></span>
+    <input asp-for=ConfirmPassword type="password" placeholder="Confirm Password" class="mb-0 mt-3">
+    <span asp-validation-for="ConfirmPassword" class="validation-message"></span>
+    <input asp-for=Email type="email" placeholder="Email Address" class="mb-0 mt-3">
+    <span asp-validation-for="Email" class="validation-message"></span>
 
-    <label for="sign-agree-check">
+    <label for="sign-agree-check" class="mt-3">
         I agree to the terms & conditions
         <input type="checkbox" id="sign-agree-check">
         <span class="checkmark"></span>
     </label>
 
-    <button id="btnSignup" type="submit" class="site-btn">Register Now</button>
+    <button id="btnSignup" type="submit" class="site-btn mt-3">Register Now</button>
 </form>
-
 
