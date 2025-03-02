@@ -1,7 +1,7 @@
 ﻿@using FoodieBlog.Model.ViewModel.Front
 @model SignUpVm
 
-<form id="frmSignup" asp-action="SignUp" asp-controller="Account" asp-area="" asp-antiforgery="true" method="post">
+<form id="frmSignup" asp-action="SignUp" asp-controller="Account" asp-antiforgery="true" method="post">
     <input asp-for=UserNameSignUp type="text" placeholder="User Name" class="mb-0">
     <span asp-validation-for="UserNameSignUp" class="validation-message"></span>
     <input asp-for=PasswordSignUp type="password" placeholder="Password" class="mb-0 mt-3">

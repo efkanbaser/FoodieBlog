@@ -2,7 +2,7 @@
 @model SignInVm
 
 
-<form id="frmSignin" asp-action="SignIn" asp-controller="Account" asp-area="" method="post" asp-antiforgery="true">
+<form id="frmSignin" asp-action="SignIn" asp-controller="Account" method="post" asp-antiforgery="true">
     <input asp-for=UserNameSignIn type="text" placeholder="User Name">
     <input asp-for=PasswordSignIn type="password" placeholder="Password">
     <button type="submit" class="site-btn">Sign In</button>

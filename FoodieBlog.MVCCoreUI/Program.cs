@@ -59,6 +59,7 @@ namespace FoodieBlog.MVCCoreUI
             builder.Services.AddScoped<IValidator<SignUpVm>, SignUpValidator>();
             builder.Services.AddScoped<IValidator<SignInVm>, SignInValidator>();
             builder.Services.AddScoped<IValidator<AddPostVm>, AddPostValidator>();
+            builder.Services.AddScoped<IValidator<MyAccountVm>, ProfileValidator>();
 
             #region Logging
             // Logging
@@ -123,6 +124,7 @@ namespace FoodieBlog.MVCCoreUI
 
             app.UseAuthorization();
 
+
             // Main Website
             app.MapControllerRoute(
                 name: "default",
@@ -133,6 +135,7 @@ namespace FoodieBlog.MVCCoreUI
                 name: "area",
                 areaName: "AdminPanel",
                 pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
 
             app.MapFallback(async context =>
             {

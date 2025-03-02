@@ -33,5 +33,17 @@ namespace Infrastructure.CrossCuttingConcern.Converters
             return System.Text.Encoding.UTF8.GetString(base64EncodedBytes);
         }
 
+        public static string FormatNullableDate(DateTime? date, string nullPlaceholder = "N/A")
+        {
+            // Check if the date is null
+            if (!date.HasValue)
+            {
+                return nullPlaceholder;
+            }
+
+            // Format the date as MM/dd/yyyy
+            return date.Value.ToString("MM/dd/yyyy");
+        }
+
     }
 }

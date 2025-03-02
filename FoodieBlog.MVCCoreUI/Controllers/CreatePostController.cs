@@ -12,11 +12,7 @@ using Microsoft.Extensions.Hosting;
 
 namespace FoodieBlog.MVCCoreUI.Controllers
 {
-    // TODO: Add fluent validation to each section
-    // TODO: Add authentication in back end
-    // TODO: Decide which parts of a post should be necessary for a recipe
     // TODO: If a post has been deleted, the pointers will explode, think of a fix
-    // TODO: Add 24 characters limit to serves section
     // TODO: Add an entity called draft storage and hold the values if the user quits while writing a post
     [UserFilter]
     public class CreatePostController : Controller
@@ -63,6 +59,8 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         }
 
         [HttpPost]
+        [Route("/CreatePost/AddPost",
+            Name = "addpost")]
         public async Task<IActionResult> AddPost(AddPostVm vm, IFormFile MainImage, IFormFile SecondaryImage)
         {
             if (ModelState.IsValid)

@@ -29,13 +29,18 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         {
             // this is a terrible solution but lets me check for unexisting posts
             List<Post> allPosts = await _postBs.GetAll();
+            Post postCheckActive = new Post();
             List<int> postIds = new List<int>();
             foreach (var item in allPosts)
             {
                 postIds.Add(item.Id);
+                if (postId == item.Id)
+                {
+                    postCheckActive = item;
+                }
             }
 
-            if (postIds.Contains(postId))
+            if (postIds.Contains(postId) && postCheckActive.Active == true)
             {
 
                 string[] list = new string[2];

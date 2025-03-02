@@ -8,7 +8,11 @@ using Infrastructure.CrossCuttingConcern.Crypto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using Infrastructure.CrossCuttingConcern.Converters;
 using System.Drawing;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Hosting;
+using FoodieBlog.Business.Concrete.Base;
 
 namespace FoodieBlog.MVCCoreUI.Controllers
 {
@@ -19,18 +23,35 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         private readonly IUserRoleBs _userRoleBs;
         private readonly MailIslemleri _mail;
         private readonly IConfiguration _config;
-        private readonly IMapper _mapper;
         private readonly ISessionManager _session;
+        private readonly IPostBs _postBs;
 
-        public AccountController(IUserBs userBs, MailIslemleri mail, IConfiguration config, IMapper mapper, ISessionManager session, IRoleBs roleBs, IUserRoleBs userRoleBs)
+        // to delete or edit posts
+        private readonly ICommentBs _commentBs;
+        private readonly IPostIngredientBs _postIngredientBs;
+        private readonly IPostTagBs _postTagBs;
+        private readonly IPostCategoryBs _postCategoryBs;
+        private readonly IInteractionBs _interactionBs;
+        private readonly IPostDirectionBs _postDirectionBs;
+
+
+        public AccountController(IUserBs userBs, MailIslemleri mail, IConfiguration config, ISessionManager session, IRoleBs roleBs, IUserRoleBs userRoleBs, IPostBs postBs, ICommentBs commentBs, IPostIngredientBs postIngredientBs, IPostTagBs postTagBs, IPostCategoryBs postCategoryBs, IInteractionBs interactionBs, IPostDirectionBs postDirectionBs)
         {
             _userBs = userBs;
             _mail = mail;
             _config = config;
-            _mapper = mapper;
             _session = session;
             _userRoleBs = userRoleBs;
             _roleBs = roleBs;
+            _postBs = postBs;
+
+
+            _commentBs = commentBs;
+            _postIngredientBs = postIngredientBs;
+            _postTagBs = postTagBs;
+            _postCategoryBs = postCategoryBs;
+            _interactionBs = interactionBs;
+            _postDirectionBs = postDirectionBs;
         }
 
         public async Task<IActionResult> Index()
@@ -140,14 +161,121 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             return View();
         }
 
-        public IActionResult MyPosts()
+        [UserFilter]
+        public async Task<IActionResult> MyPosts()
         {
-            MyPostsVm model = new MyPostsVm();
+            int id = _session.ActiveUser.Id;
+
+            List<Post> posts = await _postBs.GetAllByActive(x => x.UserId == id);
+            List<MyPostsVm> models = new List<MyPostsVm>();
+
+            foreach (var item in posts)
+            {                
+                MyPostsVm model = new MyPostsVm
+                {
+                    Id = item.Id,
+                    Title = item.Title,
+                    Href = "/Home/Posts/" + item.Id.ToString()
+                };
+                models.Add(model);
+            }
+            return View(models);
+        }
+
+        [UserFilter]
+        [HttpPost]
+        public async Task<IActionResult> DeletePost(int id)
+        {
+            //for now just make them inactive, posts can only get deleted by admins
+            //_commentBs = commentBs;
+            //_postIngredientBs = postIngredientBs;
+            //_postTagBs = postTagBs;
+            //_postCategoryBs = postCategoryBs;
+            //_interactionBs = interactionBs;
+            //_postDirectionBs = postDirectionBs;
             
 
+            if (id != 0)
+            {
+                //_postBs.DeleteById(id);
+                Post post = await _postBs.GetById(id);
+                post.Active = false;
+                await _postBs.Update(post);
 
+                return Json(new { result = true });
+            }
+
+            return Json(new { result = false });
+        }
+
+        [UserFilter]
+        [HttpPost]
+        public async Task<IActionResult> UpdatePost()
+        {
+
+            return View();
+        }
+
+
+
+
+
+        [UserFilter]
+        public async Task<IActionResult> Profile()
+        {
+            int id = _session.ActiveUser.Id;
+
+            User user = await _userBs.GetById(id);
+
+            string formattedDate = Converters.FormatNullableDate(user.PublicationDate);
+
+            MyAccountVm model = new MyAccountVm
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                Bio = user.Bio,
+                ProfilePic = user.ProfilePic,
+                CreatedOn = formattedDate
+            };
 
             return View(model);
         }
+
+        [UserFilter]
+        [HttpPost]
+        public async Task<IActionResult> Profile([FromForm]MyAccountVm model)
+        {
+            //ModelStateisvalid ekle
+            if (ModelState.IsValid)
+            {
+                int id = _session.ActiveUser.Id;
+
+                User user = await _userBs.GetById(id);
+
+                user.UserName = model.UserName;
+                user.Bio = model.Bio;
+                user.Password = CryptoManager.SHA256Encrypt(model.Password);
+                user.ProfilePic = model.ProfilePic;
+
+                await _userBs.Insert(user);
+
+                return View();
+            }
+            else
+            {
+                model.ErrorMessage = "Please check all your information";
+                return View();
+            }
+
+        }
+
+
+
+
+
+
+
+
     }
+
 }
