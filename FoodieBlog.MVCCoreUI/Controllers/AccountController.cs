@@ -43,7 +43,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                 if (u != null)
                 {
                     _session.ActiveUser = u;
-                    return View();
+                    return RedirectToAction("Index", "Home");
                 }
             }
 
@@ -128,9 +128,26 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             return RedirectToAction("Index", "Home");
         }
 
+        public IActionResult Logout()
+        {
+            _session.ActiveUser = null;
+            HttpContext.Response.Cookies.Delete("ActiveUserCookie");
+            return RedirectToAction("Index", "Home");
+        }
+
         public IActionResult EmailAuth()
         {
             return View();
+        }
+
+        public IActionResult MyPosts()
+        {
+            MyPostsVm model = new MyPostsVm();
+            
+
+
+
+            return View(model);
         }
     }
 }

@@ -18,7 +18,7 @@ namespace FoodieBlog.MVCCoreUI.Extensions
 
             }
         }
-        public static T GetObject<T>(this ISession session, string key)
+        public static T? GetObject<T>(this ISession session, string key)
         {
             string json = session.GetString(key);
             if (!string.IsNullOrEmpty(json))
@@ -29,7 +29,7 @@ namespace FoodieBlog.MVCCoreUI.Extensions
             }
             else
             {
-                return default(T);
+                return default;
             }
         }
     }

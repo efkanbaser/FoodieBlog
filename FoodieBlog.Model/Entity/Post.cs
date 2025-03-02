@@ -41,7 +41,6 @@ public partial class Post : BaseEntity
     public int? PreviousPostId { get; set; }
     public int? NextPostId { get; set; }
 
-
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
     public virtual ICollection<Interaction> Interactions { get; set; } = new List<Interaction>();

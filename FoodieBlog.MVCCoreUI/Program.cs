@@ -17,6 +17,7 @@ using Serilog;
 using System.Collections.ObjectModel;
 using System.Data;
 using FoodieBlog.MVCCoreUI.Middlewares;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace FoodieBlog.MVCCoreUI
 {
@@ -57,6 +58,7 @@ namespace FoodieBlog.MVCCoreUI
             builder.Services.AddFluentValidationClientsideAdapters();
             builder.Services.AddScoped<IValidator<SignUpVm>, SignUpValidator>();
             builder.Services.AddScoped<IValidator<SignInVm>, SignInValidator>();
+            builder.Services.AddScoped<IValidator<AddPostVm>, AddPostValidator>();
 
             #region Logging
             // Logging
@@ -109,6 +111,7 @@ namespace FoodieBlog.MVCCoreUI
                 app.UseHsts();
             }
 
+
             app.UseSession();
 
             app.UseRequestResponseLogging();
@@ -130,6 +133,12 @@ namespace FoodieBlog.MVCCoreUI
                 name: "area",
                 areaName: "AdminPanel",
                 pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
+            app.MapFallback(async context =>
+            {
+                // Redirect to a custom error page or homepage
+                context.Response.Redirect("/Home/Error");
+            });
 
 
 

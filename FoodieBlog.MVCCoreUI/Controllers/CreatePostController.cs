@@ -7,6 +7,7 @@ using Infrastructure.CrossCuttingConcern.Comunication;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
 
 namespace FoodieBlog.MVCCoreUI.Controllers
@@ -15,7 +16,8 @@ namespace FoodieBlog.MVCCoreUI.Controllers
     // TODO: Add authentication in back end
     // TODO: Decide which parts of a post should be necessary for a recipe
     // TODO: If a post has been deleted, the pointers will explode, think of a fix
-    // TODO: 
+    // TODO: Add 24 characters limit to serves section
+    // TODO: Add an entity called draft storage and hold the values if the user quits while writing a post
     [UserFilter]
     public class CreatePostController : Controller
     {
@@ -24,31 +26,32 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         private readonly ITagBs _tagBs;
         private readonly IPostTagBs _postTagBs;
         private readonly IUserBs _userBs;
-        private readonly IMapper _mapper;
         private readonly ISessionManager _session;
         private readonly IPostBs _postBs;
         private readonly IPostIngredientBs _ingredientsBs;
         private readonly IPostDirectionBs _directionsBs;
+        private readonly IMemoryCache _cache;
 
 
-        public CreatePostController(ICategoryBs categoryBs, ITagBs tagBs, IUserBs userBs, IMapper mapper, ISessionManager session, IPostBs postBs, IPostDirectionBs directionBs, IPostIngredientBs ingredientBs, IPostTagBs postTagBs, IPostCategoryBs postCategoryBs)
+        public CreatePostController(ICategoryBs categoryBs, ITagBs tagBs, IUserBs userBs, ISessionManager session, IPostBs postBs, IPostDirectionBs directionBs, IPostIngredientBs ingredientBs, IPostTagBs postTagBs, IPostCategoryBs postCategoryBs, IMemoryCache cache)
         {
             _categoryBs = categoryBs;
             _tagBs = tagBs;
             _userBs = userBs;
-            _mapper = mapper;
             _session = session;
             _postBs = postBs;
             _ingredientsBs = ingredientBs;
             _directionsBs = directionBs;
             _postTagBs = postTagBs;
             _postCategoryBs = postCategoryBs;
+            _cache = cache;
         }
 
         public async Task<IActionResult> Index()
         {
             List<Category> categories = await _categoryBs.GetAll();
             List<Tag> tags = await _tagBs.GetAll();
+
 
             AddPostVm model = new AddPostVm();
 
@@ -90,13 +93,13 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                 // Save images to wwroot and give their file path to db
                 if (MainImage != null && MainImage.Length > 0)
                 {
-                    var mainImagePath = await SaveImageToWebRoot(MainImage, "img/main");
+                    var mainImagePath = await SaveImageToWebRoot(MainImage, "/frontassets/img/main");
                     post.MainImage = mainImagePath;
                 }
 
                 if (SecondaryImage != null && SecondaryImage.Length > 0)
                 {
-                    var secondaryImagePath = await SaveImageToWebRoot(SecondaryImage, "img/secondary");
+                    var secondaryImagePath = await SaveImageToWebRoot(SecondaryImage, "/frontassets/img/secondary");
                     post.SecondaryImage = secondaryImagePath;
                 }
                 #endregion
@@ -142,14 +145,20 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                                                       .Select(s => s.Trim().Trim('"'))
                                                       .ToList();
 
+
+
+
+
+
                 foreach (string item in categories)
                 {
-                    PostCategory category = new PostCategory
-                    {
-                        PostId = post.Id,
-                        CategoryId = Int32.Parse(item) // you can maybe use tryparse
-                    };
-                    await _postCategoryBs.Insert(category);
+                   PostCategory category = new PostCategory
+                   {
+                       PostId = post.Id,
+                       CategoryId = Int32.Parse(item) // you can maybe use tryparse
+                   };
+
+                   await _postCategoryBs.Insert(category);                   
                 }
                 #endregion
                 #region add tags
@@ -176,10 +185,26 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                 #endregion
 
                 await _postBs.Update(post);
+
+                return RedirectToAction("Success", "CreatePost", new { newPostId = post.Id });
+            }
+            else
+            {
+                //return View("Index", "CreatePost", new { model });
+                return View();
             }
 
-            return View();
+        }
 
+        public IActionResult Success(int newPostId)
+        {
+            SuccessfulAddVm model = new SuccessfulAddVm
+            {
+                PostId = newPostId
+            };
+            //Post post = await _postBs.Get(x => x.Id == newPostId);
+            // THIS'LL BE A CONTROLLER THAT'LL REDIRECT TO THE CREATED POST
+            return View(model);
         }
 
         private async Task<string> SaveImageToWebRoot(IFormFile imageFile, string folderPath)

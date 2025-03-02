@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using FoodieBlog.MVCCoreUI.Filters;
 using FoodieBlog.MVCCoreUI.Models;
 using Microsoft.AspNetCore.Mvc;
 
@@ -6,9 +7,10 @@ namespace FoodieBlog.MVCCoreUI.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly ILogger<HomeController> _logger;    
+        private readonly ILogger<HomeController> _logger;
+        private readonly ISessionManager _session;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, ISessionManager session)
         {
             _logger = logger;
         }

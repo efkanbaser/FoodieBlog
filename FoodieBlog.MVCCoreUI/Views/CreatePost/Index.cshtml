@@ -10,27 +10,35 @@
             </div>
             <form asp-action="AddPost" asp-controller="CreatePost" enctype="multipart/form-data">
                 <div class="form-group">
-                    <label for="Title">Title of your recipe</label>
+                    <label for="Title">Title of your recipe*</label>
                     <input type="text" class="form-control" asp-for="Title" placeholder="Title">
-                </div>
-                <div class="form-group">
-                    <label for="Contents">Write an entrance</label>
-                    <textarea class="form-control" asp-for="Contents" rows="3"></textarea>
+                    <span class="validation-message" asp-validation-for="Title"></span>
                 </div>
 
-                @* büyük dörtgendeki alan *@
                 <div class="form-group">
-                    <label for="Ingredients">Ingredients</label>
+                    <label for="Contents">Write an entrance*</label>
+                    <textarea class="form-control" asp-for="Contents" rows="3"></textarea>
+                    <span class="validation-message" asp-validation-for="Contents"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="Ingredients">Ingredients*</label>
                     <ul id="IngredientsList" class="list-group"></ul>
                     <input type="text" class="form-control" id="IngredientsInput" placeholder="Add an ingredient and press Enter">
                     <input type="hidden" id="IngredientsHidden" asp-for="Ingredients"> <!-- Hidden field for submission -->
+                    <span class="validation-message" asp-validation-for="Ingredients"></span>
                 </div>
+
+
                 <div class="form-group">
-                    <label for="Directions">Directions</label>
+                    <label for="Directions">Directions*</label>
                     <ul id="DirectionsList" class="list-group"></ul>
                     <input type="text" class="form-control" id="DirectionsInput" placeholder="Add a direction and press Enter">
                     <input type="hidden" id="DirectionsHidden" asp-for="Directions"> <!-- Hidden field for submission -->
+                    <span class="validation-message" asp-validation-for="Directions"></span>
                 </div>
+
+
                 <div class="row mb-3">
                     <div class="col">
                         <div class="input-group">
@@ -38,14 +46,16 @@
                                 <div class="input-group-text">Reading time</div>
                             </div>
                             <input type="text" class="form-control" asp-for="ReadingTime">
+                            <span class="validation-message" asp-validation-for="ReadingTime"></span>
                         </div>
                     </div>
                     <div class="col">
                         <div class="input-group">
                             <div class="input-group-prepend">
-                                <div class="input-group-text">Serving size</div>
+                                <div class="input-group-text">Serving size*</div>
                             </div>
                             <input type="text" class="form-control" asp-for="ServingSize">
+                            <span class="validation-message" asp-validation-for="ServingSize"></span>
                         </div>
                     </div>
                     <div class="col">
@@ -54,6 +64,7 @@
                                 <div class="input-group-text">Prep time (in minutes)</div>
                             </div>
                             <input type="text" class="form-control" asp-for="PrepTime">
+                            <span class="validation-message" asp-validation-for="PrepTime"></span>
                         </div>
                     </div>
                     <div class="col">
@@ -62,6 +73,7 @@
                                 <div class="input-group-text">Cook time (in minutes)</div>
                             </div>
                             <input type="text" class="form-control" asp-for="CookTime">
+                            <span class="validation-message" asp-validation-for="CookTime"></span>
                         </div>
                     </div>
                 </div>
@@ -70,56 +82,74 @@
                 <div class="form-group">
                     <label for="MiddleText">Great time to talk about the recipe; how frequently you make it, a specific memory anytime you see it, go all out </label>
                     <textarea class="form-control" asp-for="MiddleText" rows="3"></textarea>
+                    <span class="validation-message" asp-validation-for="MiddleText"></span>
                 </div>
+
                 <div class="form-group">
-                    <label for="Quote">A quirky quote for the dish, preferably from someone you know@* quote *@</label>
+                    <label for="Quote">A quirky quote for the dish, preferably from someone you know</label>
                     <textarea class="form-control" asp-for="Quote" rows="3"></textarea>
+                    <span class="validation-message" asp-validation-for="Quote"></span>
                 </div>
 
                 @* description start*@
                 <div class="form-group">
                     <label for="DescriptionFirst">This is where you start describing your recipe</label>
                     <textarea class="form-control" asp-for="DescriptionFirst" rows="3"></textarea>
+                    <span class="validation-message" asp-validation-for="DescriptionFirst"></span>
                 </div>
+
                 <div class="form-group">
                     <label for="DescriptionHeader">Why not spice it up with some big letters, just like your perfectly seasoned meals</label>
                     <input type="text" class="form-control" asp-for="DescriptionHeader">
+                    <span class="validation-message" asp-validation-for="DescriptionHeader"></span>
                 </div>
+
                 <div class="form-group">
                     <label for="DescriptionLast">Keep telling me what's going on don't stop now</label>
                     <textarea class="form-control" asp-for="DescriptionLast" rows="3"></textarea>
+                    <span class="validation-message" asp-validation-for="DescriptionLast"></span>
                 </div>
                 @* description end *@
 
                 <div class="form-group">
                     <label for="MoreDetails">This is the text right next to your smaller image, why not describe what's happening inside there?</label>
                     <textarea class="form-control" asp-for="MoreDetails" rows="3"></textarea>
+                    <span class="validation-message" asp-validation-for="MoreDetails"></span>
                 </div>
+
                 <div class="form-group">
                     <label for="LastText">This part is for your closing statements</label>
                     <textarea class="form-control" asp-for="LastText" rows="3"></textarea>
+                    <span class="validation-message" asp-validation-for="LastText"></span>
                 </div>
 
-
                 <div class="form-group">
-                    <label for="MainImage">Upload a big image to display on top of this article</label>
+                    <label for="MainImage">Upload a big image to display on top of this article*</label>
                     <input type="file" class="form-control-file" asp-for="MainImage">
+                    @* <span class="validation-message" asp-validation-for="MainImage"></span> *@
                 </div>
+
                 <div class="form-group">
-                    <label for="SecondaryImage">Add a small, descriptive photo</label>
+                    <label for="SecondaryImage">Add a small, descriptive photo*</label>
                     <input type="file" class="form-control-file" asp-for="SecondaryImage">
+                    @* <span class="validation-message" asp-validation-for="SecondaryImage"></span> *@
                 </div>
+
                 <div class="form-group">
                     <label for="Categories">Categories</label>
                     <select class="custom-select" id="Categories" asp-items="@Model.Categories" multiple>
                     </select>
                     <input type="hidden" id="CategoriesHidden" asp-for="CategorieChosen" />
+                    @* <span class="validation-message" asp-validation-for="CategorieChosen"></span> *@
                 </div>
+
+
                 <div class="form-group">
                     <label for="Tags">Tags</label>
                     <select class="custom-select" id="Tags" asp-items="@Model.Tags" multiple>
                     </select>
                     <input type="hidden" id="TagsHidden" asp-for="TagChosen" />
+                @* <span class="validation-message" asp-validation-for="TagChosen"></span> *@
                 </div>
 
                 <div class="form-group">
@@ -164,6 +194,13 @@
             color: #fff !important; /* Ensure text is readable */
         }
 
+        .validation-message {
+            color: #dc3545;
+            font-size: 0.875rem;
+            margin: 0;
+            padding: 0;
+            display: block;
+        }
 
 
 
