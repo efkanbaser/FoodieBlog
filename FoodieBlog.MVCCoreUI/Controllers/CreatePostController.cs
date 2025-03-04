@@ -65,7 +65,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         {
             if (ModelState.IsValid)
             {
-                // Create new post
+                // Create new post, active is set to true for now but in publication, it'll be set to false
                 Post post = new Post
                 {
                     UserId = _session.ActiveUser.Id,
@@ -82,7 +82,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                     DescriptionHeader = vm.DescriptionHeader,
                     DescriptionLast = vm.DescriptionLast,
                     Quote = vm.Quote,
-                    Active = false,
+                    Active = true,
                     CreatorId = _session.ActiveUser.Id
                 };
 
@@ -184,6 +184,8 @@ namespace FoodieBlog.MVCCoreUI.Controllers
 
                 await _postBs.Update(post);
 
+                TempData["PostCreated"] = true;
+
                 return RedirectToAction("Success", "CreatePost", new { newPostId = post.Id });
             }
             else
@@ -196,6 +198,13 @@ namespace FoodieBlog.MVCCoreUI.Controllers
 
         public IActionResult Success(int newPostId)
         {
+            if (TempData["PostCreated"] == null || !(bool)TempData["PostCreated"])
+            {
+                return RedirectToAction("Index", "Home");
+            }
+            TempData.Remove("PostCreated");
+
+
             SuccessfulAddVm model = new SuccessfulAddVm
             {
                 PostId = newPostId
@@ -207,8 +216,9 @@ namespace FoodieBlog.MVCCoreUI.Controllers
 
         private async Task<string> SaveImageToWebRoot(IFormFile imageFile, string folderPath)
         {
+            // This works but this is terrible and won't work in unix based systems
             // Ensure the folder exists
-            var webRootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/frontassets", folderPath);
+            var webRootPath = Directory.GetCurrentDirectory() + "/wwwroot" + folderPath;
             if (!Directory.Exists(webRootPath))
             {
                 Directory.CreateDirectory(webRootPath);
@@ -216,7 +226,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
 
             // Generate a unique file name
             var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-            var filePath = Path.Combine(webRootPath, fileName);
+            var filePath = Path.Combine(webRootPath, fileName).Replace("\\", "/");
 
             // Save the file to the wwwroot folder
             using (var stream = new FileStream(filePath, FileMode.Create))

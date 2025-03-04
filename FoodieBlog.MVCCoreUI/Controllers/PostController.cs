@@ -27,20 +27,18 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         [Route("Home/Posts/{postId}")]
         public async Task<IActionResult> Index(int postId)
         {
-            // this is a terrible solution but lets me check for unexisting posts
-            List<Post> allPosts = await _postBs.GetAll();
-            Post postCheckActive = new Post();
-            List<int> postIds = new List<int>();
+            List<Post> allPosts = await _postBs.GetAllByActive();
+            bool doesExist = false;
             foreach (var item in allPosts)
             {
-                postIds.Add(item.Id);
-                if (postId == item.Id)
+                if (item.Id == postId)
                 {
-                    postCheckActive = item;
+                    doesExist = true;
                 }
             }
 
-            if (postIds.Contains(postId) && postCheckActive.Active == true)
+
+            if (doesExist)
             {
 
                 string[] list = new string[2];
@@ -68,26 +66,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                     .Select(x => x.Directions)
                     .ToList();
 
-                // Get previous posts for name, dates
-                Post prevPost = await _postBs.Get(x => x.Id == post.PreviousPostId);
-                #region create month and day for the previous post
-                int prevMonthNumber = prevPost.PublicationDate.Value.Month;
-                string prevMonth = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(prevMonthNumber);
-                int prevDay = prevPost.PublicationDate.Value.Day;
-                #endregion
-
-                // Get next posts for name, dates
-                Post nextPost = await _postBs.Get(x => x.Id == post.NextPostId);
-                #region create month and day for the next post
-                int nextMonthNumber = nextPost.PublicationDate.Value.Month;
-                string nextMonth = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(nextMonthNumber);
-                int nextDay = nextPost.PublicationDate.Value.Day;
-                #endregion
-
-
                 // Create the model
-                // TODO: Use userId to send signalR messages when a comment is made
-                // Reminder: when creating a post, the previous post will be postid-1 and next post will be postid-2
                 PostIndexVm model = new PostIndexVm
                 {
                     Id = post.Id,
@@ -116,15 +95,44 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                     Quote = post.Quote,
                     UserBio = user.Bio,
                     UserPic = user.ProfilePic,
-                    PreviousPostId = prevPost.Id,
-                    PrevTitle = prevPost.Title,
-                    PrevPublicationMonth = prevMonth,
-                    PrevPublicationDay = prevDay,
-                    NextPostId = nextPost.Id,
-                    NextTitle = nextPost.Title,
-                    NextPublicationMonth = nextMonth,
-                    NextPublicationDay = nextDay
                 };
+
+                if (post.PreviousPostId != null)
+                {
+                    // Get previous posts for name, dates
+                    Post prevPost = await _postBs.Get(x => x.Id == post.PreviousPostId);
+                    #region create month and day for the previous post
+                    int prevMonthNumber = prevPost.PublicationDate.Value.Month;
+                    string prevMonth = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(prevMonthNumber);
+                    int prevDay = prevPost.PublicationDate.Value.Day;
+
+                    model.PreviousPostId = prevPost.Id;
+                    model.PrevTitle = prevPost.Title;
+                    model.PrevPublicationMonth = prevMonth;
+                    model.PrevPublicationDay = prevDay;
+                    #endregion
+                }
+
+                if (post.NextPostId != null)
+                {
+                    // Get next posts for name, dates
+                    Post nextPost = await _postBs.Get(x => x.Id == post.NextPostId);
+                    #region create month and day for the next post
+                    int nextMonthNumber = nextPost.PublicationDate.Value.Month;
+                    string nextMonth = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(nextMonthNumber);
+                    int nextDay = nextPost.PublicationDate.Value.Day;
+
+                    model.NextPostId = nextPost.Id;
+                    model.NextTitle = nextPost.Title;
+                    model.NextPublicationMonth = nextMonth;
+                    model.NextPublicationDay = nextDay;
+                    #endregion
+                }
+
+
+                // TODO: Use userId to send signalR messages when a comment is made
+                // Reminder: when creating a post, the previous post will be postid-1 and next post will be postid-2
+
                 return View(model);
 
             }
