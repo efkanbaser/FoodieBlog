@@ -14,13 +14,21 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         private readonly IUserBs _userBs;
         private readonly IPostIngredientBs _ingredientBs;
         private readonly IPostDirectionBs _directionBs;
+        private readonly IPostCategoryBs _postCategoryBs;
+        private readonly ICategoryBs _categoryBs;
+        private readonly IPostTagBs _postTagBs;
+        private readonly ITagBs _tagBs;
 
-        public PostController(IPostBs postBs, IUserBs userBs, IPostIngredientBs ingredientBs, IPostDirectionBs directionBs)
+        public PostController(IPostBs postBs, IUserBs userBs, IPostIngredientBs ingredientBs, IPostDirectionBs directionBs, IPostCategoryBs postCategoryBs, ICategoryBs categoryBs, IPostTagBs postTagBs, ITagBs tagBs)
         {
             _postBs = postBs;
             _userBs = userBs;
             _ingredientBs = ingredientBs;
             _directionBs = directionBs;
+            _postCategoryBs = postCategoryBs;
+            _categoryBs = categoryBs;
+            _postTagBs = postTagBs;
+            _tagBs = tagBs;
         }
 
         //TODO: Make the url look like FoodieBlog/how-to-make-the-most-delicious-smash-burger
@@ -58,6 +66,36 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                 List<PostIngredient> ingredientsEntity = await _ingredientBs.GetAll(x => x.PostId == postId);
                 List<PostDirection> directionsEntity = await _directionBs.GetAll(x => x.PostId == postId);
 
+                // Take categories of the post
+                List<PostCategory> postCategories = await _postCategoryBs.GetAll(x => x.PostId == post.Id);
+                List<Category> categories = await _categoryBs.GetAll();
+                List<string> postCategoryNames = new List<string>();
+                foreach (var postcat in postCategories)
+                {
+                    foreach (var cat in categories)
+                    {
+                        if (postcat.CategoryId == cat.Id)
+                        {
+                            postCategoryNames.Add(cat.CategoryName);
+                        }
+                    }
+                }
+
+                // Take tags of the post
+                List<PostTag> postTags = await _postTagBs.GetAll(x => x.PostId == post.Id);
+                List<Tag> tags = await _tagBs.GetAll();
+                List<string> postTagNames = new List<string>();
+                foreach (var postcat in postTags)
+                {
+                    foreach (var cat in tags)
+                    {
+                        if (postcat.TagId == cat.Id)
+                        {
+                            postTagNames.Add(cat.TagName);
+                        }
+                    }
+                }
+
                 List<string> ingredients = ingredientsEntity
                     .Select(x => x.Ingredient)
                     .ToList();
@@ -84,7 +122,8 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                     PublicationDay = day,
                     PublicationMonth = month,
                     Comments = post.Comments,
-                    PostCategories = post.PostCategories,
+                    PostCategories = postCategoryNames,
+                    PostTags = postTagNames,
                     UserId = user.Id,
                     MiddleText = post.MiddleText,
                     DescriptionFirst = post.DescriptionFirst,

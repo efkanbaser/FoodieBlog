@@ -73,7 +73,9 @@ namespace FoodieBlog.Model.ViewModel.Front
         [BindNever]
         public virtual ICollection<Comment> Comments { get; set; }
         [BindNever]
-        public virtual ICollection<PostCategory> PostCategories { get; set; }
+        public virtual List<string> PostCategories { get; set; }
+        [BindNever]
+        public virtual List<string> PostTags { get; set; }
         [BindNever]
         public virtual User User { get; set; } // Done
 

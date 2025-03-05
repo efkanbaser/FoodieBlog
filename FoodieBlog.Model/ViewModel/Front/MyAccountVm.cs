@@ -16,6 +16,8 @@ namespace FoodieBlog.Model.ViewModel.Front
         public string Password { get; set; }
         public string Bio { get; set; }
         public string ProfilePic { get; set; }
+
+        public string ProfilePicNew { get; set; }
         public string ConfirmPassword { get; set; }
 
         [BindNever]

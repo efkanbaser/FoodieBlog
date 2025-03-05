@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Hosting;
+using System.Text.RegularExpressions;
+using FoodieBlog.Business.Common;
 
 namespace FoodieBlog.MVCCoreUI.Controllers
 {
@@ -27,9 +29,10 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         private readonly IPostIngredientBs _ingredientsBs;
         private readonly IPostDirectionBs _directionsBs;
         private readonly IMemoryCache _cache;
+        private readonly IFileService _fileService;
 
 
-        public CreatePostController(ICategoryBs categoryBs, ITagBs tagBs, IUserBs userBs, ISessionManager session, IPostBs postBs, IPostDirectionBs directionBs, IPostIngredientBs ingredientBs, IPostTagBs postTagBs, IPostCategoryBs postCategoryBs, IMemoryCache cache)
+        public CreatePostController(ICategoryBs categoryBs, ITagBs tagBs, IUserBs userBs, ISessionManager session, IPostBs postBs, IPostDirectionBs directionBs, IPostIngredientBs ingredientBs, IPostTagBs postTagBs, IPostCategoryBs postCategoryBs, IMemoryCache cache, IFileService fileService)
         {
             _categoryBs = categoryBs;
             _tagBs = tagBs;
@@ -41,6 +44,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             _postTagBs = postTagBs;
             _postCategoryBs = postCategoryBs;
             _cache = cache;
+            _fileService = fileService;
         }
 
         public async Task<IActionResult> Index()
@@ -59,12 +63,11 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         }
 
         [HttpPost]
-        [Route("/CreatePost/AddPost",
-            Name = "addpost")]
         public async Task<IActionResult> AddPost(AddPostVm vm, IFormFile MainImage, IFormFile SecondaryImage)
         {
             if (ModelState.IsValid)
             {
+                #region initialize post
                 // Create new post, active is set to true for now but in publication, it'll be set to false
                 Post post = new Post
                 {
@@ -85,29 +88,32 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                     Active = true,
                     CreatorId = _session.ActiveUser.Id
                 };
-
+                #endregion
 
                 #region add images if they exist
                 // Save images to wwroot and give their file path to db
                 if (MainImage != null && MainImage.Length > 0)
                 {
-                    var mainImagePath = await SaveImageToWebRoot(MainImage, "/frontassets/img/main");
+                    var mainImagePath = await _fileService.SaveImageAsync(MainImage, "/frontassets/img/main");
                     post.MainImage = mainImagePath;
                 }
 
                 if (SecondaryImage != null && SecondaryImage.Length > 0)
                 {
-                    var secondaryImagePath = await SaveImageToWebRoot(SecondaryImage, "/frontassets/img/secondary");
+                    var secondaryImagePath = await _fileService.SaveImageAsync(SecondaryImage, "/frontassets/img/secondary");
                     post.SecondaryImage = secondaryImagePath;
                 }
                 #endregion
                 post = await _postBs.Insert(post);
+
                 #region add directions
                 string directionsReceived = vm.Directions;
-                string directionsCleaned = directionsReceived.Trim('[', ']');
-                List<string> directions = directionsCleaned.Split(',')
-                                                      .Select(s => s.Trim().Trim('"'))
-                                                      .ToList();
+                // Remove the square brackets
+                string cleanedDirections = directionsReceived.Trim('[', ']');
+                // Split by commas outside quotes using regex
+                List<string> directions = Regex.Split(cleanedDirections, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
+                                            .Select(s => s.Trim().Trim('"'))
+                                            .ToList();
 
                 foreach (string item in directions)
                 {
@@ -121,10 +127,12 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                 #endregion
                 #region add ingredients
                 string ingredientsReceived = vm.Ingredients;
-                string ingredientsCleaned = ingredientsReceived.Trim('[', ']');
-                List<string> ingredients = ingredientsCleaned.Split(',')
-                                                      .Select(s => s.Trim().Trim('"'))
-                                                      .ToList();
+                // Remove the square brackets
+                string cleanedIngredients = ingredientsReceived.Trim('[', ']');
+                // Split by commas outside quotes using regex
+                List<string> ingredients = Regex.Split(cleanedIngredients, ",(?=(?:[^\"]*\"[^\"]*\")*[^\"]*$)")
+                                            .Select(s => s.Trim().Trim('"'))
+                                            .ToList();
 
                 foreach (string item in ingredients)
                 {
@@ -214,28 +222,6 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             return View(model);
         }
 
-        private async Task<string> SaveImageToWebRoot(IFormFile imageFile, string folderPath)
-        {
-            // This works but this is terrible and won't work in unix based systems
-            // Ensure the folder exists
-            var webRootPath = Directory.GetCurrentDirectory() + "/wwwroot" + folderPath;
-            if (!Directory.Exists(webRootPath))
-            {
-                Directory.CreateDirectory(webRootPath);
-            }
-
-            // Generate a unique file name
-            var fileName = Guid.NewGuid().ToString() + Path.GetExtension(imageFile.FileName);
-            var filePath = Path.Combine(webRootPath, fileName).Replace("\\", "/");
-
-            // Save the file to the wwwroot folder
-            using (var stream = new FileStream(filePath, FileMode.Create))
-            {
-                await imageFile.CopyToAsync(stream);
-            }
-
-            // Return the relative path to store in the database
-            return Path.Combine(folderPath, fileName).Replace("\\", "/");
-        }
+        
     }
 }

@@ -243,7 +243,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
 
         [UserFilter]
         [HttpPost]
-        public async Task<IActionResult> Profile([FromForm]MyAccountVm model)
+        public async Task<IActionResult> Profile([FromForm]MyAccountVm model, IFormFile ProfilePicNew)
         {
             //ModelStateisvalid ekle
             if (ModelState.IsValid)

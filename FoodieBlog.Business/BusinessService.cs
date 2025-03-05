@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using FoodieBlog.Business.Abstract;
 using FoodieBlog.Business.Concrete.Base;
+using FoodieBlog.Business.Common;
 
 
 
@@ -30,6 +31,8 @@ namespace FoodieBlog.Business
             services.AddScoped<IPostCategoryBs, PostCategoryBs>();
             services.AddScoped<IPostIngredientBs, PostIngredientBs>();
             services.AddScoped<IPostDirectionBs, PostDirectionBs>();
+
+            services.AddScoped<IFileService, FileService>();
 
             return services;
         }
