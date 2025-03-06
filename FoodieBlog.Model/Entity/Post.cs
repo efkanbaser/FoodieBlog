@@ -38,8 +38,9 @@ public partial class Post : BaseEntity
     public string DescriptionLast { get; set; }
 
     public string Quote { get; set; }
-    public int? PreviousPostId { get; set; }
-    public int? NextPostId { get; set; }
+    public string PreviousPostUrl { get; set; }
+    public string NextPostUrl { get; set; }
+    public string Url { get; set; }
 
     public virtual ICollection<Comment> Comments { get; set; } = new List<Comment>();
 

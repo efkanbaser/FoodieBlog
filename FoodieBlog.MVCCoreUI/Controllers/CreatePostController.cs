@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿    using AutoMapper;
 using FoodieBlog.Business.Abstract;
 using FoodieBlog.Model.Entity;
 using FoodieBlog.Model.ViewModel.Front;
@@ -185,8 +185,10 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                 }
                 #endregion
                 #region add pointers to previous and next posts
-                post.PreviousPostId = post.Id - 1;
-                post.NextPostId = post.Id - 2;
+                Post previousPost = await _postBs.Get(x => x.Id == post.Id - 1);
+                post.PreviousPostUrl = previousPost.Url;
+                Post nextPost = await _postBs.Get(x => x.Id == post.Id - 2);
+                post.NextPostUrl = nextPost.Url;
                 post = await _postBs.Update(post);
                 #endregion
 

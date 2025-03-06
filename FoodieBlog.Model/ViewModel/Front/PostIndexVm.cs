@@ -41,7 +41,7 @@ namespace FoodieBlog.Model.ViewModel.Front
 
         #region previous post
         [BindNever]
-        public int? PreviousPostId { get; set; }
+        public string PreviousPostUrl { get; set; }
         [BindNever]
         public string PrevTitle { get; set; } // Done
         [BindNever]
@@ -52,7 +52,7 @@ namespace FoodieBlog.Model.ViewModel.Front
 
         #region next post
         [BindNever]
-        public int? NextPostId { get; set; }
+        public string NextPostUrl { get; set; }
         [BindNever]
         public string NextTitle { get; set; } // Done
         [BindNever]

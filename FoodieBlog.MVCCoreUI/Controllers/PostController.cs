@@ -32,14 +32,14 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         }
 
         //TODO: Make the url look like FoodieBlog/how-to-make-the-most-delicious-smash-burger
-        [Route("Home/Posts/{postId}")]
-        public async Task<IActionResult> Index(int postId)
+        [Route("Home/Posts/{postName}")]
+        public async Task<IActionResult> Index(string postName)
         {
             List<Post> allPosts = await _postBs.GetAllByActive();
             bool doesExist = false;
             foreach (var item in allPosts)
             {
-                if (item.Id == postId)
+                if (item.Url == postName)
                 {
                     doesExist = true;
                 }
@@ -53,7 +53,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                 list = ["Comments", "PostCategories"];
 
                 // Take the required parts from db
-                Post post = await _postBs.Get(x => x.Id == postId, includelist: list);
+                Post post = await _postBs.Get(x => x.Url == postName, includelist: list);
                 User user = await _userBs.Get(x => x.Id == post.UserId);
 
                 #region create month and day for the post
@@ -63,8 +63,8 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                 #endregion
 
                 // Take Ingredients and Directions list, give them to model
-                List<PostIngredient> ingredientsEntity = await _ingredientBs.GetAll(x => x.PostId == postId);
-                List<PostDirection> directionsEntity = await _directionBs.GetAll(x => x.PostId == postId);
+                List<PostIngredient> ingredientsEntity = await _ingredientBs.GetAll(x => x.PostId == post.Id);
+                List<PostDirection> directionsEntity = await _directionBs.GetAll(x => x.PostId == post.Id);
 
                 // Take categories of the post
                 List<PostCategory> postCategories = await _postCategoryBs.GetAll(x => x.PostId == post.Id);
@@ -136,41 +136,57 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                     UserPic = user.ProfilePic,
                 };
 
-                if (post.PreviousPostId != null)
+                if (post.PreviousPostUrl != null)
                 {
                     // Get previous posts for name, dates
-                    Post prevPost = await _postBs.Get(x => x.Id == post.PreviousPostId);
-                    #region create month and day for the previous post
-                    int prevMonthNumber = prevPost.PublicationDate.Value.Month;
-                    string prevMonth = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(prevMonthNumber);
-                    int prevDay = prevPost.PublicationDate.Value.Day;
+                    try
+                    {
+                        Post prevPost = await _postBs.Get(x => x.Url == post.PreviousPostUrl);
+                        #region create month and day for the previous post
+                        int prevMonthNumber = prevPost.PublicationDate.Value.Month;
+                        string prevMonth = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(prevMonthNumber);
+                        int prevDay = prevPost.PublicationDate.Value.Day;
 
-                    model.PreviousPostId = prevPost.Id;
-                    model.PrevTitle = prevPost.Title;
-                    model.PrevPublicationMonth = prevMonth;
-                    model.PrevPublicationDay = prevDay;
-                    #endregion
+                        model.PreviousPostUrl = prevPost.Url;
+                        model.PrevTitle = prevPost.Title;
+                        model.PrevPublicationMonth = prevMonth;
+                        model.PrevPublicationDay = prevDay;
+                        #endregion
+                    }
+                    catch (Exception)
+                    {
+
+                        return RedirectToAction("Error", "Home");
+                    }
+
                 }
 
-                if (post.NextPostId != null)
+                if (post.NextPostUrl != null)
                 {
-                    // Get next posts for name, dates
-                    Post nextPost = await _postBs.Get(x => x.Id == post.NextPostId);
-                    #region create month and day for the next post
-                    int nextMonthNumber = nextPost.PublicationDate.Value.Month;
-                    string nextMonth = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(nextMonthNumber);
-                    int nextDay = nextPost.PublicationDate.Value.Day;
+                    try
+                    {
+                        // Get next posts for name, dates
+                        Post nextPost = await _postBs.Get(x => x.Url == post.NextPostUrl);
+                        #region create month and day for the next post
+                        int nextMonthNumber = nextPost.PublicationDate.Value.Month;
+                        string nextMonth = CultureInfo.CurrentCulture.DateTimeFormat.GetAbbreviatedMonthName(nextMonthNumber);
+                        int nextDay = nextPost.PublicationDate.Value.Day;
 
-                    model.NextPostId = nextPost.Id;
-                    model.NextTitle = nextPost.Title;
-                    model.NextPublicationMonth = nextMonth;
-                    model.NextPublicationDay = nextDay;
-                    #endregion
+                        model.NextPostUrl = nextPost.Url;
+                        model.NextTitle = nextPost.Title;
+                        model.NextPublicationMonth = nextMonth;
+                        model.NextPublicationDay = nextDay;
+                        #endregion
+                    }
+                    catch (Exception)
+                    {
+                        return RedirectToAction("Error", "Home");
+                    }
+
                 }
 
 
                 // TODO: Use userId to send signalR messages when a comment is made
-                // Reminder: when creating a post, the previous post will be postid-1 and next post will be postid-2
 
                 return View(model);
 
