@@ -13,7 +13,6 @@ public partial class Comment : BaseEntity
 
     public string Contents { get; set; }
 
-    public byte[] Timestamp { get; set; }
 
     public virtual Post Post { get; set; }
 

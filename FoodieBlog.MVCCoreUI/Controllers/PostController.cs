@@ -5,6 +5,7 @@ using FoodieBlog.Model.ViewModel.Front;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System;
+using FoodieBlog.MVCCoreUI.Filters;
 
 namespace FoodieBlog.MVCCoreUI.Controllers
 {
@@ -18,8 +19,10 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         private readonly ICategoryBs _categoryBs;
         private readonly IPostTagBs _postTagBs;
         private readonly ITagBs _tagBs;
+        private readonly ICommentBs _commentBs;
+        private readonly ISessionManager _session;
 
-        public PostController(IPostBs postBs, IUserBs userBs, IPostIngredientBs ingredientBs, IPostDirectionBs directionBs, IPostCategoryBs postCategoryBs, ICategoryBs categoryBs, IPostTagBs postTagBs, ITagBs tagBs)
+        public PostController(IPostBs postBs, IUserBs userBs, IPostIngredientBs ingredientBs, IPostDirectionBs directionBs, IPostCategoryBs postCategoryBs, ICategoryBs categoryBs, IPostTagBs postTagBs, ITagBs tagBs,ICommentBs commentBs, ISessionManager session)
         {
             _postBs = postBs;
             _userBs = userBs;
@@ -29,10 +32,12 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             _categoryBs = categoryBs;
             _postTagBs = postTagBs;
             _tagBs = tagBs;
+            _commentBs = commentBs;
+            _session = session;
         }
 
         //TODO: Make the url look like FoodieBlog/how-to-make-the-most-delicious-smash-burger
-        [Route("Home/Posts/{postName}")]
+        [Route("Post/{postName}")]
         public async Task<IActionResult> Index(string postName)
         {
             List<Post> allPosts = await _postBs.GetAllByActive();
@@ -49,8 +54,8 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             if (doesExist)
             {
 
-                string[] list = new string[2];
-                list = ["Comments", "PostCategories"];
+                string[] list = new string[1];
+                list = ["PostCategories"];
 
                 // Take the required parts from db
                 Post post = await _postBs.Get(x => x.Url == postName, includelist: list);
@@ -104,6 +109,27 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                     .Select(x => x.Directions)
                     .ToList();
 
+
+                // Take comments of the post
+                string[] listComment = new string[1];
+                listComment = ["User"];
+                List<PostCommentVm> comments = new List<PostCommentVm>();
+                List<Comment> commentsDb = await _commentBs.GetAll(includelist: listComment);
+                foreach (var item in commentsDb)
+                {
+                    if(item.PostId == post.Id)
+                    {
+                        PostCommentVm temp = new PostCommentVm
+                        {
+                            UserName = item.User.UserName,
+                            Date = item.PublicationDate,
+                            Contents = item.Contents,
+                            ProfilePic = item.User.ProfilePic
+                        };
+                        comments.Add(temp);
+                    }
+                }
+
                 // Create the model
                 PostIndexVm model = new PostIndexVm
                 {
@@ -121,7 +147,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                     UserName = user.UserName,
                     PublicationDay = day,
                     PublicationMonth = month,
-                    Comments = post.Comments,
+                    Comments = comments,
                     PostCategories = postCategoryNames,
                     PostTags = postTagNames,
                     UserId = user.Id,
@@ -200,6 +226,21 @@ namespace FoodieBlog.MVCCoreUI.Controllers
 
 
 
+        }
+
+
+        [HttpPost]
+        [Route("Post/Comment")]
+        public async Task<IActionResult> Comment([FromForm] int id, [FromForm] string commentContent)
+        {
+            Comment comment = new Comment
+            {
+                Contents = commentContent,
+                UserId = _session.ActiveUser.Id,
+                PostId = id
+            };
+            await _commentBs.Insert(comment);
+            return Json( new { result = true, message = "Comment is added successfully" } );
         }
     }
 }

@@ -1,4 +1,7 @@
-﻿@model PostIndexVm
+﻿@using FoodieBlog.MVCCoreUI.Filters
+@inject ISessionManager _session
+@model PostIndexVm
+
 
 <!-- Single Post Section Begin -->
 <section class="single-post spad">
@@ -31,7 +34,7 @@
                         </ul>
                     </div>
                 </div>
-@*                 <div class="single-post__social__item">
+                @*                 <div class="single-post__social__item">
                     <ul>
                         <li><a href="#"><i class="fa fa-facebook"></i></a></li>
                         <li><a href="#"><i class="fa fa-twitter"></i></a></li>
@@ -95,7 +98,7 @@
                     </p>
                 </div>
                 @{
-                    if(!string.IsNullOrEmpty(Model.Quote))
+                    if (!string.IsNullOrEmpty(Model.Quote))
                     {
                         <div class="single-post__quote">
                             <p>
@@ -134,7 +137,7 @@
                 </div>
                 <div class="single-post__tags">
                     @{
-                        if(Model.PostTags.Any())
+                        if (Model.PostTags.Any())
                         {
                             foreach (var item in Model.PostTags)
                             {
@@ -179,7 +182,9 @@
                         <img src="@Model.UserPic" alt="">
                     </div>
                     <div class="single-post__author__profile__text">
-                        <h4>@{@Model.UserName}.</h4>
+                        <h4>@{
+                                @Model.UserName
+                            }.</h4>
                         <p>
                             @Model.UserBio
                         </p>
@@ -187,27 +192,35 @@
                 </div>
                 <div class="single-post__comment">
                     <div class="widget__title">
-                        <h4>03 Comment</h4>
+                        <h4>@Model.Comments.Count.ToString() Comments</h4>
                     </div>
-                    <div class="single-post__comment__item">
-                        <div class="single-post__comment__item__pic">
-                            <img src="/frontassets/img/categories/single-post/comment/comment-1.jpg" alt="">
-                        </div>
-                        <div class="single-post__comment__item__text">
-                            <h5>Brandon Kelley</h5>
-                            <span>15 Aug 2017</span>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore
-                                magnam.
-                            </p>
-                            <ul>
-                                <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                <li><a href="#"><i class="fa fa-share-square-o"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="single-post__comment__item single-post__comment__item--reply">
+                    @{
+                        foreach (var item in Model.Comments)
+                        {
+                            <div class="single-post__comment__item">
+                                <div class="single-post__comment__item__pic">
+                                    <img src="@item.ProfilePic" alt="">
+                                </div>
+                                <div class="single-post__comment__item__text">
+                                    <h5>@item.UserName</h5>
+                                    <span>@item.Date</span>
+                                    <p>
+                                        @item.Contents
+                                    </p>
+                                    <ul>
+                                        <li><a href="#" class="heart-icon"><i class="fa fa-heart-o"></i></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        }
+                    }
+
+
+
+
+
+                    @* reply *@
+                    @*                     <div class="single-post__comment__item single-post__comment__item--reply">
                         <div class="single-post__comment__item__pic">
                             <img src="/frontassets/img/categories/single-post/comment/comment-2.jpg" alt="">
                         </div>
@@ -224,37 +237,67 @@
                                 <li><a href="#"><i class="fa fa-share-square-o"></i></a></li>
                             </ul>
                         </div>
-                    </div>
-                    <div class="single-post__comment__item">
-                        <div class="single-post__comment__item__pic">
-                            <img src="/frontassets/img/categories/single-post/comment/comment-3.jpg" alt="">
-                        </div>
-                        <div class="single-post__comment__item__text">
-                            <h5>Brandon Kelley</h5>
-                            <span>15 Aug 2017</span>
-                            <p>
-                                Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur,
-                                adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore
-                                magnam.
-                            </p>
-                            <ul>
-                                <li><a href="#"><i class="fa fa-heart-o"></i></a></li>
-                                <li><a href="#"><i class="fa fa-share-square-o"></i></a></li>
-                            </ul>
-                        </div>
-                    </div>
+                    </div> *@
+
                 </div>
-                <div class="single-post__leave__comment">
-                    <div class="widget__title">
-                        <h4>Leave a comment</h4>
-                    </div>
-                    <form action="#">
-                        <textarea placeholder="Message"></textarea>
-                        <button type="submit" class="site-btn">Submit</button>
-                    </form>
-                </div>
+                @{
+                    if(_session.ActiveUser != null){
+                        <div class="single-post__leave__comment">
+                            <div class="widget__title">
+                                <h4>Leave a comment</h4>
+                            </div>
+                            <form id="frmComment" asp-controller="Post" asp-action="Comment" method="post">
+                                <input type="hidden" asp-for="Id" />
+                                <textarea placeholder="Message" asp-for="CommentContent"></textarea>
+                                <button type="submit" class="site-btn">Submit</button>
+                            </form>                            
+                        </div>
+                        <span class="commentFeedback"></span>
+                    }
+                }
+
             </div>
         </div>
     </div>
 </section>
 <!-- Single Post Section End -->
+@section Scripts {
+
+    <script>
+        $(document).ready(function () {
+            $('#frmComment').on('submit', function (e) {
+                e.preventDefault(); 
+
+                $.ajax({
+                    url: "/Post/Comment",
+                    method: 'POST',
+                    data: $(this).serialize(),
+                    dataType: 'json',
+                    success: function (response) {
+                         $('.commentFeedback').text(response.message);
+                         $('.commentFeedback').addClass('alert');
+                         $('.commentFeedback').addClass('alert-success');
+                    },
+                    error: function (xhr, status, error) {
+                        $('.commentFeedback').text(error);
+                    }
+                });
+            });
+
+                   
+            $('.heart-icon').on('click', function (e) {
+                e.preventDefault(); // Prevent the link from navigating
+
+                const icon = $(this).find('i');
+                if (icon.hasClass('fa-heart-o')) {
+                    // Change to filled heart
+                    icon.removeClass('fa-heart-o').addClass('fa-heart');
+                } else {
+                    // Change back to empty heart
+                    icon.removeClass('fa-heart').addClass('fa-heart-o');
+                }
+            });
+       
+        });
+    </script>
+}                

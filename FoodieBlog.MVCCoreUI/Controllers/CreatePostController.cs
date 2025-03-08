@@ -67,6 +67,17 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         {
             if (ModelState.IsValid)
             {
+                #region try to create url
+                string url = GenerateSeoFriendlyName(vm.Title);
+                List<Post> allPosts = await _postBs.GetAll();
+                if (allPosts.Any(x => x.Url == url))
+                {
+                    return RedirectToAction("Fail", "CreatePost");
+                }
+                #endregion
+
+
+
                 #region initialize post
                 // Create new post, active is set to true for now but in publication, it'll be set to false
                 Post post = new Post
@@ -86,7 +97,8 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                     DescriptionLast = vm.DescriptionLast,
                     Quote = vm.Quote,
                     Active = true,
-                    CreatorId = _session.ActiveUser.Id
+                    CreatorId = _session.ActiveUser.Id,
+                    Url = url
                 };
                 #endregion
 
@@ -196,7 +208,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
 
                 TempData["PostCreated"] = true;
 
-                return RedirectToAction("Success", "CreatePost", new { newPostId = post.Id });
+                return RedirectToAction("Success", "CreatePost", new { newPostUrl = post.Url });
             }
             else
             {
@@ -206,7 +218,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
 
         }
 
-        public IActionResult Success(int newPostId)
+        public IActionResult Success(string newPostUrl)
         {
             if (TempData["PostCreated"] == null || !(bool)TempData["PostCreated"])
             {
@@ -217,13 +229,26 @@ namespace FoodieBlog.MVCCoreUI.Controllers
 
             SuccessfulAddVm model = new SuccessfulAddVm
             {
-                PostId = newPostId
+                PostUrl = newPostUrl
             };
             //Post post = await _postBs.Get(x => x.Id == newPostId);
             // THIS'LL BE A CONTROLLER THAT'LL REDIRECT TO THE CREATED POST
             return View(model);
         }
 
-        
+        private string GenerateSeoFriendlyName(string title)
+        {
+            // Convert to lowercase
+            string seoName = title.ToLowerInvariant();
+
+            // Replace spaces with hyphens
+            seoName = seoName.Replace(" ", "-");
+
+            // Remove special characters
+            seoName = System.Text.RegularExpressions.Regex.Replace(seoName, @"[^a-z0-9\-]", "");
+
+            return seoName;
+        }
+
     }
 }

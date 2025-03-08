@@ -186,15 +186,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         [HttpPost]
         public async Task<IActionResult> DeletePost(int id)
         {
-            //for now just make them inactive, posts can only get deleted by admins
-            //_commentBs = commentBs;
-            //_postIngredientBs = postIngredientBs;
-            //_postTagBs = postTagBs;
-            //_postCategoryBs = postCategoryBs;
-            //_interactionBs = interactionBs;
-            //_postDirectionBs = postDirectionBs;
-            
-
+            // this just makes the active false
             if (id != 0)
             {
                 //_postBs.DeleteById(id);

@@ -62,6 +62,15 @@ namespace FoodieBlog.Model.ViewModel.Front
         #endregion
 
 
+        #region comments
+        [BindNever]
+        public List<PostCommentVm> Comments { get; set; }
+
+        public string CommentContent { get; set; }
+
+        #endregion
+
+
 
 
 
@@ -70,8 +79,7 @@ namespace FoodieBlog.Model.ViewModel.Front
         [BindNever]
         public string UserBio { get; set; } // Done
 
-        [BindNever]
-        public virtual ICollection<Comment> Comments { get; set; }
+ 
         [BindNever]
         public virtual List<string> PostCategories { get; set; }
         [BindNever]

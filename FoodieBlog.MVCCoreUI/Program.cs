@@ -125,17 +125,17 @@ namespace FoodieBlog.MVCCoreUI
 
             app.UseAuthorization();
 
+            // Admin Panel
+            app.MapControllerRoute(
+                name: "area",
+                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
 
             // Main Website
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-            // Admin Panel
-            app.MapAreaControllerRoute(
-                name: "area",
-                areaName: "AdminPanel",
-                pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
+
 
 
             app.MapFallback(async context =>

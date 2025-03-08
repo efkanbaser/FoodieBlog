@@ -80,9 +80,7 @@ public partial class FoodBlogDbContext : DbContext
             entity.HasIndex(e => e.UserId, "IX_Comments_UserId");
 
             entity.Property(e => e.Contents).HasColumnType("text");
-            entity.Property(e => e.Timestamp)
-                .IsRowVersion()
-                .IsConcurrencyToken();
+
 
             entity.HasOne(d => d.Post).WithMany(p => p.Comments)
                 .HasForeignKey(d => d.PostId)

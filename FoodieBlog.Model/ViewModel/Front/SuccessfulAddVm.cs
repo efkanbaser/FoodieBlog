@@ -8,6 +8,6 @@ namespace FoodieBlog.Model.ViewModel.Front
 {
     public class SuccessfulAddVm
     {
-        public int PostId { get; set; } = 0;
+        public string PostUrl { get; set; }
     }
 }
