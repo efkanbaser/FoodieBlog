@@ -15,8 +15,9 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index(int page = 1)
+        public IActionResult Index(int page = 1, int categoryId = 0)
         {
+            ViewBag.CategoryId = categoryId;
             return View();
         }
 

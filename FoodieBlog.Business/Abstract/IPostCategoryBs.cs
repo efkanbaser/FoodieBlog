@@ -1,4 +1,5 @@
-﻿using FoodieBlog.Model.Entity;
+﻿using FoodieBlog.Business.Concrete.Base;
+using FoodieBlog.Model.Entity;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,7 @@ namespace FoodieBlog.Business.Abstract
 {
     public interface IPostCategoryBs : IBusinessBase<PostCategory>
     {
+
+
     }
 }

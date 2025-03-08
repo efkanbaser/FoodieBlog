@@ -26,15 +26,51 @@ namespace FoodieBlog.MVCCoreUI.ViewComponents
 
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(int page = 1, int pageSize = 6)
+        public async Task<IViewComponentResult> InvokeAsync(int page = 1, int pageSize = 6, int categoryId = 0)
         {
             if (int.TryParse(HttpContext.Request.Query["page"], out int queryPage))
             {
                 page = queryPage;
             }
 
+            // Get raw query string
+            var rawQuery = HttpContext.Request.QueryString.Value;
 
-            var pagedPosts = await _postBs.GetAllPaging(page, pageSize);
+            // Try to parse directly from query string
+            if (categoryId == 0)
+            {
+                string categoryStr = HttpContext.Request.Query["categoryId"].ToString();
+                if (!string.IsNullOrEmpty(categoryStr) && int.TryParse(categoryStr, out int queryCategoryId))
+                {
+                    categoryId = queryCategoryId;
+                }
+            }
+
+            // Store the current category ID in ViewBag
+            //ViewBag.CurrentCategoryId = categoryId;
+
+            // Get data based on whether a category is selected
+            PagingResult<Post> pagedPosts;
+
+            if (categoryId > 0)
+            {
+                // Get posts for a specific category
+                var categoryPosts = await _postCategoryBs.GetAllPaging(page, pageSize, filter: x=> x.CategoryId == categoryId);
+                var postIds = categoryPosts.Data.Select(x => x.PostId);
+                pagedPosts = await _postBs.GetAllPaging(page, pageSize, filter: x => postIds.Contains(x.Id));
+
+                // Get the category name
+                var category = await _categoryBs.GetById(categoryId);
+                ViewBag.CategoryName = category?.CategoryName ?? "Category";
+            }
+            else
+            {
+                // Get all posts (existing behavior)
+                pagedPosts = await _postBs.GetAllPaging(page, pageSize);
+                ViewBag.CategoryName = "Recipes";
+            }
+
+
             List<CategoryComponentVm> model = new();
 
             // Get users, comments, categories, and post categories
@@ -43,6 +79,7 @@ namespace FoodieBlog.MVCCoreUI.ViewComponents
             List<Category> categories = await _categoryBs.GetAll();
             List<PostCategory> postCategories = await _postCategoryBs.GetAll();
 
+            ViewBag.AllCategories = categories;
             foreach (var item in pagedPosts.Data)
             {
                 #region get category names attached to this post

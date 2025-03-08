@@ -71,5 +71,8 @@ namespace FoodieBlog.Business.Concrete.Base
         {
             return await _repo.Update(entity);
         }
+
+
+        
     }
 }

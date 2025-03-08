@@ -9,10 +9,10 @@
                 <div class="row">
                     <div class="col-lg-8 col-md-8">
                         <div class="breadcrumb__text">
-                            <h2>Categories: <span>Recipes</span></h2>
+                            <h2>Categories: <span>@ViewBag.CategoryName</span></h2>
                             <div class="breadcrumb__option">
                                 <a href="#">Home</a>
-                                <span>Recipes</span>
+                                <span>@ViewBag.CategoryName</span>
                             </div>
                         </div>
                         @foreach (var item in Model)
@@ -57,24 +57,24 @@
                                 <div class="categories__pagination">
                                     @if (ViewBag.CurrentPage > 1)
                                     {
-                                        <a href="?page=@(ViewBag.CurrentPage - 1)">Previous</a>
+                                        <a href="?page=@(ViewBag.CurrentPage - 1)&categoryId=@ViewBag.CurrentCategoryId">Previous</a>
                                     }
 
                                     @for (int i = 1; i <= ViewBag.TotalPages; i++)
                                     {
                                         if (i == ViewBag.CurrentPage)
                                         {
-                                            <a href="?page=@i" class="active">@i</a>
+                                            <a href="?page=@i&categoryId=@ViewBag.CurrentCategoryId" class="active">@i</a>
                                         }
                                         else
                                         {
-                                            <a href="?page=@i">@i</a>
+                                            <a href="?page=@i&categoryId=@ViewBag.CurrentCategoryId">@i</a>
                                         }
                                     }
 
                                     @if (ViewBag.CurrentPage < ViewBag.TotalPages)
                                     {
-                                        <a href="?page=@(ViewBag.CurrentPage + 1)">Next</a>
+                                        <a href="?page=@(ViewBag.CurrentPage + 1)&categoryId=@ViewBag.CurrentCategoryId">Next</a>
                                     }
                                 </div>
 
@@ -100,14 +100,19 @@
                                     <h6>Categories</h6>
                                 </div>
                                 <ul>
-                                    <li><a href="#">Recipes <span>128</span></a></li>
-                                    <li><a href="#">Dinner <span>32</span></a></li>
-                                    <li><a href="#">Dessert <span>86</span></a></li>
-                                    <li class="p-left"><a href="#">Smothie <span>25</span></a></li>
-                                    <li class="p-left"><a href="#">Drinks <span>36</span></a></li>
-                                    <li class="p-left"><a href="#">Cakes <span>15</span></a></li>
-                                    <li><a href="#">Vegan <span>63</span></a></li>
-                                    <li><a href="#">Weightloss <span>27</span></a></li>
+                                    <li><a href="/">Recipes <span>128</span></a></li>
+@*                                     <li><a href="/?categoryId=1">Recipes <span>128</span></a></li>
+                                    <li><a href="/?categoryId=2">Dinner <span>32</span></a></li>
+                                    <li><a href="/?categoryId=3">Dessert <span>86</span></a></li>
+                                    <li class="p-left"><a href="/?categoryId=4">Smoothie <span>25</span></a></li> *@
+
+                                    @{
+                                        foreach (var item in ViewBag.AllCategories)
+                                        {
+                                            <li><a href="/?categoryId=@item.Id">@item.CategoryName <span></span></a></li>
+                                        }
+                                    }
+                                    
                                 </ul>
                             </div>
                             <div class="sidebar__subscribe__item">
