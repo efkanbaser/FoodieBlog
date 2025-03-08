@@ -1,6 +1,7 @@
 ﻿using FoodieBlog.Business.Abstract;
 using FoodieBlog.Data.Abstract;
 using FoodieBlog.Model.Entity;
+using Infrastructure.Data.Abstract;
 using Infrastructure.Entity;
 using Infrastructure.Enumarations;
 using System;
@@ -71,5 +72,7 @@ namespace FoodieBlog.Business.Concrete.Base
         {
             return await _repo.Update(entity);
         }
+
+
     }
 }

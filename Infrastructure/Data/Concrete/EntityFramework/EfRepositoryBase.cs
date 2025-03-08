@@ -9,6 +9,7 @@ using System.Linq.Expressions;
 using System.Reflection.Metadata.Ecma335;
 using System.Text;
 using System.Threading.Tasks;
+using static Dapper.SqlMapper;
 
 namespace Infrastructure.Data.Concrete.EntityFramework
 {
@@ -193,6 +194,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
             {
                 using TContext ctx = new TContext();
                 IQueryable<TEntity> query = ctx.Set<TEntity>();
+
                 if (includelist != null && includelist.Length > 0)
                 {
                     for (int i = 0; i < includelist.Length; i++)
@@ -213,7 +215,10 @@ namespace Infrastructure.Data.Concrete.EntityFramework
 
                 // query.Take(10);// ilk 10 kayıt getir
                 //query.Skip(20);// 20 kayıt atla
-                query = query.Where(filter);
+                if (filter != null)
+                {
+                    query = query.Where(filter);
+                }
                 int totalCount = query.Count();
 
                 query = query.Skip((Page - 1) * PageSize).Take(PageSize);
@@ -327,6 +332,6 @@ namespace Infrastructure.Data.Concrete.EntityFramework
             }
         }
 
-     
+
     }
 }
