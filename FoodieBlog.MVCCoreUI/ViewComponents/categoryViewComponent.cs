@@ -46,9 +46,6 @@ namespace FoodieBlog.MVCCoreUI.ViewComponents
                 }
             }
 
-            // Store the current category ID in ViewBag
-            //ViewBag.CurrentCategoryId = categoryId;
-
             // Get data based on whether a category is selected
             PagingResult<Post> pagedPosts;
 
@@ -65,7 +62,7 @@ namespace FoodieBlog.MVCCoreUI.ViewComponents
             }
             else
             {
-                // Get all posts (existing behavior)
+                // Get all posts
                 pagedPosts = await _postBs.GetAllPaging(page, pageSize);
                 ViewBag.CategoryName = "Recipes";
             }

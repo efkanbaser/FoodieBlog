@@ -1,4 +1,8 @@
-﻿    <!-- Hero Section Begin -->
+﻿@model List<HeroComponentVm>
+ 
+
+
+<!-- Hero Section Begin -->
 <section class="hero">
     <div class="hero__slider owl-carousel">
         <div class="hero__item">
@@ -6,25 +10,28 @@
                 <div class="row">
                     <div class="col-lg-6 p-0">
                         <div class="hero__inside__item hero__inside__item--wide set-bg"
-                             data-setbg="/frontassets/img/hero/hero-1.jpg">
+                             data-setbg="@Model[0].MainImage">
                             <div class="hero__inside__item__text">
                                 <div class="hero__inside__item--meta">
-                                    <span>08</span>
-                                    <p>Aug</p>
+                                    <span>@Model[0].PublicationDay</span>
+                                    <p>@Model[0].PublicationMonth</p>
                                 </div>
                                 <div class="hero__inside__item--text">
                                     <ul class="label">
-                                        <li>Vegan</li>
-                                        <li>Desserts</li>
+                                        @{
+                                            foreach (string category in Model[0].Categories)
+                                            {
+                                                <li>@category</li>
+                                            }
+                                        }
                                     </ul>
                                     <h4>
-                                        Vegan White Peach Mug Cobbler With CardamomVegan<br /> White Peach Mug
-                                        Cobbler With Cardamom
+                                        <a href="/Post/@Model[0].Url" style="color: #ffffff;">@Model[0].Title</a>
                                     </h4>
                                     <ul class="widget">
-                                        <li>by <span>Admin</span></li>
-                                        <li>3 min read</li>
-                                        <li>20 Comment</li>
+                                        <li>by <span>@Model[0].UserName</span></li>
+                                        <li>@Model[0].ReadingTime min read</li>
+                                        <li>@Model[0].Comments Comment</li>
                                     </ul>
                                 </div>
                             </div>
@@ -32,134 +39,69 @@
                     </div>
                     <div class="col-lg-3 col-md-6  p-0">
                         <div class="hero__inside__item hero__inside__item--small set-bg"
-                             data-setbg="/frontassets/img/hero/hero-2.jpg">
+                             data-setbg="@Model[1].SecondaryImage">
                             <div class="hero__inside__item__text">
                                 <div class="hero__inside__item--meta">
-                                    <span>08</span>
-                                    <p>Aug</p>
+                                    <span>@Model[1].PublicationDay</span>
+                                    <p>@Model[1].PublicationMonth</p>
                                 </div>
                                 <div class="hero__inside__item--text">
                                     <ul class="label">
-                                        <li>Vegan</li>
-                                        <li>Desserts</li>
+                                        @{
+                                            foreach (string category in Model[1].Categories)
+                                            {
+                                                <li>@category</li>
+                                            }
+                                        }
                                     </ul>
-                                    <h5>How to Make a Milkshake With Any <br />Ice Cream, Any Toppings...</h5>
+                                    <h5>
+                                        <a href="/Post/@Model[1].Url" style="color: #ffffff;">@Model[1].Title</a>
+                                    </h5>
                                 </div>
                             </div>
                         </div>
                         <div class="hero__inside__item hero__inside__item--small set-bg"
-                             data-setbg="/frontassets/img/hero/hero-3.jpg">
+                             data-setbg="@Model[2].SecondaryImage">
                             <div class="hero__inside__item__text">
                                 <div class="hero__inside__item--meta">
-                                    <span>08</span>
-                                    <p>Aug</p>
+                                    <span>@Model[2].PublicationDay</span>
+                                    <p>@Model[2].PublicationMonth</p>
                                 </div>
                                 <div class="hero__inside__item--text">
                                     <ul class="label">
-                                        <li>Vegan</li>
-                                        <li>Desserts</li>
+                                        @{
+                                            foreach (string category in Model[2].Categories)
+                                            {
+                                                <li>@category</li>
+                                            }
+                                        }
                                     </ul>
-                                    <h5>Vintage Copper Preserve Pan with <br />Brass Handles, Mid 19th Century</h5>
+                                    <h5>
+                                        <a href="/Post/@Model[2].Url" style="color: #ffffff;">@Model[2].Title</a>
+                                    </h5>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-lg-3 col-md-6  p-0">
-                        <div class="hero__inside__item set-bg" data-setbg="/frontassets/img/hero/hero-4.jpg">
+                        <div class="hero__inside__item set-bg" data-setbg="@Model[3].MainImage">
                             <div class="hero__inside__item__text">
                                 <div class="hero__inside__item--meta">
-                                    <span>08</span>
-                                    <p>Aug</p>
+                                    <span>@Model[3].PublicationDay</span>
+                                    <p>@Model[3].PublicationMonth</p>
                                 </div>
                                 <div class="hero__inside__item--text">
                                     <ul class="label">
-                                        <li>Vegan</li>
-                                        <li>Desserts</li>
+                                        @{
+                                            foreach (string category in Model[3].Categories)
+                                            {
+                                                <li>@category</li>
+                                            }
+                                        }
                                     </ul>
-                                    <h5>Marinated Lentil Salad with Zucch <br />ini and Tomatoes</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="hero__item">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-lg-6 p-0">
-                        <div class="hero__inside__item hero__inside__item--wide set-bg"
-                             data-setbg="/frontassets/img/hero/hero-1.jpg">
-                            <div class="hero__inside__item__text">
-                                <div class="hero__inside__item--meta">
-                                    <span>08</span>
-                                    <p>Aug</p>
-                                </div>
-                                <div class="hero__inside__item--text">
-                                    <ul class="label">
-                                        <li>Vegan</li>
-                                        <li>Desserts</li>
-                                    </ul>
-                                    <h4>
-                                        Vegan White Peach Mug Cobbler With CardamomVegan<br /> White Peach Mug
-                                        Cobbler With Cardamom
-                                    </h4>
-                                    <ul class="widget">
-                                        <li>by <span>Admin</span></li>
-                                        <li>3 min read</li>
-                                        <li>20 Comment</li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 p-0">
-                        <div class="hero__inside__item hero__inside__item--small set-bg"
-                             data-setbg="/frontassets/img/hero/hero-3.jpg">
-                            <div class="hero__inside__item__text">
-                                <div class="hero__inside__item--meta">
-                                    <span>08</span>
-                                    <p>Aug</p>
-                                </div>
-                                <div class="hero__inside__item--text">
-                                    <ul class="label">
-                                        <li>Vegan</li>
-                                        <li>Desserts</li>
-                                    </ul>
-                                    <h5>How to Make a Milkshake With Any <br />Ice Cream, Any Toppings...</h5>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="hero__inside__item hero__inside__item--small set-bg"
-                             data-setbg="/frontassets/img/hero/hero-2.jpg">
-                            <div class="hero__inside__item__text">
-                                <div class="hero__inside__item--meta">
-                                    <span>08</span>
-                                    <p>Aug</p>
-                                </div>
-                                <div class="hero__inside__item--text">
-                                    <ul class="label">
-                                        <li>Vegan</li>
-                                        <li>Desserts</li>
-                                    </ul>
-                                    <h5>Vintage Copper Preserve Pan with <br />Brass Handles, Mid 19th Century</h5>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-lg-3 col-md-6 p-0">
-                        <div class="hero__inside__item set-bg" data-setbg="/frontassets/img/hero/hero-4.jpg">
-                            <div class="hero__inside__item__text">
-                                <div class="hero__inside__item--meta">
-                                    <span>08</span>
-                                    <p>Aug</p>
-                                </div>
-                                <div class="hero__inside__item--text">
-                                    <ul class="label">
-                                        <li>Vegan</li>
-                                        <li>Desserts</li>
-                                    </ul>
-                                    <h5>Marinated Lentil Salad with Zucch <br />ini and Tomatoes</h5>
+                                    <h5>
+                                        <a href="/Post/@Model[3].Url" style="color: #ffffff;">@Model[3].Title</a>
+                                    </h5>
                                 </div>
                             </div>
                         </div>

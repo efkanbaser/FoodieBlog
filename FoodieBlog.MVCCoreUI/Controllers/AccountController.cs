@@ -170,12 +170,12 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             List<MyPostsVm> models = new List<MyPostsVm>();
 
             foreach (var item in posts)
-            {                
+            {
                 MyPostsVm model = new MyPostsVm
                 {
                     Id = item.Id,
                     Title = item.Title,
-                    Href = "/Home/Posts/" + item.Id.ToString()
+                    Href = "/Post/" + item.Url
                 };
                 models.Add(model);
             }
