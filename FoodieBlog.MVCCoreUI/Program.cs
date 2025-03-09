@@ -62,6 +62,9 @@ namespace FoodieBlog.MVCCoreUI
             builder.Services.AddScoped<IValidator<AddPostVm>, AddPostValidator>();
             builder.Services.AddScoped<IValidator<MyAccountVm>, ProfileValidator>();
 
+            // SignalR
+            builder.Services.AddSignalR(); 
+
             #region Logging
             // Logging
             Log.Logger = new LoggerConfiguration()
@@ -135,12 +138,13 @@ namespace FoodieBlog.MVCCoreUI
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");
 
-
+            // SignalR NotificationHub Connection
+            app.MapHub<NotificationHub>("/notificationHub");
 
 
             app.MapFallback(async context =>
             {
-                // Redirect to a custom error page or homepage
+                // Redirect to error page when wrong url is entered
                 context.Response.Redirect("/Home/Error");
             });
 

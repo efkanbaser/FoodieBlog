@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
 using System;
 using FoodieBlog.MVCCoreUI.Filters;
+using Microsoft.AspNetCore.SignalR;
 
 namespace FoodieBlog.MVCCoreUI.Controllers
 {
@@ -21,8 +22,19 @@ namespace FoodieBlog.MVCCoreUI.Controllers
         private readonly ITagBs _tagBs;
         private readonly ICommentBs _commentBs;
         private readonly ISessionManager _session;
+        private readonly IHubContext<NotificationHub> _hubContext;
 
-        public PostController(IPostBs postBs, IUserBs userBs, IPostIngredientBs ingredientBs, IPostDirectionBs directionBs, IPostCategoryBs postCategoryBs, ICategoryBs categoryBs, IPostTagBs postTagBs, ITagBs tagBs,ICommentBs commentBs, ISessionManager session)
+        public PostController(IPostBs postBs, 
+            IUserBs userBs, 
+            IPostIngredientBs ingredientBs, 
+            IPostDirectionBs directionBs, 
+            IPostCategoryBs postCategoryBs, 
+            ICategoryBs categoryBs, 
+            IPostTagBs postTagBs, 
+            ITagBs tagBs,
+            ICommentBs commentBs, 
+            ISessionManager session,
+            IHubContext<NotificationHub> hubContext)
         {
             _postBs = postBs;
             _userBs = userBs;
@@ -34,6 +46,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             _tagBs = tagBs;
             _commentBs = commentBs;
             _session = session;
+            _hubContext = hubContext;
         }
 
         //TODO: Make the url look like FoodieBlog/how-to-make-the-most-delicious-smash-burger
@@ -240,6 +253,40 @@ namespace FoodieBlog.MVCCoreUI.Controllers
                 PostId = id
             };
             await _commentBs.Insert(comment);
+
+            #region send notification to the post owner
+            // Get post and author information for notification
+            var post = await _postBs.Get(p => p.Id == id);
+            if (post != null && post.UserId != _session.ActiveUser.Id) // Don't notify if commenting on own post
+            {
+                // Get commenter's username
+                var commenterName = _session.ActiveUser.UserName; // Use appropriate property for username
+
+                // Get connections for the post author
+                var connections = NotificationHub.GetConnectionsForUser(post.UserId.ToString());
+
+                // Send notification to each connection
+                if (connections.Any())
+                {
+                    foreach (var connectionId in connections)
+                    {
+                        await _hubContext.Clients.Client(connectionId).SendAsync(
+                            "ReceiveCommentNotification",
+                            post.Id,
+                            commenterName,
+                            post.Title // Use appropriate property for post title
+                        );
+                    }
+                }
+            }
+            #endregion
+
+
+
+
+
+
+
             return Json( new { result = true, message = "Comment is added successfully" } );
         }
     }
