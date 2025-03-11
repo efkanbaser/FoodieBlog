@@ -133,6 +133,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             user.Email = vm.Email;
             user.Password = CryptoManager.SHA256Encrypt(vm.PasswordSignUp);
             user.UniqueId = Guid.NewGuid();
+            user.ProfilePic = "/frontassets/img/userprofile/default.jpg";
             user.Active = false;
 
             user = await _userBs.Insert(user);

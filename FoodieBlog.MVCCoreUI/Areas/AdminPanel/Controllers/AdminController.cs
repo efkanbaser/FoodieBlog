@@ -44,16 +44,11 @@ namespace FoodieBlog.MVCCoreUI.Areas.AdminPanel.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginVm user)
         {
-            // TODO: Password Crypto
             // TODO: Remember Me button function with cookies
-            // TODO: are DTO's useful anywhere here? turns out they are not 20.02.2025
 
-            user.Email = "eb@gmail.com";
-            user.Password = "1234@efkan";
+            string CryptoPassword = CryptoManager.SHA256Encrypt(user.Password);
 
-            //string CryptoPassword = CryptoManager.SHA256Encrypt(user.Password);
-
-            User user1 = await _userBs.Get(x => x.Email == user.Email && x.Password == user.Password, false, "UserRoles", "UserRoles.Role");
+            User user1 = await _userBs.Get(x => x.Email == user.Email && x.Password == CryptoPassword, false, "UserRoles", "UserRoles.Role");
 
             if(user1 != null)
             {

@@ -10,5 +10,6 @@ namespace FoodieBlog.Data.Abstract
 {
     public interface IPostRepository : IRepository<Post>
     {
+        
     }
 }

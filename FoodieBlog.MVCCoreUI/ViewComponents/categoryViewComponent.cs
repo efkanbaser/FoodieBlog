@@ -48,14 +48,15 @@ namespace FoodieBlog.MVCCoreUI.ViewComponents
 
             // Get data based on whether a category is selected
             PagingResult<Post> pagedPosts;
+            List<Post> pagedPostsTemp;
 
             if (categoryId > 0)
             {
                 // Get posts for a specific category
                 var categoryPosts = await _postCategoryBs.GetAllPaging(page, pageSize, filter: x=> x.CategoryId == categoryId);
                 var postIds = categoryPosts.Data.Select(x => x.PostId);
-                pagedPosts = await _postBs.GetAllPaging(page, pageSize, filter: x => postIds.Contains(x.Id));
-
+                pagedPostsTemp = await _postBs.GetAll();
+                pagedPosts = new PagingResult<Post>(pagedPostsTemp.Where(x => postIds.Contains(x.Id)).ToList(), page, pageSize);
                 // Get the category name
                 var category = await _categoryBs.GetById(categoryId);
                 ViewBag.CategoryName = category?.CategoryName ?? "Category";

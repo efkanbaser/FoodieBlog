@@ -69,20 +69,21 @@ namespace FoodieBlog.MVCCoreUI
             // Logging
             Log.Logger = new LoggerConfiguration()
             .Enrich.FromLogContext()
-            .MinimumLevel.Information()
+            .MinimumLevel.Warning()
             // this MinimumLevel needs to overlap with the one in the middleware
             .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
             .MinimumLevel.Override("System", Serilog.Events.LogEventLevel.Warning)
             .WriteTo.Console()
             .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
             .WriteTo.MSSqlServer(
-                connectionString: "server=EFKO\\SQLEXPRESS;database=FoodBlogLogsDB;trusted_connection=true;TrustServerCertificate=True",
+                connectionString: "",
                 sinkOptions: new MSSqlServerSinkOptions {
                     TableName = "WebsiteLogs",
                     AutoCreateSqlTable = true,
                     BatchPostingLimit = 1000,
                     BatchPeriod = TimeSpan.FromSeconds(5)
                 },
+                restrictedToMinimumLevel: Serilog.Events.LogEventLevel.Error,
                 columnOptions: new ColumnOptions
                 {
                 AdditionalColumns = new Collection<SqlColumn>

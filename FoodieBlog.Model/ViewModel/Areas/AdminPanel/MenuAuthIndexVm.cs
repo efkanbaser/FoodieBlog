@@ -1,6 +1,5 @@
 ﻿using FoodieBlog.Model.Entity;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.Identity.Client;
 using System;
 using System.Collections.Generic;
 using System.Linq;

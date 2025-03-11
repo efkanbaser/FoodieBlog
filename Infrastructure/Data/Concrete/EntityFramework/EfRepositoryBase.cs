@@ -219,6 +219,8 @@ namespace Infrastructure.Data.Concrete.EntityFramework
                 {
                     query = query.Where(filter);
                 }
+                var queryTest = query.ToQueryString();
+
                 int totalCount = query.Count();
 
                 query = query.Skip((Page - 1) * PageSize).Take(PageSize);
@@ -266,6 +268,8 @@ namespace Infrastructure.Data.Concrete.EntityFramework
             {
                 using TContext ctx = new TContext();
                 IQueryable<TEntity> query = ctx.Set<TEntity>();
+
+                // Apply includes if any
                 if (includelist != null && includelist.Length > 0)
                 {
                     for (int i = 0; i < includelist.Length; i++)
@@ -274,21 +278,19 @@ namespace Infrastructure.Data.Concrete.EntityFramework
                     }
                 }
 
-                return await query.Where(filter).CountAsync();
+                // Apply filter only if it's not null
+                if (filter != null)
+                {
+                    query = query.Where(filter);
+                }
+
+                // Get count
+                return await query.CountAsync();
             }
             catch (Exception)
             {
-
                 throw;
             }
-
-
-
-
-
-
-
-
         }
 
         public async Task<TEntity> Insert(TEntity entity)
