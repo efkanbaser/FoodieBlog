@@ -219,7 +219,7 @@ namespace Infrastructure.Data.Concrete.EntityFramework
                 {
                     query = query.Where(filter);
                 }
-                var queryTest = query.ToQueryString();
+                //var queryTest = query.ToQueryString();
 
                 int totalCount = query.Count();
 

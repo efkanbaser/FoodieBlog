@@ -212,8 +212,7 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             }
             else
             {
-                //return View("Index", "CreatePost", new { model });
-                return View();
+                return RedirectToAction("Fail", "CreatePost");
             }
 
         }

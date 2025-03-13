@@ -76,7 +76,7 @@ namespace FoodieBlog.MVCCoreUI
             .WriteTo.Console()
             .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
             .WriteTo.MSSqlServer(
-                connectionString: "",
+                connectionString: "server=EFKO\\SQLEXPRESS;database=FoodBlogDB;trusted_connection=true;TrustServerCertificate=True",
                 sinkOptions: new MSSqlServerSinkOptions {
                     TableName = "WebsiteLogs",
                     AutoCreateSqlTable = true,
