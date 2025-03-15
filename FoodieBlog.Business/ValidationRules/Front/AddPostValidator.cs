@@ -104,15 +104,13 @@ namespace FoodieBlog.Business.ValidationRules.Front
                 .NotEmpty().WithMessage("Ingredients are required.");
             //.MinimumLength(10).WithMessage("Ingredients must be at least 20 characters.");
 
-            //// Validate TagChosen
-            //RuleFor(x => x.TagChosen)
-            //    .NotEmpty().WithMessage("At least one tag is required.")
-            //    .Must(BeAValidTag).WithMessage("Invalid tag selected.");
+            // Validate TagChosen
+            RuleFor(x => x.TagChosen)
+                .NotEmpty().WithMessage("At least one tag is required.");
 
-            //// Validate CategorieChosen
-            //RuleFor(x => x.CategorieChosen)
-            //    .NotEmpty().WithMessage("At least one category is required.")
-            //    .Must(BeAValidCategory).WithMessage("Invalid category selected.");
+            // Validate CategorieChosen
+            RuleFor(x => x.CategorieChosen)
+                .NotEmpty().WithMessage("At least one category is required.");
         }
 
         // Custom validation method for images
