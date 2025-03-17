@@ -190,10 +190,14 @@ namespace FoodieBlog.MVCCoreUI.Controllers
             // this just makes the active false
             if (id != 0)
             {
-                //_postBs.DeleteById(id);
                 Post post = await _postBs.GetById(id);
-                post.Active = false;
-                await _postBs.Update(post);
+
+                // check if the user trying to delete the post is the actual user in the session
+                if(post.UserId == _session.ActiveUser.Id)
+                {
+                    post.Active = false;
+                    await _postBs.Update(post);
+                }
 
                 return Json(new { result = true });
             }
